@@ -11,6 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -137,5 +138,9 @@ public class Texie extends WrappedNode {
 	@Override
 	public void removeFromPane(Pane p) {
 		p.getChildren().removeAll(group);
+	}
+	@Override
+	public void clip(Node n) {
+		rectNode.setClip(n);
 	}
 }

@@ -1,6 +1,7 @@
 package fxwindows.wrapped;
 
 import fxwindows.Animatable;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public abstract class WrappedNode extends Animatable {
@@ -23,5 +24,6 @@ public abstract class WrappedNode extends Animatable {
 //		return node;
 //	}
 	public abstract void addToPane(Pane p);
+	public abstract void clip(Node n);
 	public abstract void removeFromPane(Pane p);
 }

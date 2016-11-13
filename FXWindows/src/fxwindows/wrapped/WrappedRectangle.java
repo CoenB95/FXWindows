@@ -1,6 +1,7 @@
 package fxwindows.wrapped;
 
 import javafx.beans.binding.DoubleExpression;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
@@ -36,5 +37,10 @@ public class WrappedRectangle extends WrappedNode {
 	@Override
 	public void removeFromPane(Pane p) {
 		p.getChildren().remove(rect);
+	}
+
+	@Override
+	public void clip(Node n) {
+		rect.setClip(n);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 public abstract class Container extends WrappedNode {
@@ -55,5 +56,10 @@ public abstract class Container extends WrappedNode {
 		for (WrappedNode w : getChildren()) {
 			w.removeFromPane(p);
 		}
+	}
+	
+	@Override
+	public void clip(Node n) {
+		// TODO Implement clip for lists?
 	}
 }

@@ -1,17 +1,16 @@
 package fxwindows.wrapped;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ListChangeListener.Change;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ListContainer extends Container {
 	
 	private Rectangle background;
-	private Rectangle rect;
+	//private Rectangle rect;
+	private Pane bounds;
 	private DoubleProperty scroll;
 	private double listHeight;
 	private boolean updateRequested = true;
@@ -31,6 +30,12 @@ public class ListContainer extends Container {
 
 	public ListContainer() {
 		super();
+		bounds = new Pane();
+		bounds.layoutXProperty().bind(transformedXProperty());
+		bounds.layoutYProperty().bind(transformedYProperty());
+		bounds.prefWidthProperty().bind(widthProperty());
+		bounds.prefHeightProperty().bind(heightProperty());
+		
 		background = new Rectangle();
 		background.opacityProperty().bind(alphaProperty());
 		background.fillProperty().bind(backgroundColorProperty());
@@ -38,9 +43,24 @@ public class ListContainer extends Container {
 		background.layoutYProperty().bind(transformedYProperty());
 		background.widthProperty().bind(widthProperty());
 		background.heightProperty().bind(heightProperty());
+		
+		Rectangle rect = new Rectangle();
+		rect.layoutXProperty().bind(transformedXProperty());
+		rect.layoutYProperty().bind(transformedYProperty());
+		rect.widthProperty().bind(widthProperty());
+		rect.heightProperty().bind(heightProperty());
+		
+		bounds.setClip(rect);
+		
 		getChildren().addListener((Change<? extends WrappedNode> c) -> {
 			while (c.next()) {
 				for (WrappedNode w : c.getAddedSubList()) {
+//					Rectangle rect = new Rectangle();
+//					rect.layoutXProperty().bind(transformedXProperty());
+//					rect.layoutYProperty().bind(transformedYProperty());
+//					rect.widthProperty().bind(widthProperty());
+//					rect.heightProperty().bind(heightProperty());
+//					w.clip(rect);
 					w.bindX(transformedXProperty());
 					w.heightProperty().addListener((a,b,c1) -> {
 						updateRequested = true;
@@ -92,8 +112,12 @@ public class ListContainer extends Container {
 	
 	@Override
 	public void addToPane(Pane p) {
-		p.getChildren().add(background);
-		super.addToPane(p);
+		//p.getChildren().add(background);
+		//super.addToPane(p);
+		bounds.getChildren().clear();
+		bounds.getChildren().add(background);
+		super.addToPane(bounds);
+		p.getChildren().add(bounds);
 		//super.addToPane(pane);
 		//p.getChildren().add(pane);
 	}
