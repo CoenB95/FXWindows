@@ -12,6 +12,8 @@ public class WrappedRectangle extends WrappedNode {
 	public WrappedRectangle() {
 		super();
 		rect = new Rectangle();
+		rect.layoutXProperty().bind(transformedXProperty());
+		rect.layoutYProperty().bind(transformedYProperty());
 		rect.widthProperty().bind(widthProperty());
 		rect.heightProperty().bind(heightProperty());
 		rect.fillProperty().bind(backgroundColorProperty());

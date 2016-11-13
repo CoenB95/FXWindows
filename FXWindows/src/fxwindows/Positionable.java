@@ -84,12 +84,12 @@ public abstract class Positionable {
 	// Transforms
 	private DoubleProperty transformX;
 	public DoubleProperty transformXProperty() {
-		if (transformX == null) transformX = new SimpleDoubleProperty();
+		if (transformX == null) transformX = new SimpleDoubleProperty(0);
 		return transformX;
 	}
 	private DoubleProperty transformY;
 	public DoubleProperty transformYProperty() {
-		if (transformY == null) transformY = new SimpleDoubleProperty();
+		if (transformY == null) transformY = new SimpleDoubleProperty(0);
 		return transformY;
 	}
 

@@ -9,12 +9,15 @@ import javafx.scene.shape.Rectangle;
 public class ListContainer extends Container {
 	
 	private Rectangle background;
-	//private Rectangle rect;
-	private Pane bounds;
+	private Pane pane;
 	private DoubleProperty scroll;
 	private double listHeight;
+	
+	/**Flag notifying one or more things have changed that require a
+	 * horizontal re-layout.*/
 	private boolean updateRequested = true;
 	
+	// Scroll of the list.
 	public DoubleProperty scrollProperty() {
 		if (scroll == null) {
 			scroll = new SimpleDoubleProperty();
@@ -30,51 +33,44 @@ public class ListContainer extends Container {
 
 	public ListContainer() {
 		super();
-		bounds = new Pane();
-		bounds.layoutXProperty().bind(transformedXProperty());
-		bounds.layoutYProperty().bind(transformedYProperty());
-		bounds.prefWidthProperty().bind(widthProperty());
-		bounds.prefHeightProperty().bind(heightProperty());
 		
+		// Important note!
+		// The layoutXProperty of a Node is relative to the parent node.
+		// So when we changed this code to move the local Pane,
+		// we effectively doubled the position of all contents.
+		
+		// Setup all things needed to clip the children to the max height;
+		pane = new Pane();
+		pane.layoutXProperty().bind(transformedXProperty());
+		pane.layoutYProperty().bind(transformedYProperty());
+		pane.prefWidthProperty().bind(widthProperty());
+		pane.prefHeightProperty().bind(heightProperty());
+		Rectangle rect = new Rectangle();
+		// Don't bind position of rect, background and children. See note.
+		rect.widthProperty().bind(widthProperty());
+		rect.heightProperty().bind(heightProperty());
+		pane.setClip(rect);
+		
+		// The background of the list.
 		background = new Rectangle();
 		background.opacityProperty().bind(alphaProperty());
 		background.fillProperty().bind(backgroundColorProperty());
-		background.layoutXProperty().bind(transformedXProperty());
-		background.layoutYProperty().bind(transformedYProperty());
 		background.widthProperty().bind(widthProperty());
 		background.heightProperty().bind(heightProperty());
 		
-		Rectangle rect = new Rectangle();
-		rect.layoutXProperty().bind(transformedXProperty());
-		rect.layoutYProperty().bind(transformedYProperty());
-		rect.widthProperty().bind(widthProperty());
-		rect.heightProperty().bind(heightProperty());
-		
-		bounds.setClip(rect);
-		
+		// When the amount of children changes, a vertical re-layout is needed.
 		getChildren().addListener((Change<? extends WrappedNode> c) -> {
 			while (c.next()) {
 				for (WrappedNode w : c.getAddedSubList()) {
-//					Rectangle rect = new Rectangle();
-//					rect.layoutXProperty().bind(transformedXProperty());
-//					rect.layoutYProperty().bind(transformedYProperty());
-//					rect.widthProperty().bind(widthProperty());
-//					rect.heightProperty().bind(heightProperty());
-//					w.clip(rect);
-					w.bindX(transformedXProperty());
 					w.heightProperty().addListener((a,b,c1) -> {
+						// Also when a single item changes its size;
 						updateRequested = true;
 					});
-					//w.addToPane(pane);
 					updateRequested = true;
 				}
-				for (WrappedNode w : c.getRemoved()) {
-					//w.baseXProperty().unbind();
-					updateRequested = true;
-				}
+				if (!c.getRemoved().isEmpty()) updateRequested = true;
 			}
 		});
-		//pane = new Pane(rect);
 	}
 	
 	@Override
@@ -87,14 +83,13 @@ public class ListContainer extends Container {
 		return listHeight;
 	}
 	
+	/**Called to relocate all children.*/
 	private void updateY() {
 		updateRequested = false;
 		double height = 0;
 		double width = 0;
 		for (WrappedNode w : getChildren()) {
-			//System.out.println("Child placed at y=" + (getY() + height + 
-			//		getScroll()));
-			w.setY(getY() + height + getScroll());
+			w.setY(/*getY() + */height + getScroll());
 			height += w.getHeight();
 			if ((height + getScroll() <= 0) ||
 					(height - w.getHeight() + getScroll() > 300)) {
@@ -106,20 +101,13 @@ public class ListContainer extends Container {
 		listHeight = height;
 		setHeight(Math.min(height,300));
 		setWidth(width);
-		//System.out.println("Rectangle: x="+getX()+", y="+getY()+", w="+getWidth()+
-		//		", h="+getHeight());
 	}
 	
 	@Override
 	public void addToPane(Pane p) {
-		//p.getChildren().add(background);
-		//super.addToPane(p);
-		bounds.getChildren().clear();
-		bounds.getChildren().add(background);
-		super.addToPane(bounds);
-		p.getChildren().add(bounds);
-		//super.addToPane(pane);
-		//p.getChildren().add(pane);
+		pane.getChildren().add(background);
+		super.addToPane(pane);
+		p.getChildren().add(pane);
 	}
 
 	@Override

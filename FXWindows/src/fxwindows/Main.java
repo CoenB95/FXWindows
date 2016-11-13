@@ -118,7 +118,7 @@ public class Main extends Manager {
 		//texie.addToStage(canvas);
 		
 		ListContainer texie2 = new ListContainer();
-		texie2.setXY(50, 50);
+		texie2.setXY(100, 10);
 		texie2.setBackgroundColor(Color.RED);
 		Font f = Font.loadFont(RobotoFont.medium(), 24);
 		//texie2.setGeneralFont(Font.loadFont(RobotoFont.medium(), 24));
@@ -131,14 +131,20 @@ public class Main extends Manager {
 		
 		ListContainer list2 = new ListContainer();
 		list2.setY(50);
-		list2.bindX(texie2.transformedXProperty().add(texie2.transformedWidthProperty()).add(10));
+		list2.bindX(texie2.transformedXProperty().add(texie2.widthProperty()));
 		//list2.setGeneralFont(Font.loadFont(RobotoFont.medium(), 24));
 		for (int i = 0;i < 20;i++) {
 			list2.getChildren().add(new fxwindows.wrapped.Texie("Test item "+i, f,
 					Color.WHITE));
 		}
 		
-		canvas.getChildren().addAll(background, texie, texie2, list2);
+		WrappedRectangle testrect = new WrappedRectangle(10, 10);
+		testrect.setY(10);
+		testrect.setBackgroundColor(Color.ALICEBLUE);
+		testrect.bindX(texie2.transformedXProperty());//.add(texie2.widthProperty()));
+		//testrect.bindWidth(texie2.widthProperty());
+		
+		canvas.getChildren().addAll(background, texie, texie2, list2, testrect);
 
 		canvas.setOnMouseClicked(() -> {
 			texie.setAlpha(1);
