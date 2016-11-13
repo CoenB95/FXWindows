@@ -2,7 +2,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.drawable.Drawable;
+import fxwindows.Animatable;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -14,7 +14,7 @@ public class MoveAnimation extends Animation {
 	public MoveAnimation(Duration duration) {
 		super(duration);
 	}
-	public MoveAnimation(Drawable drawable, Duration duration) {
+	public MoveAnimation(Animatable drawable, Duration duration) {
 		super(drawable, duration);
 		fromX = new SimpleDoubleProperty();
 		fromY = new SimpleDoubleProperty();

@@ -2,7 +2,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.drawable.Drawable;
+import fxwindows.Animatable;
 import javafx.animation.Interpolator;
 
 public abstract class Animation {
@@ -11,20 +11,19 @@ public abstract class Animation {
 	private boolean started;
 	private boolean done;
 	private Interpolator interpolator = Interpolator.EASE_BOTH;
-	private Drawable parent;
+	private Animatable parent;
 	public Animation(Duration duration) {
 		setDuration(duration);
 	}
-	public Animation(Drawable drawable, Duration duration) {
+	public Animation(Animatable drawable, Duration duration) {
 		setDuration(duration);
 		setDrawable(drawable);
 	}
 	public boolean hasEnded() {
 		return done;
 	}
-	public final void update() {
+	public final void update(long time) {
 		if (done) return;
-		long time = System.currentTimeMillis();
 		if (!started && time >= startTime) {
 			started = true;
 			init();
@@ -41,20 +40,20 @@ public abstract class Animation {
 		if (started && !done) return;
 		started = false;
 		done = false;
-		startTime = System.currentTimeMillis();
+		startTime = System.nanoTime()/1000000;//currentTimeMillis();
 	}
 	public final void startAt(long milisDelay) {
 		start();
-		startTime = System.currentTimeMillis() + milisDelay;
+		startTime = System.nanoTime()/1000000 + milisDelay;//currentTimeMillis() + milisDelay;
 	}
 	public final void stop() {
 		done = true;
 	}
-	public final void setDrawable(Drawable drawable) {
+	public final void setDrawable(Animatable drawable) {
 		parent = drawable;
 		parent.addAnimation(this);
 	}
-	public final Drawable getDrawable() {
+	public final Animatable getDrawable() {
 		return parent;
 	}
 	public final void setDuration(Duration duration) {

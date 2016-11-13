@@ -52,8 +52,8 @@ public abstract class Container extends Drawable {
 	}
 	
 	@Override
-	public void update() {
-		super.update();
-		for (Drawable drawable : children) drawable.update();
+	public void update(long time) {
+		super.update(time);
+		for (Drawable drawable : children) drawable.update(time);
 	}
 }

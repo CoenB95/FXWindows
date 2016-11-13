@@ -73,23 +73,32 @@ public class ListView extends Container {
 			Drawable d = getChildren().get(i);
 			d.setX(getX());
 			d.setY(getY() + listHeight + scroll);
-			d.update();
 			if (listHeight + scroll > 0) firstVisible = i-1;
 			if (d.getWidth() > listWidth) listWidth = d.getWidth();
 			listHeight += d.getHeight();
 		}
-		setCalculatedHeight(Math.min(listHeight,maxH));
-		setCalculatedWidth(listWidth);
+		setHeight(Math.min(listHeight,maxH));
+		setWidth(listWidth);
 		g.setGlobalAlpha(getAlpha());
 		g.setFill(Color.RED);
 		g.fillRect(getX(), getY(), getWidth(), getHeight());
-		g.save();
-		g.beginPath();
-		g.rect(getX(), getY(), getWidth(), getHeight());
-		g.clip();
+		//g.save();
+		//g.beginPath();
+		//g.rect(getX(), getY(), getWidth(), getHeight());
+		//g.clip();
+		Drawable top_clip;
+		Drawable bottom_clip;
 		for (Drawable d : getChildren()) {
-			if (d.getY() + d.getHeight() >= 0 && d.getY() < getY()+maxH) {
-				d.draw(g);
+			if (d.getY() + d.getHeight() >= getY() && d.getY() < getY()+maxH) {
+				if (d.getY() + d.getHeight() > getY() + maxH) {
+					g.save();
+					g.beginPath();
+					g.rect(getX(), getY(), getWidth(), getHeight());
+					g.clip();
+					d.draw(g);
+					g.closePath();
+					g.restore();
+				} else d.draw(g);
 			}
 		}
 		g.closePath();

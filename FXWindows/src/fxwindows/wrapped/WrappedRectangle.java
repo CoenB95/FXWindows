@@ -1,19 +1,40 @@
 package fxwindows.wrapped;
 
+import javafx.beans.binding.DoubleExpression;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 public class WrappedRectangle extends WrappedNode {
 
+	private Rectangle rect;
+	
 	public WrappedRectangle() {
-		super(new Rectangle());
-		Rectangle r = (Rectangle) getNode();
-		r.widthProperty().bind(transformedWidthProperty());
-		r.heightProperty().bind(transformedHeightProperty());
+		super();
+		rect = new Rectangle();
+		rect.widthProperty().bind(widthProperty());
+		rect.heightProperty().bind(heightProperty());
+		rect.fillProperty().bind(backgroundColorProperty());
 	}
 	
 	public WrappedRectangle(double w, double h) {
 		this();
-		setCalculatedHeight(h);
-		setCalculatedWidth(w);
+		setHeight(h);
+		setWidth(w);
+	}
+	
+	public WrappedRectangle(DoubleExpression w, DoubleExpression h) {
+		this();
+		bindWidth(w);
+		bindHeight(h);
+	}
+
+	@Override
+	public void addToPane(Pane p) {
+		p.getChildren().add(rect);
+	}
+
+	@Override
+	public void removeFromPane(Pane p) {
+		p.getChildren().remove(rect);
 	}
 }
