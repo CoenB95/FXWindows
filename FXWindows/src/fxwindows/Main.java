@@ -42,7 +42,9 @@ public class Main extends Manager {
 		
 		ListContainer list1 = new ListContainer();
 		list1.setXY(100, 10);
-		list1.setBackgroundColor(Color.RED);
+		list1.bindX(canvas.widthProperty().divide(4));
+		list1.setBorderColor(Color.RED);
+		list1.setBorderWidth(3);
 		Font f = Font.loadFont(RobotoFont.medium(), 24);
 		for (int i = 0;i < 20;i++) {
 			Texie t = new Texie("Test "+i,f);
@@ -51,10 +53,12 @@ public class Main extends Manager {
 		}
 		
 		ListContainer list2 = new ListContainer();
-		list2.setBackgroundColor(Color.PURPLE);
-		list2.bindY(list1.transformedYProperty());
-		list2.bindX(list1.transformedXProperty().add(list1.widthProperty()));
-		for (int i = 0;i < 20;i++) {
+		list2.setBorderColor(Color.ORANGE);
+		list2.setBorderWidth(3);
+		list2.bindY(list1.transformedYProperty().add(list1.heightProperty()));
+		//list2.bindX(list1.transformedXProperty().add(list1.widthProperty()));
+		list2.bindX(canvas.widthProperty().divide(2));
+		for (int i = 0;i < 100;i++) {
 			list2.getChildren().add(new Texie("Test item "+i, f, Color.WHITE));
 		}
 		
@@ -73,14 +77,20 @@ public class Main extends Manager {
 			new Animation(list1, Duration.ofMillis(4500)) {	
 				@Override
 				public void update(double progress) {
-					list1.setScroll( -(list1.getListHeight()-list1.getHeight()) *
+					list1.setSchrink(progress);
+					//list1.setScroll( -(list1.getListHeight()-list1.getHeight()) *
+					//		progress);
+					list2.setScroll( -(list2.getListHeight()-list2.getHeight()) *
 							progress);
 				}
 			}.startAt(500);
 			new Animation(list1, Duration.ofMillis(500)) {	
 				@Override
 				public void update(double progress) {
-					list1.setScroll( -(list1.getListHeight()-list1.getHeight()) *
+					list1.setSchrink(1.0-progress);
+					//list1.setScroll( -(list1.getListHeight()-list1.getHeight()) *
+					//		(1.0-progress));
+					list2.setScroll( -(list2.getListHeight()-list2.getHeight()) *
 							(1.0-progress));
 				}
 			}.start();

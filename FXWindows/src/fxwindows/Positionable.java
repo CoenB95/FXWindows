@@ -153,6 +153,15 @@ public abstract class Positionable {
 	}
 	public void setBorderColor(Paint value) { borderColorProperty().set(value); }
 	public Paint getBorderColor() { return borderColorProperty().get(); }
+	
+	private DoubleProperty borderWidth;
+	public DoubleProperty borderWidthProperty() {
+		if (borderWidth == null)
+			borderWidth = new SimpleDoubleProperty(1);
+		return borderWidth;
+	}
+	public void setBorderWidth(double value) { borderWidthProperty().set(value); }
+	public double getBorderWidth() { return borderWidthProperty().get(); }
 
 	private ObjectProperty<Paint> backgroundColor;
 	public ObjectProperty<Paint> backgroundColorProperty() {
