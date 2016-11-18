@@ -1,0 +1,90 @@
+package fxwindows.wrapped;
+
+import fxwindows.core.Position;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleExpression;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
+
+public class WrappedLine extends WrappedNode {
+
+	private Line line;
+	private final DoubleProperty endX = new SimpleDoubleProperty();
+	private final DoubleProperty endY = new SimpleDoubleProperty();
+	private final DoubleProperty lengthX = new SimpleDoubleProperty();
+	private final DoubleProperty lengthY = new SimpleDoubleProperty();
+	
+	public WrappedLine() {
+		super();
+		line = new Line();
+		line.startXProperty().bind(xProperty());
+		line.startYProperty().bind(yProperty());
+		line.endXProperty().bind(endX);
+		line.endYProperty().bind(endY);
+		line.fillProperty().bind(backgroundColorProperty());
+		lengthX.bind(endX.subtract(xProperty()));
+		lengthY.bind(endY.subtract(yProperty()));
+	}
+	
+	public WrappedLine(double startX, double startY) {
+		this();
+		setXY(startX, startY);
+	}
+	
+	public WrappedLine(DoubleExpression startY, DoubleExpression startX) {
+		this();
+		bindX(startX);
+		bindY(startY);
+	}
+	
+	public WrappedLine(DoubleExpression startY, DoubleExpression startX,
+			DoubleExpression endX, DoubleExpression endY) {
+		this(startX, startY);
+		bindEndX(endX);
+		bindEndY(endY);
+	}
+	
+	public DoubleProperty lengthXProperty() {
+		return lengthX;
+	}
+	
+	public DoubleProperty lengthYProperty() {
+		return lengthY;
+	}
+	
+	public void bindEndX(DoubleExpression value) {
+		endX.bind(value);
+	}
+	
+	public void bindEndY(DoubleExpression value) {
+		endY.bind(value);
+	}
+	
+	public void bindEndXY(DoubleExpression x, DoubleExpression y) {
+		endX.bind(x);
+		endY.bind(y);
+	}
+	
+	public void bindEndPosition(Position p) {
+		endX.bind(p.xProperty());
+		endY.bind(p.yProperty());
+	}
+
+	@Override
+	public void addToPane(Pane p) {
+		p.getChildren().add(line);
+	}
+
+	@Override
+	public void removeFromPane(Pane p) {
+		p.getChildren().remove(line);
+	}
+
+	@Override
+	public void clip(Node n) {
+		line.setClip(n);
+	}
+}
