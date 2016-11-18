@@ -11,6 +11,8 @@ import fxwindows.animation.MoveAnimation;
 import fxwindows.wrapped.Container;
 import fxwindows.wrapped.ListContainer;
 import fxwindows.wrapped.Texie;
+import fxwindows.wrapped.WrappedArc;
+import fxwindows.wrapped.WrappedLine;
 import fxwindows.wrapped.WrappedRectangle;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,7 +24,7 @@ public class Main extends Manager {
 	}
 	
 	@Override
-	public void setup(Container canvas) {
+	public void setup(RootContainer canvas) {
 		WrappedRectangle background = new WrappedRectangle(
 				canvas.widthProperty(), canvas.heightProperty());
 		background.setBackgroundColor(Color.DARKSLATEBLUE);
@@ -55,12 +57,26 @@ public class Main extends Manager {
 		ListContainer list2 = new ListContainer();
 		list2.setBorderColor(Color.ORANGE);
 		list2.setBorderWidth(3);
-		list2.bindY(list1.transformedYProperty().add(list1.heightProperty()));
+		list2.bindY(list1.yProperty().add(list1.heightProperty()));
 		//list2.bindX(list1.transformedXProperty().add(list1.widthProperty()));
 		list2.bindX(canvas.widthProperty().divide(2));
 		for (int i = 0;i < 100;i++) {
 			list2.getChildren().add(new Texie("Test item "+i, f, Color.WHITE));
 		}
+		
+		/*WrappedLine line1 = new WrappedLine();
+		line1.bindXY(list1.xProperty().add(list1.widthProperty()),
+				list1.yProperty().add(list1.heightProperty()));
+		line1.bindEndXY(canvas.mouseXProperty().subtract(10),
+				canvas.mouseYProperty().subtract(10));
+		
+		WrappedArc arc1 = new WrappedArc();
+		arc1.bindX(line1.xProperty());//.add(line1.lengthXProperty()));//.divide(2)));
+		arc1.bindY(line1.yProperty().add(line1.lengthYProperty()));//.divide(2)));
+		arc1.bindRadiusX(line1.lengthXProperty());//.divide(2));
+		arc1.bindRadiusY(line1.lengthYProperty());//.divide(2));
+		arc1.setBorderWidth(5);
+		arc1.setBorderColor(Color.AQUA);*/
 		
 		canvas.getChildren().addAll(background, texie, list1, list2);
 

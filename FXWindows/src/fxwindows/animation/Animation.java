@@ -2,7 +2,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.Animatable;
+import fxwindows.core.Animatable;
 import javafx.animation.Interpolator;
 
 public abstract class Animation {

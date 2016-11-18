@@ -109,8 +109,8 @@ public class Texie extends WrappedNode {
 		//rectNode.layoutYProperty().bind(transformedYProperty());
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
-		group.layoutXProperty().bind(transformedXProperty());
-		group.layoutYProperty().bind(transformedYProperty());
+		group.layoutXProperty().bind(xProperty());
+		group.layoutYProperty().bind(yProperty());
 		//textNode.layoutXProperty().bind(transformedXProperty());
 		//textNode.layoutYProperty().bind(transformedYProperty());
 		textNode.setTextOrigin(VPos.TOP);

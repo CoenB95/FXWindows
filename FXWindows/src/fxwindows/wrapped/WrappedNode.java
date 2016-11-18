@@ -1,29 +1,45 @@
 package fxwindows.wrapped;
 
-import fxwindows.Animatable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import fxwindows.animation.Animation;
+import fxwindows.core.Animatable;
+import fxwindows.core.ColoredPositionable;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public abstract class WrappedNode extends Animatable {
+public abstract class WrappedNode extends ColoredPositionable
+		implements Animatable {
 
-//	private Node node;
-//	
-//	public WrappedNode(Node node) {
-//		this.node = node;
-//		setupBindings();
-//	}
-//	
-//	private void setupBindings() {
-//		node.layoutXProperty().bind(transformedXProperty());
-//		node.layoutYProperty().bind(transformedYProperty());
-//		node.translateXProperty().bind(transformXProperty());
-//		node.translateYProperty().bind(transformYProperty());
-//	}
+	private List<Animation> animations;
 	
-//	public Node getNode() {
-//		return node;
-//	}
+	public WrappedNode() {
+		animations = new ArrayList<>();
+	}
+	
 	public abstract void addToPane(Pane p);
 	public abstract void clip(Node n);
 	public abstract void removeFromPane(Pane p);
+	
+	@Override
+		public List<Animation> getAnimations() {
+			return animations;
+		}
+	
+	@Override
+	public void update(long time) {
+		ListIterator<Animation> it = getAnimations().listIterator(0);
+		while (it.hasNext()) {
+			Animation a = it.next();
+			a.update(time);
+			if (a.hasEnded()) it.remove();
+		}
+	}
+	
+	@Override
+	public void addAnimation(Animation anim) {
+		getAnimations().add(anim);
+	}
 }

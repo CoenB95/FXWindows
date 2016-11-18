@@ -8,6 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
+/**
+ * 
+ * @author PC1
+ *
+ */
 public abstract class Container extends WrappedNode {
 
 	private Pane pane;

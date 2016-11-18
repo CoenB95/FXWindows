@@ -58,8 +58,8 @@ public class ListContainer extends Container {
 
 		// Setup all things needed to clip the children to the max height;
 		pane = new Pane();
-		pane.layoutXProperty().bind(transformedXProperty());
-		pane.layoutYProperty().bind(transformedYProperty());
+		pane.layoutXProperty().bind(xProperty());
+		pane.layoutYProperty().bind(yProperty());
 		pane.prefWidthProperty().bind(widthProperty());
 		pane.prefHeightProperty().bind(heightProperty());
 		pane.setOnScroll((e) -> {
@@ -78,8 +78,8 @@ public class ListContainer extends Container {
 		background.fillProperty().bind(backgroundColorProperty());
 		background.strokeProperty().bind(borderColorProperty());
 		background.strokeWidthProperty().bind(borderWidthProperty());
-		background.layoutXProperty().bind(transformedXProperty());
-		background.layoutYProperty().bind(transformedYProperty());
+		background.layoutXProperty().bind(xProperty());
+		background.layoutYProperty().bind(yProperty());
 		background.widthProperty().bind(widthProperty());
 		background.heightProperty().bind(heightProperty());
 

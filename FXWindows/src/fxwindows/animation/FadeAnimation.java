@@ -2,7 +2,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.Animatable;
+import fxwindows.core.AnimatedColorable;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -15,7 +15,7 @@ public class FadeAnimation extends Animation {
 		super(duration);
 	}
 	
-	public FadeAnimation(Animatable drawable, Duration duration) {
+	public FadeAnimation(AnimatedColorable drawable, Duration duration) {
 		super(drawable, duration);
 		fromOpacity = new SimpleDoubleProperty();
 		toOpacity = new SimpleDoubleProperty();
@@ -42,7 +42,7 @@ public class FadeAnimation extends Animation {
 
 	@Override
 	public void update(double progress) {
-		getDrawable().setAlpha(fromOpacity.get() + 
+		((AnimatedColorable)getDrawable()).setAlpha(fromOpacity.get() + 
 				(toOpacity.get() - fromOpacity.get()) * progress);
 	}
 }
