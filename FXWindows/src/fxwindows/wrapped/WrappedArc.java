@@ -2,10 +2,13 @@ package fxwindows.wrapped;
 
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 
 public class WrappedArc extends WrappedNode {
 
@@ -14,6 +17,9 @@ public class WrappedArc extends WrappedNode {
 	private final DoubleProperty radiusY = new SimpleDoubleProperty();
 	private final DoubleProperty startAngle = new SimpleDoubleProperty();
 	private final DoubleProperty angleLength = new SimpleDoubleProperty(90);
+	private final DoubleProperty rotation = new SimpleDoubleProperty();
+	private final ObjectProperty<ArcType> type = new SimpleObjectProperty<>(
+			ArcType.OPEN);
 	
 	public WrappedArc() {
 		super();
@@ -24,9 +30,11 @@ public class WrappedArc extends WrappedNode {
 		arc.radiusYProperty().bind(radiusY);
 		arc.startAngleProperty().bind(startAngle);
 		arc.lengthProperty().bind(angleLength);
+		arc.rotateProperty().bind(rotation);
 		arc.fillProperty().bind(backgroundColorProperty());
 		arc.strokeProperty().bind(borderColorProperty());
 		arc.strokeWidthProperty().bind(borderWidthProperty());
+		arc.typeProperty().bind(type);
 	}
 	
 	public WrappedArc(double startX, double startY) {
@@ -45,6 +53,21 @@ public class WrappedArc extends WrappedNode {
 		this(startX, startY);
 		bindRadiusX(radiusX);
 		bindRadiusY(radiusY);
+	}
+	
+	public ObjectProperty<ArcType> typeProperty() {
+		return type;
+	}
+	
+	public void setType(ArcType value) {
+		typeProperty().set(value);
+	}
+	
+	public void setRotation(double value) {
+		rotation.set(value);
+	}
+	public void bindRotation(DoubleExpression value) {
+		rotation.bind(value);
 	}
 	
 	public void bindStartAngle(DoubleExpression value) {

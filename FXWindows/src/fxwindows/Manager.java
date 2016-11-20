@@ -27,12 +27,16 @@ public abstract class Manager extends Application {
 	private long frameStart;
 	private long frameCount;
 	private long fps;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
-		shapeVersion(primaryStage);
+		try {
+			shapeVersion(primaryStage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public void shapeVersion(Stage primaryStage) {
 		Text t = new Text();
 		t.setX(10);
@@ -41,15 +45,20 @@ public abstract class Manager extends Application {
 		timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				frameCount++;
-				if (System.currentTimeMillis() > frameStart + 250) {
-					fps = frameCount*4;
-					frameStart = System.currentTimeMillis();
-					frameCount = 0;
-					t.setText(fps + " FPS");
+				try {
+					frameCount++;
+					if (System.currentTimeMillis() > frameStart + 250) {
+						fps = frameCount*4;
+						frameStart = System.currentTimeMillis();
+						frameCount = 0;
+						t.setText(fps + " FPS");
+					}
+					canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
+					shapeContainer.update(now/1000000);
+					frame();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
-				shapeContainer.update(now/1000000);
 			}
 		};
 		timer.start();
@@ -61,12 +70,12 @@ public abstract class Manager extends Application {
 		primaryStage.setScene(new Scene(new BorderPane(pane),500,500));
 		primaryStage.show();
 	}
-	
+
 	public static class RootContainer extends Container {
-		
+
 		private final DoubleProperty mouseX = new SimpleDoubleProperty();
 		private final DoubleProperty mouseY = new SimpleDoubleProperty();
-		
+
 		public RootContainer(Pane canv) {
 			super();
 			canv.setOnMouseMoved((e) -> {
@@ -80,15 +89,16 @@ public abstract class Manager extends Application {
 			});
 			addToPane(canv);
 		}
-		
+
 		public DoubleProperty mouseXProperty() {
 			return mouseX;
 		}
-		
+
 		public DoubleProperty mouseYProperty() {
 			return mouseY;
 		}
 	}
 
 	public abstract void setup(RootContainer canvas);
+	public abstract void frame();
 }

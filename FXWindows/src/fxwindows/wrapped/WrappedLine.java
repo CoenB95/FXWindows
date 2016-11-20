@@ -24,7 +24,8 @@ public class WrappedLine extends WrappedNode {
 		line.startYProperty().bind(yProperty());
 		line.endXProperty().bind(endX);
 		line.endYProperty().bind(endY);
-		line.fillProperty().bind(backgroundColorProperty());
+		line.strokeProperty().bind(borderColorProperty());
+		line.strokeWidthProperty().bind(borderWidthProperty());
 		lengthX.bind(endX.subtract(xProperty()));
 		lengthY.bind(endY.subtract(yProperty()));
 	}
@@ -53,6 +54,14 @@ public class WrappedLine extends WrappedNode {
 	
 	public DoubleProperty lengthYProperty() {
 		return lengthY;
+	}
+	
+	public DoubleProperty endXProperty() {
+		return endX;
+	}
+	
+	public DoubleProperty endYProperty() {
+		return endY;
 	}
 	
 	public void bindEndX(DoubleExpression value) {

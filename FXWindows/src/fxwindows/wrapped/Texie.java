@@ -120,7 +120,8 @@ public class Texie extends WrappedNode {
 		textNode.wrappingWidthProperty().addListener((a,b,c) -> calculateSize());
 		rectNode.fillProperty().bind(Bindings.when(
 				textNode.hoverProperty())
-				.then(Color.rgb(255, 255, 255, 0.2)).otherwise(Color.TRANSPARENT));
+				.then((Paint) Color.rgb(255, 255, 255, 0.2))
+				.otherwise(backgroundColorProperty()));
 		calculateSize();
 	}
 
