@@ -28,7 +28,7 @@ public class Main extends Manager {
 	public void setup(RootContainer canvas) {
 		WrappedRectangle background = new WrappedRectangle(
 				canvas.widthProperty(), canvas.heightProperty());
-		background.setBackgroundColor(Color.DARKSLATEBLUE);
+		background.setBackgroundColor(Color.DARKGREEN);
 		
 		fxwindows.wrapped.Texie texie = new fxwindows.wrapped.Texie(
 				"Welkom op Avans Hogeschool Breda");
@@ -67,7 +67,7 @@ public class Main extends Manager {
 		
 		
 		
-		canvas.getChildren().addAll(background, texie, list1, list2);
+		canvas.getChildren().addAll(background);//, texie, list1, list2);
 		
 		currentRoad = new Road(canvas, 200, 400, 10);
 
@@ -112,66 +112,69 @@ public class Main extends Manager {
 	
 	public static class Road {
 		
-		private WrappedLine line1;
-		private WrappedArc arc1;
-		private Texie debug1;
+		private RootContainer canvas;
+		private WrappedLine line;
+		private WrappedArc arc;
 		private double startAngle;
 		private double newAngle;
-		private RootContainer canvas;
+		
+		private double arcX;
+		private double arcY;
+		private double arcRadius;
+		private double arcStartAngle;
+		private double arcAngleLength;
 		
 		public Road(RootContainer root, double x, double y, double angle) {
 			canvas = root;
 			startAngle = angle;
-			line1 = new WrappedLine();
-			line1.setX(x);
-			line1.setY(y);
-			line1.bindEndXY(root.mouseXProperty().subtract(10),
+			line = new WrappedLine();
+			line.setX(x);
+			line.setY(y);
+			line.bindEndXY(root.mouseXProperty().subtract(10),
 					root.mouseYProperty().subtract(10));
-			line1.setBorderWidth(3);
-			line1.setBorderColor(Color.ALICEBLUE);
+			line.setBorderWidth(3);
+			line.setBorderColor(Color.ALICEBLUE);
 			
-			debug1 = new Texie();
-			debug1.setXY(50, 50);
-			debug1.setBackgroundColor(Color.WHITE);
-			
-			arc1 = new WrappedArc();
-			//arc1.bindX(line1.xProperty());//.add(line1.lengthXProperty()));//.divide(2)));
-			//arc1.bindY(line1.yProperty().add(line1.lengthYProperty()));//.divide(2)));
-			//arc1.bindRadiusX(line1.lengthXProperty());//.divide(2));
-			//arc1.bindRadiusY(line1.lengthYProperty());//.divide(2));
-			//arc1.bindX(line1.xProperty());//.subtract(10));
-			arc1.setRadiusX(20);
-			arc1.setBorderWidth(5);
-			arc1.setBorderColor(Color.AQUA);
-			//arc1.setBackgroundColor(Color.RED);
-			root.getChildren().addAll(arc1, line1, debug1);
+			arc = new WrappedArc();
+			arc.setRadiusX(20);
+			arc.setBorderWidth(10);
+			arc.setBorderColor(Color.AQUA);
+			root.getChildren().addAll(arc, line);
 		}
 		
 		public void click() {
-			//newAngle = newAngle - 180;
 			WrappedArc placedArc = new WrappedArc();
-			placedArc.setBorderWidth(5);
-			placedArc.setBorderColor(Color.RED);
-			update(placedArc);
+			placedArc.setBorderWidth(10);
+			placedArc.setBorderColor(Color.DARKGRAY);
+			updateArc(placedArc);
 			canvas.getChildren().add(placedArc);
-			line1.setX(line1.endXProperty().get());
-			line1.setY(line1.endYProperty().get());
+			line.setX(line.endXProperty().get());
+			line.setY(line.endYProperty().get());
 			if (newAngle < 0) newAngle = 360+newAngle;
 			startAngle = newAngle;
 			while (startAngle > 180) startAngle -= 360;
 		}
 		
 		public void update() {
-			update(arc1);
+			calculate();
+			updateArc(arc);
 		}
 		
-		public void update(WrappedArc arcie) {
+		public void updateArc(WrappedArc a) {
+			a.setX(arcX);
+			a.setY(arcY);
+			a.setRadiusXY(arcRadius, arcRadius);
+			a.setStartAngle(arcStartAngle);
+			a.setAngleLength(arcAngleLength);
+		}
+		
+		public void calculate() {
 			double linelength = Math.sqrt( 
-					line1.lengthXProperty().get()*line1.lengthXProperty().get()
-					+ line1.lengthYProperty().get()*line1.lengthYProperty().get());
+					line.lengthXProperty().get()*line.lengthXProperty().get()
+					+ line.lengthYProperty().get()*line.lengthYProperty().get());
 			
-			boolean positive = line1.lengthYProperty().get()/linelength >= 0;
-			double lineAngleRad = Math.acos(line1.lengthXProperty().get()/linelength);
+			boolean positive = line.lengthYProperty().get()/linelength >= 0;
+			double lineAngleRad = Math.acos(line.lengthXProperty().get()/linelength);
 			if (positive) lineAngleRad = -lineAngleRad;
 			if (lineAngleRad < 0) lineAngleRad += Math.toRadians(360);
 			
@@ -180,16 +183,15 @@ public class Main extends Manager {
 			double radius = (linelength/2)/Math.cos(Math.toRadians(90) -
 					(lineAngleRad - Math.toRadians(startAngle)));
 			
-			arcie.setX(line1.getX() + Math.cos(circleAngleRad) * radius);
-			arcie.setY(line1.getY() - Math.sin(circleAngleRad) * radius);
-			arcie.setRadiusY(radius >= 0 ? radius : -radius);
-			arcie.setRadiusX(radius >= 0 ? radius : -radius);
-			arcie.setStartAngle(radius >= 0 ? startAngle-90 : startAngle+90);
-			double angleLength = 
+			arcX = line.getX() + Math.cos(circleAngleRad) * radius;
+			arcY = line.getY() - Math.sin(circleAngleRad) * radius;
+			arcRadius = radius >= 0 ? radius : -radius;
+			arcStartAngle = radius >= 0 ? startAngle-90 : startAngle+90;
+			arcAngleLength = 
 					(Math.toDegrees(lineAngleRad) - startAngle - 
 					(Math.toDegrees(lineAngleRad)- startAngle <= 180 ? 0 : 360)) *2;
-			arcie.setAngleLength(angleLength);
-			newAngle = startAngle + angleLength;
+			
+			newAngle = startAngle + arcAngleLength;
 		}
 	}
 }
