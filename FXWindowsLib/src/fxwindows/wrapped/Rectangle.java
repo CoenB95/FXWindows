@@ -3,15 +3,14 @@ package fxwindows.wrapped;
 import javafx.beans.binding.DoubleExpression;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
-public class WrappedRectangle extends WrappedNode {
+public class Rectangle extends ShapeBase {
 
-	private Rectangle rect;
+	private javafx.scene.shape.Rectangle rect;
 	
-	public WrappedRectangle() {
+	public Rectangle() {
 		super();
-		rect = new Rectangle();
+		rect = new javafx.scene.shape.Rectangle();
 		rect.layoutXProperty().bind(xProperty());
 		rect.layoutYProperty().bind(yProperty());
 		rect.widthProperty().bind(widthProperty());
@@ -19,13 +18,13 @@ public class WrappedRectangle extends WrappedNode {
 		rect.fillProperty().bind(backgroundColorProperty());
 	}
 	
-	public WrappedRectangle(double w, double h) {
+	public Rectangle(double w, double h) {
 		this();
 		setHeight(h);
 		setWidth(w);
 	}
 	
-	public WrappedRectangle(DoubleExpression w, DoubleExpression h) {
+	public Rectangle(DoubleExpression w, DoubleExpression h) {
 		this();
 		bindWidth(w);
 		bindHeight(h);

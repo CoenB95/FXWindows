@@ -17,12 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
-public class Texie extends WrappedNode {
+public class Text extends ShapeBase {
 
 	private Group group;
-	private Text textNode;
+	private javafx.scene.text.Text textNode;
 	private Rectangle rectNode;
 
 	// Font
@@ -76,15 +75,15 @@ public class Texie extends WrappedNode {
 	public void setWrappingWidth(double value) { wrappingWidthProperty().set(value); }
 	public double getWrappingWidth() { return wrappingWidthProperty().get(); }
 
-	public Texie() {
+	public Text() {
 		this("");
 	}
 
-	public Texie(String value) {
-		this(new Text(value));
+	public Text(String value) {
+		this(new javafx.scene.text.Text(value));
 	}
 
-	public Texie(Text text) {
+	private Text(javafx.scene.text.Text text) {
 		super();
 		textNode = text;
 		textNode.setCache(true);
@@ -94,12 +93,12 @@ public class Texie extends WrappedNode {
 		setupBindings();
 	}
 
-	public Texie(String text, Font font) {
+	public Text(String text, Font font) {
 		this(text);
 		setFont(font);
 	}
 
-	public Texie(String text, Font font, Paint color) {
+	public Text(String text, Font font, Paint color) {
 		this(text, font);
 		setTextColor(color);
 	}

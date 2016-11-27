@@ -13,25 +13,25 @@ import javafx.scene.layout.Pane;
  * @author PC1
  *
  */
-public abstract class Container extends WrappedNode {
+public abstract class Container extends ShapeBase {
 
 	private Pane pane;
 	
-	private final ObservableList<WrappedNode> children =
+	private final ObservableList<ShapeBase> children =
 			FXCollections.observableArrayList(new ArrayList<>());
 
-	public ObservableList<WrappedNode> getChildren() {
+	public ObservableList<ShapeBase> getChildren() {
 		return children;
 	}
 	
 	public Container() {
 		super();
-		getChildren().addListener(new ListChangeListener<WrappedNode>() {
+		getChildren().addListener(new ListChangeListener<ShapeBase>() {
 
 			@Override
-			public void onChanged(Change<? extends WrappedNode> c) {
+			public void onChanged(Change<? extends ShapeBase> c) {
 				while (c.next()) {
-					for (WrappedNode w : c.getAddedSubList()) {
+					for (ShapeBase w : c.getAddedSubList()) {
 						if (pane != null) w.addToPane(pane);
 					}
 				}
@@ -43,7 +43,7 @@ public abstract class Container extends WrappedNode {
 	@Override
 	public void update(long time) {
 		super.update(time);
-		for (WrappedNode w : getChildren()) {
+		for (ShapeBase w : getChildren()) {
 			w.update(time);
 		}
 	}
@@ -51,14 +51,14 @@ public abstract class Container extends WrappedNode {
 	@Override
 	public void addToPane(Pane p) {
 		pane = p;
-		for (WrappedNode w : getChildren()) {
+		for (ShapeBase w : getChildren()) {
 			w.addToPane(p);
 		}
 	}
 	
 	@Override
 	public void removeFromPane(Pane p) {
-		for (WrappedNode w : getChildren()) {
+		for (ShapeBase w : getChildren()) {
 			w.removeFromPane(p);
 		}
 	}

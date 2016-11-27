@@ -84,9 +84,9 @@ public class ListContainer extends Container {
 		background.heightProperty().bind(heightProperty());
 
 		// When the amount of children changes, a vertical re-layout is needed.
-		getChildren().addListener((Change<? extends WrappedNode> c) -> {
+		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
-				for (WrappedNode w : c.getAddedSubList()) {
+				for (ShapeBase w : c.getAddedSubList()) {
 					w.heightProperty().addListener((a,b,c1) -> {
 						// Also when a single item changes its size;
 						updateRequested = true;
@@ -113,7 +113,7 @@ public class ListContainer extends Container {
 		updateRequested = false;
 		double height = 0;
 		double width = 0;
-		for (WrappedNode w : getChildren()) {
+		for (ShapeBase w : getChildren()) {
 			w.setY((height + getScroll()) * getSchrink());
 			height += w.getHeight();
 			if ((height + getScroll() <= 0) ||

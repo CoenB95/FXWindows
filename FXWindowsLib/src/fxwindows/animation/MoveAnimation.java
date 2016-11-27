@@ -3,7 +3,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.wrapped.WrappedNode;
+import fxwindows.wrapped.ShapeBase;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -15,7 +15,7 @@ public class MoveAnimation extends Animation {
 	public MoveAnimation(Duration duration) {
 		super(duration);
 	}
-	public MoveAnimation(WrappedNode drawable, Duration duration) {
+	public MoveAnimation(ShapeBase drawable, Duration duration) {
 		super(drawable, duration);
 		fromX = new SimpleDoubleProperty();
 		fromY = new SimpleDoubleProperty();
@@ -77,9 +77,9 @@ public class MoveAnimation extends Animation {
 
 	@Override
 	public void update(double progress) {
-		((WrappedNode)getDrawable()).setTransformX(fromX.get() + (toX.get() - 
+		((ShapeBase)getDrawable()).setTransformX(fromX.get() + (toX.get() - 
 				fromX.get())*progress);
-		((WrappedNode)getDrawable()).setTransformY(fromY.get() + (toY.get() -
+		((ShapeBase)getDrawable()).setTransformY(fromY.get() + (toY.get() -
 				fromY.get())*progress);
 	}
 }

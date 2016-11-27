@@ -7,19 +7,18 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
 
-public class WrappedLine extends WrappedNode {
+public class Line extends ShapeBase {
 
-	private Line line;
+	private javafx.scene.shape.Line line;
 	private final DoubleProperty endX = new SimpleDoubleProperty();
 	private final DoubleProperty endY = new SimpleDoubleProperty();
 	private final DoubleProperty lengthX = new SimpleDoubleProperty();
 	private final DoubleProperty lengthY = new SimpleDoubleProperty();
 	
-	public WrappedLine() {
+	public Line() {
 		super();
-		line = new Line();
+		line = new javafx.scene.shape.Line();
 		line.startXProperty().bind(xProperty());
 		line.startYProperty().bind(yProperty());
 		line.endXProperty().bind(endX);
@@ -30,18 +29,18 @@ public class WrappedLine extends WrappedNode {
 		lengthY.bind(endY.subtract(yProperty()));
 	}
 	
-	public WrappedLine(double startX, double startY) {
+	public Line(double startX, double startY) {
 		this();
 		setXY(startX, startY);
 	}
 	
-	public WrappedLine(DoubleExpression startY, DoubleExpression startX) {
+	public Line(DoubleExpression startY, DoubleExpression startX) {
 		this();
 		bindX(startX);
 		bindY(startY);
 	}
 	
-	public WrappedLine(DoubleExpression startY, DoubleExpression startX,
+	public Line(DoubleExpression startY, DoubleExpression startX,
 			DoubleExpression endX, DoubleExpression endY) {
 		this(startX, startY);
 		bindEndX(endX);

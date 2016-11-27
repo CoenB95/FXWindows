@@ -10,12 +10,12 @@ import fxwindows.core.ColoredPositionable;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public abstract class WrappedNode extends ColoredPositionable
+public abstract class ShapeBase extends ColoredPositionable
 		implements Animatable {
 
 	private List<Animation> animations;
 	
-	public WrappedNode() {
+	public ShapeBase() {
 		animations = new ArrayList<>();
 	}
 	
