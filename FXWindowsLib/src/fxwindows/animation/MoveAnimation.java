@@ -1,5 +1,6 @@
 package fxwindows.animation;
 
+
 import java.time.Duration;
 
 import fxwindows.wrapped.WrappedNode;

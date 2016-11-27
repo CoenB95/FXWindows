@@ -1,4 +1,4 @@
-package fxwindows;
+package fxwindows.core;
 
 import fxwindows.wrapped.Container;
 import javafx.animation.AnimationTimer;
