@@ -26,6 +26,7 @@ public abstract class Area extends Position {
 	
 	/**Sets the calculated width of the object. To be used internal only.*/
 	protected void setHeight(double value) { height.set(value); }
+	protected void unbindHeight() { height.unbind(); }
 	protected void bindHeight(DoubleExpression value) { height.bind(value); }
 	public double getHeight() { return heightProperty().get(); }
 
@@ -36,6 +37,7 @@ public abstract class Area extends Position {
 
 	/**Sets the calculated width of the object. To be used internal only.*/
 	protected void setWidth(double value) { width.set(value); }
+	protected void unbindWidth() { width.unbind(); }
 	protected void bindWidth(DoubleExpression value) { width.bind(value); }
 	public double getWidth() { return widthProperty().get(); }
 
