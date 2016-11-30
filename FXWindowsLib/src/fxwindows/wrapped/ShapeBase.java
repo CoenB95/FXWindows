@@ -6,11 +6,11 @@ import java.util.ListIterator;
 
 import fxwindows.animation.Animation;
 import fxwindows.core.Animatable;
-import fxwindows.core.ColoredPositionable;
+import fxwindows.core.ColoredBoundedArea;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
-public abstract class ShapeBase extends ColoredPositionable
+public abstract class ShapeBase extends ColoredBoundedArea
 		implements Animatable {
 
 	private List<Animation> animations;

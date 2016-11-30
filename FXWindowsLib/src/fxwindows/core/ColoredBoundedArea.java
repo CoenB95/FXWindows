@@ -12,7 +12,7 @@ import javafx.scene.paint.Paint;
  * @author CoenB95
  *
  */
-public abstract class ColoredPositionable extends Area implements Colorable {
+public abstract class ColoredBoundedArea extends BoundedArea implements Colorable {
 	
 	private DoubleProperty alpha;
 	

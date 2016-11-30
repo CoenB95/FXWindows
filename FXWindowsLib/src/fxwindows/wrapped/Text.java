@@ -104,8 +104,6 @@ public class Text extends ShapeBase {
 	}
 
 	private void setupBindings() {
-		//rectNode.layoutXProperty().bind(transformedXProperty());
-		//rectNode.layoutYProperty().bind(transformedYProperty());
 		group.setOnMouseClicked((e) -> {
 			Runnable runner = getOnMouseClicked();
 			if (runner != null) runner.run();
@@ -114,8 +112,6 @@ public class Text extends ShapeBase {
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
 		group.layoutYProperty().bind(yProperty());
-		//textNode.layoutXProperty().bind(transformedXProperty());
-		//textNode.layoutYProperty().bind(transformedYProperty());
 		textNode.setTextOrigin(VPos.TOP);
 		group.opacityProperty().bind(alphaProperty());
 		group.visibleProperty().bind(alphaProperty().greaterThan(0));
@@ -125,19 +121,17 @@ public class Text extends ShapeBase {
 				textNode.hoverProperty())
 				.then((Paint) Color.rgb(255, 255, 255, 0.2))
 				.otherwise(backgroundColorProperty()));
-		calculateSize();
 	}
 
 	private void calculateSize() {
-		Platform.runLater(() -> {
-			setHeight(textNode.getBoundsInLocal().getHeight());
-			setWidth(textNode.getBoundsInLocal().getWidth());
-		});
+		setHeight(textNode.getBoundsInLocal().getHeight());
+		setWidth(textNode.getBoundsInLocal().getWidth());
 	}
 	
 	@Override
 	public void addToPane(Pane p) {
 		p.getChildren().addAll(group);
+		calculateSize();
 	}
 	@Override
 	public void removeFromPane(Pane p) {

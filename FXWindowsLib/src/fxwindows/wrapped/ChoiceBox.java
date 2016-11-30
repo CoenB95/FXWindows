@@ -10,7 +10,7 @@ import javafx.collections.ListChangeListener.Change;
 public class ChoiceBox extends VerticalContainer {
 	
 	private ShapeBase itemSelected;
-	private boolean itemUpdate;
+	private boolean itemUpdate = true;
 	private boolean expanding = true;
 	private ValueAnimation scrollAnim;
 	private ValueAnimation heightAnim;
@@ -36,6 +36,7 @@ public class ChoiceBox extends VerticalContainer {
 	
 	@Override
 	public void update(long time) {
+		super.update(time);
 		if (itemUpdate) {
 			itemUpdate = false;
 			blockScroll(!expanding);
@@ -54,14 +55,19 @@ public class ChoiceBox extends VerticalContainer {
 				toScroll = fromScroll;
 			}
 			fromHeight = getHeight();
-			if (expanding) toHeight = Math.min(getListHeigth(), getMaxHeigth());
+			if (expanding) toHeight = Math.min(getContentHeight(), getMaxHeight());
 			else toHeight = getChildren().get(position).getHeight();
 			//for (int i = position;i < getChildren().size()-1;i++) {
 			//	toHeight += getChildren().get(i).getHeight();
 			//}
 			
-			if (expanding && toScroll < -(getListHeigth() - getMaxHeigth())) {
-				toScroll = -(getListHeigth() - getMaxHeigth());
+			if (expanding) {
+				if (getContentHeight() > getMaxHeight()
+						&& toScroll < -(getContentHeight() - getMaxHeight())) {
+					toScroll = -(getContentHeight() - getMaxHeight());
+				} else {
+					toScroll = 0;
+				}
 			}
 			
 			scrollAnim = new ValueAnimation(this,
@@ -80,6 +86,6 @@ public class ChoiceBox extends VerticalContainer {
 		}
 		if (scrollAnim != null && (!scrollAnim.hasEnded() || !expanding))
 			setScroll(scrollAnim.getValue());
-		super.update(time);
+		//super.update(time);
 	}
 }
