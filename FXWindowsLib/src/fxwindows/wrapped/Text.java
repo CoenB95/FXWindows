@@ -106,7 +106,10 @@ public class Text extends ShapeBase {
 	private void setupBindings() {
 		//rectNode.layoutXProperty().bind(transformedXProperty());
 		//rectNode.layoutYProperty().bind(transformedYProperty());
-		group.setOnMouseClicked((e) -> getOnMouseClicked().run());
+		group.setOnMouseClicked((e) -> {
+			Runnable runner = getOnMouseClicked();
+			if (runner != null) runner.run();
+		});
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
