@@ -2,6 +2,7 @@ package fxwindows.wrapped;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -23,6 +24,8 @@ public class Text extends ShapeBase {
 	private Group group;
 	private javafx.scene.text.Text textNode;
 	private Rectangle rectNode;
+	private boolean recalculate = true;
+	private ObjectBinding<Paint> fillBinding;
 
 	// Font
 	private ObjectProperty<Font> font;
@@ -89,6 +92,7 @@ public class Text extends ShapeBase {
 		textNode.setCache(true);
 		textNode.setCacheHint(CacheHint.SPEED);
 		rectNode = new Rectangle();
+		//textClip = new Rectangle();
 		group = new Group(rectNode, textNode);
 		setupBindings();
 	}
@@ -115,23 +119,54 @@ public class Text extends ShapeBase {
 		textNode.setTextOrigin(VPos.TOP);
 		group.opacityProperty().bind(alphaProperty());
 		group.visibleProperty().bind(alphaProperty().greaterThan(0));
-		textNode.textProperty().addListener((a,b,c) -> calculateSize());
-		textNode.wrappingWidthProperty().addListener((a,b,c) -> calculateSize());
-		rectNode.fillProperty().bind(Bindings.when(
-				textNode.hoverProperty())
-				.then((Paint) Color.rgb(255, 255, 255, 0.2))
-				.otherwise(backgroundColorProperty()));
+		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
+		fillBinding = Bindings.createObjectBinding(() -> {
+			if (group.isHover()) {
+				Color c = (Color) getBackgroundColor();
+				if (c.equals(Color.TRANSPARENT)) return Color.gray(1, 0.2);
+				else return ((Color)getBackgroundColor()).brighter();
+			}
+			return getBackgroundColor();
+		}, backgroundColorProperty(), group.hoverProperty());
+		rectNode.fillProperty().bind(fillBinding);
+		
+		recalculate = true;
+//		textClip.setLayoutX(0);
+//		textClip.setLayoutY(0);
+//		textClip.widthProperty().bind(widthProperty());
+//		textClip.heightProperty().bind(heightProperty());
+//		//textClip.setHeight(100);
+//		textNode.setClip(textClip);
 	}
 
 	private void calculateSize() {
-		setHeight(textNode.getBoundsInLocal().getHeight());
-		setWidth(textNode.getBoundsInLocal().getWidth());
+		textNode.setClip(null);
+		setContentHeight(textNode.getBoundsInLocal().getHeight());
+		setContentWidth(textNode.getBoundsInLocal().getWidth());
+		Rectangle textClip = new Rectangle();
+		textClip.setLayoutX(0);
+		textClip.setLayoutY(0);
+		textClip.setHeight(getHeight());
+		textClip.setWidth(getWidth());
+		//textClip.setHeight(100);
+		textNode.setClip(textClip);
+	}
+
+	@Override
+	public void update(long time) {
+		super.update(time);
+		if (recalculate) {
+			recalculate = false;
+			calculateSize();
+		}
 	}
 	
 	@Override
 	public void addToPane(Pane p) {
 		p.getChildren().addAll(group);
-		calculateSize();
+		recalculate = true;
 	}
 	@Override
 	public void removeFromPane(Pane p) {
@@ -139,6 +174,6 @@ public class Text extends ShapeBase {
 	}
 	@Override
 	public void clip(Node n) {
-		rectNode.setClip(n);
+		group.setClip(n);
 	}
 }

@@ -5,15 +5,23 @@ import java.time.Duration;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.SmoothInterpolator.AnimType;
 import fxwindows.animation.ValueAnimation;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener.Change;
 
 public class ChoiceBox extends VerticalContainer {
 	
 	private ShapeBase itemSelected;
+	private int itemPosition;
+	private boolean relayout = true;
 	private boolean itemUpdate = true;
 	private boolean expanding = true;
 	private ValueAnimation scrollAnim;
 	private ValueAnimation heightAnim;
+	
+	private final DoubleProperty toScroll = new SimpleDoubleProperty();
+	private final DoubleProperty toHeight = new SimpleDoubleProperty();
 	
 	public ChoiceBox() {
 		super();
@@ -21,6 +29,7 @@ public class ChoiceBox extends VerticalContainer {
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
+					w.heightProperty().addListener((v1,v2,v3) -> relayout = true);
 					w.setOnMouseClicked(() -> {
 						itemSelected = w;
 						itemUpdate = true;
@@ -32,43 +41,69 @@ public class ChoiceBox extends VerticalContainer {
 				}
 			}
 		});
+		ChangeListener<Number> lis = (v1,v2,v3) -> relayout = true;
+		widthProperty().addListener(lis);
+		heightProperty().addListener(lis);
 	}
 	
 	@Override
 	public void update(long time) {
 		super.update(time);
+		if (itemUpdate) itemPosition = getChildren().indexOf(itemSelected);
+		if (itemUpdate || relayout) {
+			relayout = false;
+			if (!expanding) {
+				double temp = 0;
+				for (int i = 0;i < itemPosition;i++) {
+					temp -= getChildren().get(i).getHeight();
+				}
+				toScroll.set(temp);
+			} else {
+				// Prevent going back to the top on re-expand.
+				toScroll.set(getScroll());
+			}
+			if (expanding) toHeight.set(Math.min(getContentHeight(), getMaxHeight()));
+			else toHeight.set(itemSelected.getHeight());
+			if (expanding) {
+				if (getContentHeight() > getMaxHeight()) {
+					if (toScroll.get() < -(getContentHeight() - getMaxHeight())) {
+						toScroll.set(-(getContentHeight() - getMaxHeight()));
+					}
+				} else toScroll.set(0);
+			}
+		}
 		if (itemUpdate) {
 			itemUpdate = false;
 			blockScroll(!expanding);
 			double fromScroll = 0;
 			double fromHeight = 0;
-			double toScroll = 0;
-			double toHeight = 0;
-			int position = getChildren().indexOf(itemSelected);
+			//double toScroll = 0;
+			//double toHeight = 0;
+//			int position = getChildren().indexOf(itemSelected);
 			fromScroll = getScroll();
-			if (!expanding) {
-				for (int i = 0;i < position;i++) {
-					toScroll -= getChildren().get(i).getHeight();
-				}
-			} else {
-				// Prevent going back to the top on re-expand.
-				toScroll = fromScroll;
-			}
+//			if (!expanding) {
+//				for (int i = 0;i < position;i++) {
+//					toScroll -= getChildren().get(i).getHeight();
+//				}
+//			} else {
+//				// Prevent going back to the top on re-expand.
+//				toScroll = fromScroll;
+//			}
 			fromHeight = getHeight();
-			if (expanding) toHeight = Math.min(getContentHeight(), getMaxHeight());
-			else toHeight = getChildren().get(position).getHeight();
+//			if (expanding) toHeight = Math.min(getContentHeight(), getMaxHeight());
+//			else toHeight = getChildren().get(position).getHeight();
 			//for (int i = position;i < getChildren().size()-1;i++) {
 			//	toHeight += getChildren().get(i).getHeight();
 			//}
 			
-			if (expanding) {
-				if (getContentHeight() > getMaxHeight()
-						&& toScroll < -(getContentHeight() - getMaxHeight())) {
-					toScroll = -(getContentHeight() - getMaxHeight());
-				} else {
-					toScroll = 0;
-				}
-			}
+//			if (expanding) {
+//				if (getContentHeight() > getMaxHeight()
+//						&& toScroll < -(getContentHeight() - getMaxHeight())) {
+//					toScroll = -(getContentHeight() - getMaxHeight());
+//				} else {
+//					toScroll = 0;
+//				}
+//			}
 			
 			scrollAnim = new ValueAnimation(this,
 					Duration.ofMillis(400)).setFrom(fromScroll).setTo(toScroll);
@@ -79,13 +114,14 @@ public class ChoiceBox extends VerticalContainer {
 			scrollAnim.start();
 			heightAnim.start();
 			unbindHeight();
-			bindHeight(heightAnim.valueProperty());
-			System.out.println("Changing scroll: from " + fromScroll + ", to "
-					+ toScroll + "; height from " + fromHeight + ", to " + 
-					toHeight);
+//			bindHeight(heightAnim.valueProperty());
 		}
-		if (scrollAnim != null && (!scrollAnim.hasEnded() || !expanding))
+		if (scrollAnim != null && !scrollAnim.hasEnded())
 			setScroll(scrollAnim.getValue());
+		else if (!expanding) setScroll(toScroll.get());
+		if (heightAnim != null && !heightAnim.hasEnded())
+			setHeight(heightAnim.getValue());
+		else if (!expanding) setHeight(toHeight.get());
 		//super.update(time);
 	}
 }
