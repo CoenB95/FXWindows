@@ -120,6 +120,7 @@ public class Text extends ShapeBase {
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.textProperty().bind(textProperty());
 		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
+		maxWidthProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
 		fillBinding = Bindings.createObjectBinding(() -> {
 			if (group.isHover()) {
