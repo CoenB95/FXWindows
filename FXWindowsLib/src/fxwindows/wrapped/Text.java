@@ -26,6 +26,8 @@ public class Text extends ShapeBase {
 	private Rectangle rectNode;
 	private boolean recalculate = true;
 	private ObjectBinding<Paint> fillBinding;
+	
+	private final StringProperty text = new SimpleStringProperty();
 
 	// Font
 	private ObjectProperty<Font> font;
@@ -54,12 +56,7 @@ public class Text extends ShapeBase {
 
 
 	// Text
-	private StringProperty text;
 	public StringProperty textProperty() {
-		if (text == null) {
-			text = new SimpleStringProperty();
-			textNode.textProperty().bind(text);
-		}
 		return text;
 	}
 	public void setText(String value) { textProperty().set(value); }
@@ -83,7 +80,8 @@ public class Text extends ShapeBase {
 	}
 
 	public Text(String value) {
-		this(new javafx.scene.text.Text(value));
+		this(new javafx.scene.text.Text());
+		setText(value);
 	}
 
 	private Text(javafx.scene.text.Text text) {
@@ -120,6 +118,7 @@ public class Text extends ShapeBase {
 		group.opacityProperty().bind(alphaProperty());
 		group.visibleProperty().bind(alphaProperty().greaterThan(0));
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.textProperty().bind(textProperty());
 		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
 		fillBinding = Bindings.createObjectBinding(() -> {
