@@ -28,6 +28,10 @@ public abstract class Manager extends Application {
 	private long frameCount;
 	private long fps;
 
+	public static void start(Class<? extends Manager> theClass, String[] args) {
+		launch(theClass, args);
+	}
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
