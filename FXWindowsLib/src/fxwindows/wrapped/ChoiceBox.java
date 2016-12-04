@@ -19,12 +19,16 @@ public class ChoiceBox extends VerticalContainer {
 	private boolean expanding = true;
 	private ValueAnimation scrollAnim;
 	private ValueAnimation heightAnim;
+	private SmoothInterpolator interpolator;
+	private Duration duration;
 	
 	private final DoubleProperty toScroll = new SimpleDoubleProperty();
 	private final DoubleProperty toHeight = new SimpleDoubleProperty();
 	
 	public ChoiceBox() {
 		super();
+		interpolator = new SmoothInterpolator(AnimType.DECELERATE);
+		duration = Duration.ofMillis(400);
 		// When the amount of children changes, a vertical re-layout is needed.
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
@@ -106,22 +110,27 @@ public class ChoiceBox extends VerticalContainer {
 //			}
 			
 			scrollAnim = new ValueAnimation(this,
-					Duration.ofMillis(400)).setFrom(fromScroll).setTo(toScroll);
+					duration).setFrom(fromScroll).setTo(toScroll);
 			heightAnim = new ValueAnimation(this, 
-					Duration.ofMillis(400)).setFrom(fromHeight).setTo(toHeight);
-			scrollAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
-			heightAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
+					duration).setFrom(fromHeight).setTo(toHeight);
+			scrollAnim.setInterpolator(interpolator);
+			heightAnim.setInterpolator(interpolator);
 			scrollAnim.start();
 			heightAnim.start();
 			unbindHeight();
 //			bindHeight(heightAnim.valueProperty());
 		}
-		if (scrollAnim != null && !scrollAnim.hasEnded())
+		if (scrollAnim != null && !scrollAnim.hasFinished())
 			setScroll(scrollAnim.getValue());
 		else if (!expanding) setScroll(toScroll.get());
-		if (heightAnim != null && !heightAnim.hasEnded())
+		if (heightAnim != null && !heightAnim.hasFinished())
 			setHeight(heightAnim.getValue());
 		else if (!expanding) setHeight(toHeight.get());
 		//super.update(time);
+	}
+	
+	public void setAnimation(SmoothInterpolator smooth, Duration duration) {
+		interpolator = smooth;
+		this.duration = duration;
 	}
 }

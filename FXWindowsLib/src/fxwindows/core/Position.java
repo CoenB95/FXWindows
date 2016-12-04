@@ -126,7 +126,7 @@ public class Position {
 		bindY(y);
 	}
 	
-	public void copy(Position p) {
+	public void setPosition(Position p) {
 		setX(p.getX());
 		setY(p.getY());
 		setTransformX(p.getTransformX());

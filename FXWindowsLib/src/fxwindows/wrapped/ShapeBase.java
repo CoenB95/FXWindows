@@ -34,7 +34,7 @@ public abstract class ShapeBase extends ColoredBoundedArea
 		while (it.hasNext()) {
 			Animation a = it.next();
 			a.update(time);
-			if (a.hasEnded()) it.remove();
+			if (a.hasFinished()) it.remove();
 		}
 	}
 	

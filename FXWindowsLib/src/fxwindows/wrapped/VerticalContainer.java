@@ -143,7 +143,7 @@ public abstract class VerticalContainer extends Container {
 	@Override
 	public void update(long time) {
 		super.update(time);
-		if (userScrollAnim != null && !userScrollAnim.hasEnded())
+		if (userScrollAnim != null && !userScrollAnim.hasFinished())
 			setScroll(userScrollAnim.getValue());
 		if (updateRequested) {
 			updateY();
