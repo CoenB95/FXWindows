@@ -77,6 +77,14 @@ public class Arc extends ShapeBase {
 		angleLength.bind(value);
 	}
 	
+	public double getStartAngle() {
+		return startAngle.get();
+	}
+	
+	public double getAngleLength() {
+		return angleLength.get();
+	}
+	
 	public void setStartAngle(double value) {
 		startAngle.set(value);
 	}
