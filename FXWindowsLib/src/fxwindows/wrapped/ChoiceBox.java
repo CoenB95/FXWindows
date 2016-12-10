@@ -34,14 +34,11 @@ public class ChoiceBox extends VerticalContainer {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
 					w.heightProperty().addListener((v1,v2,v3) -> relayout = true);
-					w.setOnMouseClicked(() -> {
+					w.addOnMouseClicked(() -> {
 						itemSelected = w;
 						itemUpdate = true;
 						expanding = !expanding;
 					});
-				}
-				for (ShapeBase w : c.getRemoved()) {
-					w.setOnMouseClicked(null);
 				}
 			}
 		});

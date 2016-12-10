@@ -1,5 +1,8 @@
 package fxwindows.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -53,13 +56,13 @@ public abstract class Area extends Position {
 		hovered.set(value); }
 	public boolean isHovered() { return hoveredProperty().get(); }
 
-	private ObjectProperty<Runnable> onMouseClicked;
-	public ObjectProperty<Runnable> onMouseClickedProperty() {
-		if (onMouseClicked == null) onMouseClicked = new SimpleObjectProperty<>();
+	private final List<Runnable> onMouseClicked = new ArrayList<>();
+	public void addOnMouseClicked(Runnable r) {
+		onMouseClicked.add(r);
+	}
+	public List<Runnable> getOnMouseClickedListeners() {
 		return onMouseClicked;
 	}
-	public void setOnMouseClicked(Runnable r) { onMouseClickedProperty().set(r); }
-	public Runnable getOnMouseClicked() { return onMouseClickedProperty().get(); }
 
 	
 }

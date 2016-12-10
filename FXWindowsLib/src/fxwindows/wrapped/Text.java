@@ -1,6 +1,5 @@
 package fxwindows.wrapped;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;
@@ -107,8 +106,7 @@ public class Text extends ShapeBase {
 
 	private void setupBindings() {
 		group.setOnMouseClicked((e) -> {
-			Runnable runner = getOnMouseClicked();
-			if (runner != null) runner.run();
+			for (Runnable r : getOnMouseClickedListeners()) r.run();
 		});
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());

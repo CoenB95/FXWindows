@@ -34,6 +34,9 @@ public abstract class Container extends ShapeBase {
 					for (ShapeBase w : c.getAddedSubList()) {
 						if (pane != null) w.addToPane(pane);
 					}
+					for (ShapeBase w : c.getRemoved()) {
+						if (pane != null) w.removeFromPane(pane);
+					}
 				}
 			}
 			

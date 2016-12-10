@@ -89,7 +89,7 @@ public abstract class Manager extends Application {
 			bindHeight(canv.heightProperty());
 			bindWidth(canv.widthProperty());
 			canv.setOnMouseClicked((e) -> {
-				if (getOnMouseClicked() != null) getOnMouseClicked().run();
+				for (Runnable r : getOnMouseClickedListeners()) r.run();
 			});
 			addToPane(canv);
 		}
