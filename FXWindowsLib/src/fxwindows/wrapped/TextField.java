@@ -1,5 +1,7 @@
 package fxwindows.wrapped;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
@@ -12,6 +14,7 @@ public class TextField extends ShapeBase {
 	private javafx.scene.control.TextField field;
 	private boolean initialized = false;
 	private final StringProperty text = new SimpleStringProperty();
+	private final ObjectProperty<Runnable> onAction = new SimpleObjectProperty<>();
 
 	public TextField() {
 		this(new javafx.scene.control.TextField());
@@ -38,6 +41,9 @@ public class TextField extends ShapeBase {
 				field.maxHeightProperty().bind(heightProperty());
 			}
 		});
+		field.setOnAction(e -> {
+			if (onAction.get() != null) onAction.get().run();
+		});
 		textProperty().bindBidirectional(field.textProperty());
 		Rectangle rect = new Rectangle(10,10);
 		field.setShape(rect);
@@ -48,8 +54,16 @@ public class TextField extends ShapeBase {
 		return text;
 	}
 	
+	public Runnable getOnAction() {
+		return onAction.get();
+	}
+	
 	public String getText() {
 		return textProperty().get();
+	}
+	
+	public void setOnAction(Runnable value) {
+		onAction.set(value);
 	}
 	
 	public void setText(String value) {
