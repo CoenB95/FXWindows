@@ -72,6 +72,7 @@ public abstract class Manager extends Application {
 		setup(shapeContainer);
 		pane.getChildren().add(t);
 		primaryStage.setScene(new Scene(new BorderPane(pane),500,500));
+		primaryStage.setOnCloseRequest((e) -> shutdown());
 		primaryStage.show();
 	}
 
@@ -105,4 +106,5 @@ public abstract class Manager extends Application {
 
 	public abstract void setup(RootContainer canvas);
 	public abstract void frame();
+	public abstract void shutdown();
 }
