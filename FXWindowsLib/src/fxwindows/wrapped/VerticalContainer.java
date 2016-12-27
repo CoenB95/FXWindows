@@ -1,8 +1,5 @@
 package fxwindows.wrapped;
 
-import fxwindows.animation.ValueAnimation;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -22,7 +19,6 @@ public abstract class VerticalContainer extends Container {
 	private Pane pane;
 	private BooleanProperty scrollBlocked = new SimpleBooleanProperty();
 	private final DoubleProperty scroll = new SimpleDoubleProperty();
-	private ValueAnimation userScrollAnim;
 
 	/**Flag notifying one or more things have changed that require a
 	 * horizontal re-layout.*/
@@ -42,25 +38,13 @@ public abstract class VerticalContainer extends Container {
 
 	public double getScroll() { return scrollProperty().get(); }
 	public void setScroll(double value) { scrollProperty().set(value); }
-	
-	
-	
-	// 
-	/*public DoubleProperty maxHeightProperty() {
-		return maxHeight;
-	}
 
-	public double getMaxHeigth() { return maxHeightProperty().get(); }
-	public void setMaxHeigth(double value) { maxHeightProperty().set(value); }
-	 */
 	public VerticalContainer() {
 		super();
 		setMaxHeight(250);
 		setMaxWidth(100);
 
-		ChangeListener<Number> change = (a,b,c) -> {
-			updateRequested = true;
-		};
+		ChangeListener<Number> change = (a,b,c) -> updateRequested = true;
 		scrollProperty().addListener(change);
 		contentHeightProperty().addListener(change);
 		contentWidthProperty().addListener(change);
@@ -83,10 +67,6 @@ public abstract class VerticalContainer extends Container {
 				return;
 			}
 			double oldScroll = getScroll();
-			if (userScrollAnim != null) {
-				oldScroll = userScrollAnim.getTo();
-				userScrollAnim.stop();
-			}
 			double newScroll = oldScroll + e.getTextDeltaY()*e.getMultiplierY();
 			if (updateScroll(oldScroll, newScroll)) e.consume();
 		});
@@ -107,12 +87,6 @@ public abstract class VerticalContainer extends Container {
 		background.layoutYProperty().bind(yProperty());
 		background.widthProperty().bind(widthProperty());
 		background.heightProperty().bind(heightProperty());
-		
-		//maxWidthProperty().addListener((a1,a2,a3) -> {
-		//	for (ShapeBase sh : getChildren()) {
-		//		sh.setMaxWidth(a3.doubleValue());
-		//	}
-		//});
 
 		// When the amount of children changes, a vertical re-layout is needed.
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
@@ -122,28 +96,17 @@ public abstract class VerticalContainer extends Container {
 						// Also when a single item changes its size;
 						updateRequested = true;
 					});
-					//w.setMaxWidth(getMaxWidth());
 					w.maxWidthProperty().bind(maxWidthProperty());
-					//maxWidthProperty().addListener((a1,a2,a3) -> {
-					//	if (a3.doubleValue() < a2.doubleValue()) {
-					//		System.out.println("maxWidth went down! " + a2+" "+ a3);
-					//	}
-					//	w.setMaxWidth(a3.doubleValue());
-					//});//.bind(this.maxWidthProperty());
 					updateRequested = true;
 				}
 				if (!c.getRemoved().isEmpty()) updateRequested = true;
 			}
 		});
-		//bindHeight(contentHeightProperty());
-		//bindWidth(contentWidthProperty());
 	}
 
 	@Override
 	public void update(long time) {
 		super.update(time);
-		if (userScrollAnim != null && !userScrollAnim.hasFinished())
-			setScroll(userScrollAnim.getValue());
 		if (updateRequested) {
 			updateY();
 			updateScroll(getScroll(), getScroll());
@@ -167,41 +130,27 @@ public abstract class VerticalContainer extends Container {
 		}
 		setContentHeight(height);
 		setContentWidth(width);
-		//setHeight(Math.min(height, getMaxHeigth()));
-		//setWidth(width);
 	}
 	
 	private boolean updateScroll(double oldValue, double newValue) {
 		boolean consumed = false;
-		if (isScrollBlocked()) return consumed;
+		if (isScrollBlocked()) return false;
 		if (getContentHeight() <= getMaxHeight()) {
 			setScroll(0);
-			return consumed;
-		}
-		if (userScrollAnim != null) {
-			oldValue = userScrollAnim.getTo();
-			userScrollAnim.stop();
+			return false;
 		}
 		if (newValue > -(getContentHeight() - getMaxHeight())) {
 			if (newValue < 0) {
-				//userScrollAnim = new ValueAnimation(this, Duration.ofMillis(100))
-				//		.setFrom(getScroll()).setTo(newScroll);
 				setScroll(newValue);
 				consumed = true;
 			} else {
-				//userScrollAnim = new ValueAnimation(this, Duration.ofMillis(100))
-				//		.setFrom(getScroll()).setTo(0);
 				if (oldValue != 0) consumed = true;
 				setScroll(0);
 			}
 		} else {
-			//userScrollAnim = new ValueAnimation(this, Duration.ofMillis(100)).
-			//		setFrom(getScroll()).setTo(-(getListHeigth() - 
-			//				getMaxHeigth()));
 			if (oldValue != -(getContentHeight() - getMaxHeight())) consumed = true;
 			setScroll(-(getContentHeight() - getMaxHeight()));
 		}
-		if (userScrollAnim != null) userScrollAnim.start();
 		return consumed;
 	}
 

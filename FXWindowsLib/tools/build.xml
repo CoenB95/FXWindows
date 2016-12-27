@@ -22,10 +22,10 @@
     </target>
 	<target depends="javadoc" name="create-javadoc">
 		<echo>Compressing the Javadoc...</echo>
-		<jar 
-			compress="true" 
-			destfile="../output/FXWindows-javadoc.jar" 
-			basedir="../doc"></jar>
+		<jar
+				compress="true"
+				destfile="../output/FXWindows-javadoc.jar"
+				basedir="../doc"/>
 		<echo>Done building Javadoc</echo>
 	</target>
 	<target name="create-jar">
@@ -33,7 +33,7 @@
 		<jar 
 			compress="true" 
 			destfile="../output/FXWindows.jar" 
-			basedir="../bin">
+			basedir="../../out/production/FXWindows">
 		</jar>
 		<echo>Done building jar</echo>
 	</target>
