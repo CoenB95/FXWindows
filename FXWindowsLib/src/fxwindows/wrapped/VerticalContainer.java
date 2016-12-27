@@ -22,7 +22,6 @@ public abstract class VerticalContainer extends Container {
 	private Pane pane;
 	private BooleanProperty scrollBlocked = new SimpleBooleanProperty();
 	private final DoubleProperty scroll = new SimpleDoubleProperty();
-	//private final DoubleProperty maxHeight = new SimpleDoubleProperty(250);
 	private ValueAnimation userScrollAnim;
 
 	/**Flag notifying one or more things have changed that require a
