@@ -1,6 +1,6 @@
 package fxwindows.core;
 
-import fxwindows.wrapped.Container;
+import fxwindows.wrapped.container.Container;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
@@ -58,7 +58,8 @@ public abstract class Manager extends Application {
 						t.setText(fps + " FPS");
 					}
 					canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
-					shapeContainer.update(now/1000000);
+                    Updatable.updateAll(now/1000000);
+					shapeContainer.update();
 					frame();
 				} catch (Exception e) {
 					e.printStackTrace();

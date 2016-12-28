@@ -8,15 +8,19 @@ import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.SimpleDoubleProperty;
 
 public class MoveAnimation extends Animation {
+
 	private DoubleExpression fromX;
 	private DoubleExpression fromY;
 	private DoubleExpression toX;
 	private DoubleExpression toY;
+	private ShapeBase drawable;
+
 	public MoveAnimation(Duration duration) {
 		super(duration);
 	}
 	public MoveAnimation(ShapeBase drawable, Duration duration) {
-		super(drawable, duration);
+		super(duration);
+		this.drawable = drawable;
 		fromX = new SimpleDoubleProperty();
 		fromY = new SimpleDoubleProperty();
 		toX = new SimpleDoubleProperty();
@@ -77,9 +81,9 @@ public class MoveAnimation extends Animation {
 
 	@Override
 	public void update(double progress) {
-		((ShapeBase)getDrawable()).setTransformX(fromX.get() + (toX.get() - 
+		drawable.setTransformX(fromX.get() + (toX.get() -
 				fromX.get())*progress);
-		((ShapeBase)getDrawable()).setTransformY(fromY.get() + (toY.get() -
+		drawable.setTransformY(fromY.get() + (toY.get() -
 				fromY.get())*progress);
 	}
 }

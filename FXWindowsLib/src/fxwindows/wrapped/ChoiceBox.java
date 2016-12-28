@@ -17,7 +17,7 @@ public class ChoiceBox extends VerticalContainer {
 	private boolean relayout = true;
 	private boolean itemUpdate = true;
 	private boolean expanding = true;
-	private ValueAnimation scrollAnim;
+	//private ValueAnimation scrollAnim;
 	private ValueAnimation heightAnim;
 	private SmoothInterpolator interpolator;
 	private Duration duration;
@@ -52,14 +52,14 @@ public class ChoiceBox extends VerticalContainer {
 				}
 			}
 		});
-		ChangeListener<Number> lis = (v1,v2,v3) -> relayout = true;
-		widthProperty().addListener(lis);
-		heightProperty().addListener(lis);
+		//ChangeListener<Number> lis = (v1,v2,v3) -> relayout = true;
+		//widthProperty().addListener(lis);
+		//heightProperty().addListener(lis);
 	}
 	
 	@Override
-	public void update(long time) {
-		super.update(time);
+	public void update() {
+		super.update();
 		if (!expanding && itemPosition >= getChildren().size())
 			itemPosition = getChildren().size()-1;
 		if (itemUpdate) itemPosition = getChildren().indexOf(itemSelected);
@@ -73,7 +73,7 @@ public class ChoiceBox extends VerticalContainer {
 				toScroll.set(temp);
 			} else {
 				// Prevent going back to the top on re-expand.
-				toScroll.set(getScroll());
+				toScroll.set(getScrollY());
 			}
 			if (expanding) toHeight.set(Math.min(getContentHeight(), getMaxHeight()));
 			else toHeight.set(itemSelected.getHeight());
@@ -84,28 +84,27 @@ public class ChoiceBox extends VerticalContainer {
 					}
 				} else toScroll.set(0);
 			}
+			setScrollY(toScroll.get());
 		}
 		if (itemUpdate) {
 			itemUpdate = false;
 			blockScroll(!expanding);
-			double fromScroll = 0;
-			double fromHeight = 0;
-			fromScroll = getScroll();
+			double fromScroll;
+			double fromHeight;
+			fromScroll = getScrollY();
 			fromHeight = getHeight();
 			
-			scrollAnim = new ValueAnimation(this,
-					duration).setFrom(fromScroll).setTo(toScroll);
-			heightAnim = new ValueAnimation(this, 
-					duration).setFrom(fromHeight).setTo(toHeight);
-			scrollAnim.setInterpolator(interpolator);
+			//scrollAnim = new ValueAnimation(duration).setFrom(fromScroll).setTo(toScroll);
+			heightAnim = new ValueAnimation(duration).setFrom(fromHeight).setTo(toHeight);
+			//scrollAnim.setInterpolator(interpolator);
 			heightAnim.setInterpolator(interpolator);
-			scrollAnim.start();
+			//scrollAnim.start();
 			heightAnim.start();
 			unbindHeight();
 		}
-		if (scrollAnim != null && !scrollAnim.hasFinished())
-			setScroll(scrollAnim.getValue());
-		else if (!expanding) setScroll(toScroll.get());
+		//if (scrollAnim != null && !scrollAnim.hasFinished())
+		//	setScrollY(scrollAnim.getValue());
+		//else if (!expanding) setScrollY(toScroll.get());
 		if (heightAnim != null && !heightAnim.hasFinished())
 			setHeight(heightAnim.getValue());
 		else if (!expanding) setHeight(toHeight.get());

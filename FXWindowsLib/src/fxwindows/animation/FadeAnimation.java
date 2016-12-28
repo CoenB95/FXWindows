@@ -1,23 +1,26 @@
 package fxwindows.animation;
 
 
+import fxwindows.core.Colorable;
+
 import java.time.Duration;
 
-import fxwindows.core.AnimatedColorable;
-
 public class FadeAnimation extends ValueAnimation {
-	
+
+	private Colorable animatedColorable;
+
 	public FadeAnimation(Duration duration) {
 		super(duration);
 	}
 	
-	public FadeAnimation(AnimatedColorable drawable, Duration duration) {
-		super(drawable, duration);
+	public FadeAnimation(Colorable drawable, Duration duration) {
+		super(duration);
+		animatedColorable = drawable;
 	}
 
 	@Override
 	public void update(double progress) {
 		super.update(progress);
-		((AnimatedColorable)getDrawable()).setAlpha(getValue());
+		animatedColorable.setAlpha(getValue());
 	}
 }

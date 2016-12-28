@@ -33,8 +33,7 @@ public class ImageView extends ShapeBase {
 	}
 	
 	@Override
-	public void update(long time) {
-		super.update(time);
+	public void update() {
 		if (recalculate) {
 			recalculate = false;
 			Bounds b = view.getBoundsInParent();

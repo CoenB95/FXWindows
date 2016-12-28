@@ -1,13 +1,11 @@
 package fxwindows.animation;
 
 
-import java.time.Duration;
-
-import fxwindows.core.Animatable;
-import fxwindows.core.AnimatedColorable;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+
+import java.time.Duration;
 
 public class ValueAnimation extends Animation {
 	
@@ -17,10 +15,6 @@ public class ValueAnimation extends Animation {
 	
 	public ValueAnimation(Duration duration) {
 		super(duration);
-	}
-	
-	public ValueAnimation(Animatable drawable, Duration duration) {
-		super(drawable, duration);
 		fromValue = new SimpleDoubleProperty();
 		toValue = new SimpleDoubleProperty();
 	}
