@@ -67,7 +67,8 @@ public class Text extends ShapeBase {
 	public DoubleProperty wrappingWidthProperty() {
 		if (wrappingWidth == null) {
 			wrappingWidth = new SimpleDoubleProperty(0);
-			textNode.wrappingWidthProperty().bind(wrappingWidth);
+			textNode.wrappingWidthProperty().bind(wrappingWidth.subtract(
+			        paddingXProperty().multiply(2)));
 		}
 		return wrappingWidth;
 	}
@@ -112,6 +113,8 @@ public class Text extends ShapeBase {
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
 		group.layoutYProperty().bind(yProperty());
+		textNode.layoutXProperty().bind(paddingXProperty());
+        textNode.layoutYProperty().bind(paddingYProperty());
 		textNode.setTextOrigin(VPos.TOP);
 		group.opacityProperty().bind(alphaProperty());
 		group.visibleProperty().bind(alphaProperty().greaterThan(0));

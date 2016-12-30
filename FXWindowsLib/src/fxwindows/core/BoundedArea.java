@@ -7,7 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public abstract class BoundedArea extends Area {
+public abstract class BoundedArea extends PaddedArea {
 
 	private final DoubleProperty contentHeight = new SimpleDoubleProperty();
 	private final DoubleProperty contentWidth = new SimpleDoubleProperty();
@@ -28,11 +28,12 @@ public abstract class BoundedArea extends Area {
 			case FILL_SPACE:
 				return getMaxHeight();
 			case WRAP_CONTENT:
-				return getContentHeight();
+				return getContentHeight() + 2 * getPaddingY();
 			default:
 				return 0.0;
 			}
-		}, contentHeightProperty(), maxHeightProperty(), heightBehaviorProperty());
+		}, contentHeightProperty(), maxHeightProperty(), heightBehaviorProperty(),
+				paddingYProperty());
 		bindHeight(heightBinding);
 		
 		widthBinding = Bindings.createDoubleBinding(() -> {
@@ -40,11 +41,12 @@ public abstract class BoundedArea extends Area {
 			case FILL_SPACE:
 				return getMaxWidth();
 			case WRAP_CONTENT:
-				return getContentWidth();
+				return getContentWidth() + 2 * getPaddingX();
 			default:
 				return 0.0;
 			}
-		}, contentWidthProperty(), maxWidthProperty(), widthBehaviorProperty());
+		}, contentWidthProperty(), maxWidthProperty(), widthBehaviorProperty(),
+                paddingXProperty());
 		bindWidth(widthBinding);
 	}
 	// 

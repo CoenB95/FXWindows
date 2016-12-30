@@ -92,7 +92,7 @@ public class Position {
 
 	/**
 	 * Sets the transformed position.
-	 * @param x the new value.
+	 * @param y the new value.
 	 */
 	public void setTransformY(double y) {
 		this.transformYProperty().set(y);
@@ -101,6 +101,7 @@ public class Position {
 	public double getTransformY() {
 		return transformYProperty().get();
 	}
+
 
 	// Transformed-position
 	public ReadOnlyDoubleProperty xProperty() {

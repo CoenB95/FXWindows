@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.binding.DoubleExpression;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 /**
  * The base class for all 'nodes' in FXWindows.
@@ -18,33 +13,63 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public abstract class Area extends Position {
 
-	
-
-	
 	// Width and Height
-	private final ReadOnlyDoubleWrapper height = new ReadOnlyDoubleWrapper();
+	private final DoubleProperty baseHeight = new SimpleDoubleProperty();
+	private final ReadOnlyDoubleWrapper transformedHeight =
+            new ReadOnlyDoubleWrapper();
+
 	public ReadOnlyDoubleProperty heightProperty() {
-		return height.getReadOnlyProperty();
+		return transformedHeight.getReadOnlyProperty();
 	}
 	
 	/**Sets the calculated width of the object. To be used internal only.*/
-	protected void setHeight(double value) { height.set(value); }
-	protected void unbindHeight() { height.unbind(); }
-	protected void bindHeight(DoubleExpression value) { height.bind(value); }
-	public double getHeight() { return heightProperty().get(); }
+	protected void setHeight(double value) {
+	    baseHeight.set(value);
+	}
 
-	private final ReadOnlyDoubleWrapper width = new ReadOnlyDoubleWrapper();
+	protected void unbindHeight() {
+	    baseHeight.unbind();
+	}
+
+	protected void bindHeight(DoubleExpression value) {
+	    baseHeight.bind(value);
+	}
+
+	public double getHeight() {
+	    return heightProperty().get();
+	}
+
+	private final DoubleProperty baseWidth = new SimpleDoubleProperty();
+	private final ReadOnlyDoubleWrapper transformedWidth =
+            new ReadOnlyDoubleWrapper();
+
 	public ReadOnlyDoubleProperty widthProperty() {
-		return width.getReadOnlyProperty();
+		return transformedWidth.getReadOnlyProperty();
 	}
 
 	/**Sets the calculated width of the object. To be used internal only.*/
-	protected void setWidth(double value) { width.set(value); }
-	protected void unbindWidth() { width.unbind(); }
-	protected void bindWidth(DoubleExpression value) { width.bind(value); }
-	public double getWidth() { return widthProperty().get(); }
+	protected void setWidth(double value) {
+	    baseWidth.set(value);
+	}
 
-	
+	protected void unbindWidth() {
+	    baseWidth.unbind();
+	}
+
+	protected void bindWidth(DoubleExpression value) {
+	    baseWidth.bind(value);
+	}
+
+	public double getWidth() {
+	    return transformedWidth.get();
+	}
+
+
+	public Area() {
+	    transformedHeight.bind(baseHeight);
+        transformedWidth.bind(baseWidth);
+    }
+
 	// Other properties
 	private ReadOnlyBooleanWrapper hovered;
 	public ReadOnlyBooleanProperty hoveredProperty() {
