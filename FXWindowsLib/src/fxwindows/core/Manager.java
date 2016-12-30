@@ -1,11 +1,13 @@
 package fxwindows.core;
 
+import com.sun.istack.internal.NotNull;
 import fxwindows.animation.Animation;
 import fxwindows.wrapped.container.Container;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
@@ -24,6 +26,8 @@ public abstract class Manager extends Application {
 
 	private AnimationTimer timer;
 	private Pane pane;
+	private Text fpsText;
+    private RootContainer oldContainer;
 	private RootContainer shapeContainer;
 	private long frameStart;
 	private long frameCount;
@@ -43,9 +47,9 @@ public abstract class Manager extends Application {
 	}
 
 	public void shapeVersion(Stage primaryStage) {
-		Text t = new Text();
-		t.setX(10);
-		t.setY(10);
+		fpsText = new Text();
+		fpsText.setX(10);
+		fpsText.setY(10);
 		Canvas canv = new Canvas(10,10);
 		timer = new AnimationTimer() {
 			@Override
@@ -56,11 +60,12 @@ public abstract class Manager extends Application {
 						fps = frameCount*4;
 						frameStart = System.currentTimeMillis();
 						frameCount = 0;
-						t.setText(fps + " FPS");
+						fpsText.setText(fps + " FPS");
 					}
 					canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
                     Updatable.updateAll(now/1000000);
-					shapeContainer.update();
+                    shapeContainer.update();
+                    oldContainerHandler();
 					frame();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,26 +74,65 @@ public abstract class Manager extends Application {
 		};
 		timer.start();
 		pane = new Pane();
-		pane.getChildren().add(canv);
-		shapeContainer = new RootContainer(pane);
-		setup(shapeContainer);
-		pane.getChildren().add(t);
+		pane.getChildren().addAll(canv, fpsText);
+		RootContainer startContainer = new RootContainer();
+		setup(startContainer);
+        setRoot(startContainer, true);
 		primaryStage.setScene(new Scene(new BorderPane(pane),500,500));
 		primaryStage.setOnCloseRequest((e) -> shutdown());
 		primaryStage.show();
 	}
 
-	public void setRoot(RootContainer root) {
-	    if (shapeContainer.exitAnimation != null) {
-	        final RootContainer prev = shapeContainer;
-	        prev.exitAnimation.start();
-	        prev.exitAnimation.unregisteredProperty().addListener((v1, v2, v3) -> {
-	            if (v3) prev.removeFromPane(pane);
-            });
+	private void oldContainerHandler() {
+	    if (shapeContainer == null || oldContainer == null) return;
+	    boolean oldDone = false;
+	    boolean newDone = false;
+        if (shapeContainer.enterAnimation != null) {
+            newDone = shapeContainer.enterAnimation.hasFinished();
+        } else newDone = true;
+        if (oldContainer.exitAnimation != null) {
+            oldDone = oldContainer.exitAnimation.hasFinished();
+        } else oldDone = true;
+
+        if (oldDone && newDone) {
+            // All animations have finished so we can remove the old container
+            // (it was kept because it could still be visible).
+            oldContainer.removeFromPane(pane);
+            oldContainer = null;
+            System.out.println("Removed old root");
+        }
+    }
+
+	public void setRoot(@NotNull RootContainer root, boolean newInFront) {
+	    if (oldContainer != null) {
+	        System.err.println("Root switch canceled: old was still going. " +
+                    "Try again later.");
+	        return;
+        }
+	    if (shapeContainer != null) {
+            oldContainer = shapeContainer;
+	        if (shapeContainer.exitAnimation != null) {
+                System.out.println("Start exit animation old root");
+                oldContainer.exitAnimation.start();
+            }
         }
         shapeContainer = root;
+        System.out.println("Set new root");
+        pane.setOnMouseMoved((e) -> {
+            shapeContainer.mouseX.set(e.getSceneX());
+            shapeContainer.mouseY.set(e.getSceneY());
+        });
+        shapeContainer.bindHeight(pane.heightProperty());
+        shapeContainer.bindWidth(pane.widthProperty());
+        pane.setOnMouseClicked((e) -> {
+            for (Runnable r : shapeContainer.getOnMouseClickedListeners()) r.run();
+        });
 	    shapeContainer.addToPane(pane);
+	    if (!newInFront && oldContainer != null) oldContainer.getPane().toFront();
+	    // Make sure the fps stays visible.
+        fpsText.toFront();
         if (shapeContainer.enterAnimation != null) {
+            System.out.println("Start enter animation new root");
             shapeContainer.enterAnimation.start();
         }
     }
@@ -100,20 +144,6 @@ public abstract class Manager extends Application {
 
 		private Animation enterAnimation;
 		private Animation exitAnimation;
-
-		public RootContainer(Pane canv) {
-			super();
-			canv.setOnMouseMoved((e) -> {
-				mouseX.set(e.getSceneX());
-				mouseY.set(e.getSceneY());
-			});
-			bindHeight(canv.heightProperty());
-			bindWidth(canv.widthProperty());
-			canv.setOnMouseClicked((e) -> {
-				for (Runnable r : getOnMouseClickedListeners()) r.run();
-			});
-			addToPane(canv);
-		}
 
 		public void setEnterAnimation(Animation value) {
 		    enterAnimation = value;

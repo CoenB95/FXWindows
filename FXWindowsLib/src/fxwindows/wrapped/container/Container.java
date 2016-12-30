@@ -76,7 +76,7 @@ public abstract class Container extends ShapeBase {
         });
 	}
 
-	protected Pane getPane() {
+	public Pane getPane() {
 	    return pane;
     }
 
