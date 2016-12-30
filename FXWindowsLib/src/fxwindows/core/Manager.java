@@ -1,5 +1,6 @@
 package fxwindows.core;
 
+import fxwindows.animation.Animation;
 import fxwindows.wrapped.container.Container;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -16,8 +17,8 @@ import javafx.stage.Stage;
  * Base class for using FXWindows. Subclasses need to call launch in the
  * main method in order for the application to start.
  * The setup method passes a root container for the nodes to be added to.
- * @author CoenB95
  *
+ * @author CoenB95
  */
 public abstract class Manager extends Application {
 
@@ -77,10 +78,28 @@ public abstract class Manager extends Application {
 		primaryStage.show();
 	}
 
+	public void setRoot(RootContainer root) {
+	    if (shapeContainer.exitAnimation != null) {
+	        final RootContainer prev = shapeContainer;
+	        prev.exitAnimation.start();
+	        prev.exitAnimation.unregisteredProperty().addListener((v1, v2, v3) -> {
+	            if (v3) prev.removeFromPane(pane);
+            });
+        }
+        shapeContainer = root;
+	    shapeContainer.addToPane(pane);
+        if (shapeContainer.enterAnimation != null) {
+            shapeContainer.enterAnimation.start();
+        }
+    }
+
 	public static class RootContainer extends Container {
 
 		private final DoubleProperty mouseX = new SimpleDoubleProperty();
 		private final DoubleProperty mouseY = new SimpleDoubleProperty();
+
+		private Animation enterAnimation;
+		private Animation exitAnimation;
 
 		public RootContainer(Pane canv) {
 			super();
@@ -95,6 +114,14 @@ public abstract class Manager extends Application {
 			});
 			addToPane(canv);
 		}
+
+		public void setEnterAnimation(Animation value) {
+		    enterAnimation = value;
+        }
+
+        public void setExitAnimation(Animation value) {
+		    exitAnimation = value;
+        }
 
 		public DoubleProperty mouseXProperty() {
 			return mouseX;

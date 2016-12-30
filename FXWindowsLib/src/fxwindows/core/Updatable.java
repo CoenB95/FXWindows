@@ -1,5 +1,10 @@
 package fxwindows.core;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -13,13 +18,16 @@ public abstract class Updatable {
     private static final List<Updatable> additionQueue = new ArrayList<>();
     private static final List<Updatable> updatables = new ArrayList<>();
 
-    private boolean unregisterRequested;
+    private ReadOnlyBooleanWrapper unregisterRequested = new ReadOnlyBooleanWrapper();
     private boolean unregistered;
 
     public Updatable() {
-        unregisterRequested = false;
         unregistered = true;
         register();
+    }
+
+    public ReadOnlyBooleanProperty unregisteredProperty() {
+        return unregisterRequested.getReadOnlyProperty();
     }
 
     public static int getAmountUpdatables() {
@@ -37,7 +45,7 @@ public abstract class Updatable {
         while (it.hasNext()) {
             Updatable u = it.next();
             u.update(currentTimeMillis);
-            if (u.unregisterRequested) {
+            if (u.unregisterRequested.get()) {
                 it.remove();
                 u.unregistered = true;
             }
@@ -45,17 +53,17 @@ public abstract class Updatable {
     }
 
     protected boolean isUnregistered() {
-        return unregisterRequested || unregistered;
+        return unregisterRequested.get();
     }
 
     protected void register() {
         if (unregistered) additionQueue.add(this);
         unregistered = false;
-        unregisterRequested = false;
+        unregisterRequested.set(false);
     }
 
     protected void unregister() {
-        unregisterRequested = true;
+        unregisterRequested.set(true);
     }
 
     public abstract void update(long currentTimeMillis);
