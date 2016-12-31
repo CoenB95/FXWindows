@@ -34,7 +34,7 @@ public class Line extends ShapeBase {
 		setXY(startX, startY);
 	}
 	
-	public Line(DoubleExpression startY, DoubleExpression startX) {
+	public Line(DoubleExpression startX, DoubleExpression startY) {
 		this();
 		bindX(startX);
 		bindY(startY);
