@@ -132,14 +132,9 @@ public class Text extends ShapeBase {
 			return getBackgroundColor();
 		}, backgroundColorProperty(), group.hoverProperty());
 		rectNode.fillProperty().bind(fillBinding);
-		
+		rectNode.strokeProperty().bind(borderColorProperty());
+		rectNode.strokeWidthProperty().bind(borderWidthProperty());
 		recalculate = true;
-//		textClip.setLayoutX(0);
-//		textClip.setLayoutY(0);
-//		textClip.widthProperty().bind(widthProperty());
-//		textClip.heightProperty().bind(heightProperty());
-//		//textClip.setHeight(100);
-//		textNode.setClip(textClip);
 	}
 
 	private void calculateSize() {
