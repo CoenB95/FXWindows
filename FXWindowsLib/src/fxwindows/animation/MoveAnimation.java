@@ -3,7 +3,7 @@ package fxwindows.animation;
 
 import java.time.Duration;
 
-import fxwindows.wrapped.ShapeBase;
+import fxwindows.core.ShapeBase;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.SimpleDoubleProperty;
 

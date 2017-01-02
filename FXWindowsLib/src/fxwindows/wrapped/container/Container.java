@@ -2,7 +2,7 @@ package fxwindows.wrapped.container;
 
 import java.util.ArrayList;
 
-import fxwindows.wrapped.ShapeBase;
+import fxwindows.core.ShapeBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

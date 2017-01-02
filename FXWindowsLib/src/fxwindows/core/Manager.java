@@ -1,17 +1,17 @@
 package fxwindows.core;
 
-import com.sun.istack.internal.NotNull;
 import fxwindows.animation.Animation;
+import fxwindows.wrapped.Line;
 import fxwindows.wrapped.container.Container;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -36,6 +36,19 @@ public abstract class Manager extends Application {
 	public static void main(String[] args) {
 	    start(Test.class, args);
     }
+	
+	public static class TestContainer extends Manager.RootContainer {
+		
+		public TestContainer() {
+			Line line = new Line(0,0);
+        	line.bindEndXY(widthProperty(), heightProperty());
+        	line.setBorderColor(Color.BLACK);
+        	line.setBorderWidth(2);
+        	getChildren().add(line);
+        	setContentHeight(50);
+        	setContentWidth(50);
+		}
+	}
 
     public static class Test extends Manager {
 
@@ -45,7 +58,8 @@ public abstract class Manager extends Application {
 
         @Override
         public void setup(RootContainer canvas) {
-
+        	TestContainer container = new TestContainer();
+        	canvas.getChildren().add(container);
         }
 
         @Override
@@ -129,7 +143,7 @@ public abstract class Manager extends Application {
         }
     }
 
-	public void setRoot(@NotNull RootContainer root, boolean newInFront) {
+	public void setRoot(RootContainer root, boolean newInFront) {
 	    if (oldContainer != null) {
 	        System.err.println("Root switch canceled: old was still going. " +
                     "Try again later.");

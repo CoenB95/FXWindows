@@ -1,6 +1,7 @@
 package fxwindows.wrapped;
 
 import fxwindows.core.Position;
+import fxwindows.core.ShapeBase;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

@@ -1,5 +1,6 @@
 package fxwindows.wrapped;
 
+import fxwindows.core.ShapeBase;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.DoubleProperty;

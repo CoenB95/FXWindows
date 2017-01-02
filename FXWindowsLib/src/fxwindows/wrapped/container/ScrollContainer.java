@@ -3,11 +3,7 @@ package fxwindows.wrapped.container;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.ValueAnimation;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.layout.Pane;
-
 import java.time.Duration;
 
 /**
@@ -16,8 +12,6 @@ import java.time.Duration;
  * @version 1.0
  */
 public abstract class ScrollContainer extends Container {
-
-    private Pane viewPort;
 
     private BooleanProperty scrollBlocked = new SimpleBooleanProperty();
     private ValueAnimation scrollXAnim;

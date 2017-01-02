@@ -1,6 +1,7 @@
 package fxwindows.wrapped;
 
 import fxwindows.wrapped.container.ScrollContainer;
+import fxwindows.core.ShapeBase;
 import javafx.collections.ListChangeListener.Change;
 
 /**

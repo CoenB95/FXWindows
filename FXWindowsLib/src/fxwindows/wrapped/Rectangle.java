@@ -1,5 +1,6 @@
 package fxwindows.wrapped;
 
+import fxwindows.core.ShapeBase;
 import javafx.beans.binding.DoubleExpression;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;

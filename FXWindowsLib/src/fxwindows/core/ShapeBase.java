@@ -1,4 +1,4 @@
-package fxwindows.wrapped;
+package fxwindows.core;
 
 import fxwindows.core.ColoredBoundedArea;
 import javafx.beans.property.ObjectProperty;
@@ -17,7 +17,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseDragged = new SimpleObjectProperty<>();
 
 	public ShapeBase() {
-
+		System.out.println("A new ShapeBase is created!");
     }
 
     protected void setupClickedHandlers(Node node) {

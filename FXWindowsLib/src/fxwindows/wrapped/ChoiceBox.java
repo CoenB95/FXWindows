@@ -5,6 +5,7 @@ import java.time.Duration;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.SmoothInterpolator.AnimType;
 import fxwindows.animation.ValueAnimation;
+import fxwindows.core.ShapeBase;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
