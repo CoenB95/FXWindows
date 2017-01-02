@@ -22,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 public abstract class Container extends ShapeBase {
 
 	private Pane pane;
+	private Pane innerPane;
 	private Rectangle rect;
 	private Rectangle background;
 
@@ -40,19 +41,25 @@ public abstract class Container extends ShapeBase {
         // So when we changed this code to move the local Pane,
         // we effectively doubled the position of all contents.
 
-        // Setup all things needed to clip the children to the max height;
-        pane = new Pane();
-        pane.layoutXProperty().bind(innerXProperty());
-        pane.layoutYProperty().bind(innerYProperty());
-        pane.prefWidthProperty().bind(innerWidthProperty());
-        pane.prefHeightProperty().bind(innerHeightProperty());
+		pane = new Pane();
+		pane.layoutXProperty().bind(xProperty());
+		pane.layoutYProperty().bind(yProperty());
+		pane.prefWidthProperty().bind(widthProperty());
+        pane.prefHeightProperty().bind(heightProperty());
         pane.opacityProperty().bind(alphaProperty());
+        
+        // Setup all things needed to clip the children to the max height;
+        innerPane = new Pane();
+        innerPane.layoutXProperty().bind(paddingXProperty());
+        innerPane.layoutYProperty().bind(paddingYProperty());
+        innerPane.prefWidthProperty().bind(innerWidthProperty());
+        innerPane.prefHeightProperty().bind(innerHeightProperty());
 
         rect = new javafx.scene.shape.Rectangle();
         // Don't bind position of rect, background and children. See note.
         rect.widthProperty().bind(innerWidthProperty());
         rect.heightProperty().bind(innerHeightProperty());
-        pane.setClip(rect);
+        innerPane.setClip(rect);
 
 
         // The background of this container.
@@ -60,26 +67,24 @@ public abstract class Container extends ShapeBase {
         // panel. Instead it should be drawn separately at the back. This way
         // children don't need to calculate padding.
         background = new javafx.scene.shape.Rectangle();
-        background.xProperty().bind(xProperty());
-        background.yProperty().bind(yProperty());
         background.fillProperty().bind(backgroundColorProperty());
         background.strokeProperty().bind(borderColorProperty());
         background.strokeWidthProperty().bind(borderWidthProperty());
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
-        //pane.getChildren().add(background);
+        pane.getChildren().addAll(background, innerPane);
 
 		getChildren().addListener((ListChangeListener<ShapeBase>) c -> {
             while (c.next()) {
                 for (ShapeBase w : c.getAddedSubList()) {
-                    w.addToPane(pane);
+                    w.addToPane(innerPane);
                 }
                 for (ShapeBase w : c.getRemoved()) {
-                    w.removeFromPane(pane);
+                    w.removeFromPane(innerPane);
                 }
             }
         });
-		setupClickedHandlers(pane);
+		setupClickedHandlers(innerPane);
 	}
 
 	public Pane getPane() {
@@ -98,12 +103,12 @@ public abstract class Container extends ShapeBase {
 
 	@Override
 	public void addToPane(Pane p) {
-		p.getChildren().addAll(background, pane);
+		p.getChildren().addAll(pane);
 	}
 
 	@Override
 	public void removeFromPane(Pane p) {
-        p.getChildren().removeAll(background, pane);
+        p.getChildren().removeAll(pane);
 	}
 	
 	@Override

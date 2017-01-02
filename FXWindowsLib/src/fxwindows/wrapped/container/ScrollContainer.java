@@ -59,16 +59,21 @@ public abstract class ScrollContainer extends Container {
             if (updateVerticalScroll(oldScrollY, newScrollY) ||
                     updateHorizontalScroll(oldScrollX, newScrollX)) e.consume();
         });
+        
+        contentHeightProperty().addListener((v1, v2, v3) -> updateVerticalScroll(
+        		getScrollY(), getScrollY()));
+        contentWidthProperty().addListener((v1, v2, v3) -> updateHorizontalScroll(
+        		getScrollX(), getScrollX()));
     }
 
     private boolean updateVerticalScroll(double oldValue, double newValue) {
         boolean consumed = false;
         if (isScrollBlocked()) return false;
-        if (getContentHeight() <= getMaxHeight()) {
+        if (getContentHeight() <= getInnerHeight()) {
             setScrollY(0);
             return false;
         }
-        if (newValue > -(getContentHeight() - getMaxHeight())) {
+        if (newValue > -(getContentHeight() - getInnerHeight())) {
             if (newValue < 0) {
                 setScrollY(newValue);
                 consumed = true;
@@ -77,8 +82,8 @@ public abstract class ScrollContainer extends Container {
                 setScrollY(0);
             }
         } else {
-            if (oldValue != -(getContentHeight() - getMaxHeight())) consumed = true;
-            setScrollY(-(getContentHeight() - getMaxHeight()));
+            if (oldValue != -(getContentHeight() - getInnerHeight())) consumed = true;
+            setScrollY(-(getContentHeight() - getInnerHeight()));
         }
         return consumed;
     }
