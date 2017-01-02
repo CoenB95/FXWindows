@@ -56,13 +56,18 @@ public abstract class Container extends ShapeBase {
 
 
         // The background of this container.
+        // Due to padding considerations, the background is no longer added to the
+        // panel. Instead it should be drawn separately at the back. This way
+        // children don't need to calculate padding.
         background = new javafx.scene.shape.Rectangle();
+        background.xProperty().bind(xProperty());
+        background.yProperty().bind(yProperty());
         background.fillProperty().bind(backgroundColorProperty());
         background.strokeProperty().bind(borderColorProperty());
         background.strokeWidthProperty().bind(borderWidthProperty());
         background.widthProperty().bind(widthProperty());
         background.heightProperty().bind(heightProperty());
-        pane.getChildren().add(background);
+        //pane.getChildren().add(background);
 
 		getChildren().addListener((ListChangeListener<ShapeBase>) c -> {
             while (c.next()) {
@@ -93,12 +98,12 @@ public abstract class Container extends ShapeBase {
 
 	@Override
 	public void addToPane(Pane p) {
-		p.getChildren().add(pane);
+		p.getChildren().addAll(background, pane);
 	}
 
 	@Override
 	public void removeFromPane(Pane p) {
-        p.getChildren().remove(pane);
+        p.getChildren().removeAll(background, pane);
 	}
 	
 	@Override
