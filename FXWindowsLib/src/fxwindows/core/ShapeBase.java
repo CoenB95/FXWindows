@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 
 public abstract class ShapeBase extends ColoredBoundedArea {
 
-	private ReadOnlyBooleanWrapper hovered;
+	private final ReadOnlyBooleanWrapper hovered = new ReadOnlyBooleanWrapper();
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseClicked = new SimpleObjectProperty<>();
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseDragged = new SimpleObjectProperty<>();
 
@@ -23,6 +23,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
     protected void setupClickedHandlers(Node node) {
         node.onMouseClickedProperty().bind(onMouseClicked);
         node.onMouseDraggedProperty().bind(onMouseDragged);
+        hovered.bind(node.hoverProperty());
 	}
 	
 	public abstract void addToPane(Pane p);
@@ -40,7 +41,6 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	// Other properties
 
 	public ReadOnlyBooleanProperty hoveredProperty() {
-		if (hovered == null) hovered = new ReadOnlyBooleanWrapper();
 		return hovered.getReadOnlyProperty();
 	}
 

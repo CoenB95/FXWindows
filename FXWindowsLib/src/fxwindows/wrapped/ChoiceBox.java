@@ -26,7 +26,8 @@ public class ChoiceBox extends VerticalContainer {
 	
 	private final DoubleProperty toScroll = new SimpleDoubleProperty();
 	private final DoubleProperty toHeight = new SimpleDoubleProperty();
-	private final ObjectProperty<Runnable> onItemSelected = new SimpleObjectProperty<>();
+	private final ObjectProperty<OnItemSelectedListener> onItemSelected =
+			new SimpleObjectProperty<>();
 	
 	public ChoiceBox() {
 		super();
@@ -41,6 +42,8 @@ public class ChoiceBox extends VerticalContainer {
 						itemSelected = w;
 						itemUpdate = true;
 						expanding = !expanding;
+						if (!expanding && getOnItemSelected() != null)
+							getOnItemSelected().onItemSelected(w);
 					});
 					itemUpdate = true;
 					//Items got added, so the position of the selected item
@@ -55,9 +58,6 @@ public class ChoiceBox extends VerticalContainer {
 				}
 			}
 		});
-		//ChangeListener<Number> lis = (v1,v2,v3) -> relayout = true;
-		//widthProperty().addListener(lis);
-		//heightProperty().addListener(lis);
 	}
 	
 	@Override
@@ -92,41 +92,37 @@ public class ChoiceBox extends VerticalContainer {
 		if (itemUpdate) {
 			itemUpdate = false;
 			blockScroll(!expanding);
-			double fromScroll;
 			double fromHeight;
-			fromScroll = getScrollY();
 			fromHeight = getHeight();
 			
-			//scrollAnim = new ValueAnimation(duration).setFrom(fromScroll).setTo(toScroll);
 			heightAnim = new ValueAnimation(duration).setFrom(fromHeight).setTo(toHeight);
-			//scrollAnim.setInterpolator(interpolator);
 			heightAnim.setInterpolator(interpolator);
-			//scrollAnim.start();
 			heightAnim.start();
 			unbindHeight();
 		}
-		//if (scrollAnim != null && !scrollAnim.hasFinished())
-		//	setScrollY(scrollAnim.getValue());
-		//else if (!expanding) setScrollY(toScroll.get());
 		if (heightAnim != null && !heightAnim.hasFinished())
 			setHeight(heightAnim.getValue());
 		else if (!expanding) setHeight(toHeight.get());
 	}
 
-	public ObjectProperty<Runnable> onItemSelectedProperty() {
+	public ObjectProperty<OnItemSelectedListener> onItemSelectedProperty() {
         return onItemSelected;
     }
 
-    public Runnable getOnItemSelected() {
+    public OnItemSelectedListener getOnItemSelected() {
 	    return onItemSelectedProperty().get();
     }
 
-	public void setOnItemSelected(Runnable r) {
-	    onItemSelectedProperty().set(r);
+	public void setOnItemSelected(OnItemSelectedListener l) {
+	    onItemSelectedProperty().set(l);
     }
 
 	public void setAnimation(SmoothInterpolator smooth, Duration duration) {
 		interpolator = smooth;
 		this.duration = duration;
+	}
+	
+	public interface OnItemSelectedListener {
+		void onItemSelected(ShapeBase item);
 	}
 }

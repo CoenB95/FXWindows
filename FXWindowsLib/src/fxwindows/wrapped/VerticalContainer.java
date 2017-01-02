@@ -54,10 +54,10 @@ public abstract class VerticalContainer extends ScrollContainer {
 		double height = 0;
 		double width = 0;
 		for (ShapeBase w : getChildren()) {
-			w.setY(height + getScrollY());
+			w.setXY(0, height + getScrollY());
 			height += w.getHeight();
 			if ((height + getScrollY() <= 0) ||
-					(height - w.getHeight() + getScrollY() > 300)) {
+					(height + getScrollY() - w.getHeight()  > getInnerHeight())) {
 				w.setAlpha(0);
 			} else w.setAlpha(1);
 

@@ -75,9 +75,11 @@ public class PaddedArea extends Area {
     }
 
     public PaddedArea() {
+    	innerX.bind(xProperty().add(paddingXProperty()));
+    	innerY.bind(yProperty().add(paddingYProperty()));
         innerHeight.bind(heightProperty().subtract(
                 paddingYProperty().multiply(2)));
-        innerWidth.bind(heightProperty().subtract(
+        innerWidth.bind(widthProperty().subtract(
                 paddingXProperty().multiply(2)));
     }
 }

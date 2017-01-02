@@ -42,21 +42,21 @@ public abstract class Container extends ShapeBase {
 
         // Setup all things needed to clip the children to the max height;
         pane = new Pane();
-        pane.layoutXProperty().bind(xProperty());
-        pane.layoutYProperty().bind(yProperty());
-        pane.prefWidthProperty().bind(widthProperty());
-        pane.prefHeightProperty().bind(heightProperty());
+        pane.layoutXProperty().bind(innerXProperty());
+        pane.layoutYProperty().bind(innerYProperty());
+        pane.prefWidthProperty().bind(innerWidthProperty());
+        pane.prefHeightProperty().bind(innerHeightProperty());
+        pane.opacityProperty().bind(alphaProperty());
 
         rect = new javafx.scene.shape.Rectangle();
         // Don't bind position of rect, background and children. See note.
-        rect.widthProperty().bind(widthProperty());
-        rect.heightProperty().bind(heightProperty());
+        rect.widthProperty().bind(innerWidthProperty());
+        rect.heightProperty().bind(innerHeightProperty());
         pane.setClip(rect);
 
 
         // The background of this container.
         background = new javafx.scene.shape.Rectangle();
-        background.opacityProperty().bind(alphaProperty());
         background.fillProperty().bind(backgroundColorProperty());
         background.strokeProperty().bind(borderColorProperty());
         background.strokeWidthProperty().bind(borderWidthProperty());
