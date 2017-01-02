@@ -106,9 +106,7 @@ public class Text extends ShapeBase {
 	}
 
 	private void setupBindings() {
-		group.setOnMouseClicked((e) -> {
-			for (Runnable r : getOnMouseClickedListeners()) r.run();
-		});
+		setupClickedHandlers(group);
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());

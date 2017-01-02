@@ -69,25 +69,4 @@ public abstract class Area extends Position {
 	    transformedHeight.bind(baseHeight);
         transformedWidth.bind(baseWidth);
     }
-
-	// Other properties
-	private ReadOnlyBooleanWrapper hovered;
-	public ReadOnlyBooleanProperty hoveredProperty() {
-		if (hovered == null) hovered = new ReadOnlyBooleanWrapper();
-		return hovered.getReadOnlyProperty();
-	}
-	public void setHovered(boolean value) { 
-		if (hovered == null) hovered = new ReadOnlyBooleanWrapper();
-		hovered.set(value); }
-	public boolean isHovered() { return hoveredProperty().get(); }
-
-	private final List<Runnable> onMouseClicked = new ArrayList<>();
-	public void addOnMouseClicked(Runnable r) {
-		onMouseClicked.add(r);
-	}
-	public List<Runnable> getOnMouseClickedListeners() {
-		return onMouseClicked;
-	}
-
-	
 }

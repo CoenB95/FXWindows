@@ -74,6 +74,7 @@ public abstract class Container extends ShapeBase {
                 }
             }
         });
+		setupClickedHandlers(pane);
 	}
 
 	public Pane getPane() {

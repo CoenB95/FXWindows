@@ -6,8 +6,9 @@ import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.SmoothInterpolator.AnimType;
 import fxwindows.animation.ValueAnimation;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 
 public class ChoiceBox extends VerticalContainer {
@@ -24,6 +25,7 @@ public class ChoiceBox extends VerticalContainer {
 	
 	private final DoubleProperty toScroll = new SimpleDoubleProperty();
 	private final DoubleProperty toHeight = new SimpleDoubleProperty();
+	private final ObjectProperty<Runnable> onItemSelected = new SimpleObjectProperty<>();
 	
 	public ChoiceBox() {
 		super();
@@ -34,7 +36,7 @@ public class ChoiceBox extends VerticalContainer {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
 					w.heightProperty().addListener((v1,v2,v3) -> relayout = true);
-					w.addOnMouseClicked(() -> {
+					w.setOnMouseClicked((e) -> {
 						itemSelected = w;
 						itemUpdate = true;
 						expanding = !expanding;
@@ -109,7 +111,19 @@ public class ChoiceBox extends VerticalContainer {
 			setHeight(heightAnim.getValue());
 		else if (!expanding) setHeight(toHeight.get());
 	}
-	
+
+	public ObjectProperty<Runnable> onItemSelectedProperty() {
+        return onItemSelected;
+    }
+
+    public Runnable getOnItemSelected() {
+	    return onItemSelectedProperty().get();
+    }
+
+	public void setOnItemSelected(Runnable r) {
+	    onItemSelectedProperty().set(r);
+    }
+
 	public void setAnimation(SmoothInterpolator smooth, Duration duration) {
 		interpolator = smooth;
 		this.duration = duration;

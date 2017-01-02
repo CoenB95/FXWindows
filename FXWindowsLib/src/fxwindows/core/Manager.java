@@ -33,6 +33,32 @@ public abstract class Manager extends Application {
 	private long frameCount;
 	private long fps;
 
+	public static void main(String[] args) {
+	    start(Test.class, args);
+    }
+
+    public static class Test extends Manager {
+
+	    public Test() {
+
+        }
+
+        @Override
+        public void setup(RootContainer canvas) {
+
+        }
+
+        @Override
+        public void frame() {
+
+        }
+
+        @Override
+        public void shutdown() {
+
+        }
+    }
+
 	public static void start(Class<? extends Manager> theClass, String[] args) {
 		launch(theClass, args);
 	}
@@ -64,7 +90,7 @@ public abstract class Manager extends Application {
 					}
 					canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
                     Updatable.updateAll(now/1000000);
-                    shapeContainer.update();
+                    if (shapeContainer != null) shapeContainer.update();
                     oldContainerHandler();
 					frame();
 				} catch (Exception e) {
@@ -124,9 +150,6 @@ public abstract class Manager extends Application {
         });
         shapeContainer.bindHeight(pane.heightProperty());
         shapeContainer.bindWidth(pane.widthProperty());
-        pane.setOnMouseClicked((e) -> {
-            for (Runnable r : shapeContainer.getOnMouseClickedListeners()) r.run();
-        });
 	    shapeContainer.addToPane(pane);
 	    if (!newInFront && oldContainer != null) oldContainer.getPane().toFront();
 	    // Make sure the fps stays visible.

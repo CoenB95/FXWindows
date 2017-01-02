@@ -1,7 +1,6 @@
 package fxwindows.wrapped;
 
 import fxwindows.core.Position;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -27,6 +26,7 @@ public class Line extends ShapeBase {
 		line.strokeWidthProperty().bind(borderWidthProperty());
 		lengthX.bind(endX.subtract(xProperty()));
 		lengthY.bind(endY.subtract(yProperty()));
+		setupClickedHandlers(line);
 	}
 	
 	public Line(double startX, double startY) {
