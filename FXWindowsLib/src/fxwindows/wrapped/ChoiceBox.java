@@ -101,8 +101,8 @@ public class ChoiceBox extends VerticalContainer {
 			unbindHeight();
 		}
 		if (heightAnim != null && !heightAnim.hasFinished())
-			setHeight(heightAnim.getValue());
-		else if (!expanding) setHeight(toHeight.get());
+			setHeight(heightAnim.getValue() + getPaddingY()*2);
+		else if (!expanding) setHeight(toHeight.get() + getPaddingY()*2);
 	}
 
 	public ObjectProperty<OnItemSelectedListener> onItemSelectedProperty() {
