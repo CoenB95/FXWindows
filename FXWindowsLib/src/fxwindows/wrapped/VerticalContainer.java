@@ -2,6 +2,8 @@ package fxwindows.wrapped;
 
 import fxwindows.wrapped.container.ScrollContainer;
 import fxwindows.core.ShapeBase;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ListChangeListener.Change;
 
 /**
@@ -10,52 +12,48 @@ import javafx.collections.ListChangeListener.Change;
  */
 public abstract class VerticalContainer extends ScrollContainer {
 
-	/**Flag notifying one or more things have changed that require a
-	 * horizontal re-layout.*/
-	//private boolean updateRequested = true;
-
+	private final DoubleProperty margin = new SimpleDoubleProperty();
+	
 	public VerticalContainer() {
 		super();
 		setMaxHeight(250);
 		setMaxWidth(100);
 
-		//ChangeListener<Number> change = (a,b,c) -> updateRequested = true;
-		//scrollYProperty().addListener(change);
-		//contentHeightProperty().addListener(change);
-		//contentWidthProperty().addListener(change);
-
 		// When the amount of children changes, a vertical re-layout is needed.
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
-					//w.heightProperty().addListener((a,b,c1) -> {
-						// Also when a single item changes its size;
-					//	updateRequested = true;
-					//});
 					w.maxWidthProperty().bind(maxWidthProperty());
-					//updateRequested = true;
 				}
-				//if (!c.getRemoved().isEmpty()) updateRequested = true;
 			}
 		});
+	}
+	
+	public DoubleProperty marginProperty() {
+		return margin;
+	}
+	
+	public double getMargin() {
+		return margin.get();
+	}
+	
+	public void setMargin(double value) {
+		margin.set(value);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		//if (updateRequested) {
-			updateY();
-		//}
+		updateY();
 	}
 
 	/**Called to relocate all children.*/
 	private void updateY() {
-		//updateRequested = false;
 		double height = 0;
 		double width = 0;
 		for (ShapeBase w : getChildren()) {
 			w.setXY(0, height + getScrollY());
-			height += w.getHeight();
+			height += w.getHeight() + getMargin();
 			if ((height + getScrollY() <= 0) ||
 					(height + getScrollY() - w.getHeight()  > getInnerHeight())) {
 				w.setAlpha(0);
