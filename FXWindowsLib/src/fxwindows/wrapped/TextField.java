@@ -14,7 +14,9 @@ public class TextField extends ShapeBase {
 
 	private javafx.scene.control.TextField field;
 	private boolean initialized = false;
+	
 	private final StringProperty text = new SimpleStringProperty();
+	private final StringProperty promptText = new SimpleStringProperty();
 	private final ObjectProperty<Runnable> onAction = new SimpleObjectProperty<>();
 
 	public TextField() {
@@ -46,9 +48,22 @@ public class TextField extends ShapeBase {
 			if (onAction.get() != null) onAction.get().run();
 		});
 		textProperty().bindBidirectional(field.textProperty());
+		promptTextProperty().bind(field.promptTextProperty());
 		Rectangle rect = new Rectangle(10,10);
 		field.setShape(rect);
 		rect.setFill(Color.RED);
+	}
+	
+	public StringProperty promptTextProperty() {
+		return promptText;
+	}
+	
+	public String getPromptText() {
+		return promptTextProperty().get();
+	}
+	
+	public void setPromptText(String value) {
+		promptTextProperty().set(value);
 	}
 	
 	public StringProperty textProperty() {
