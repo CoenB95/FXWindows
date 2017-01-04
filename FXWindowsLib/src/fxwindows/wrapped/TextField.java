@@ -48,7 +48,7 @@ public class TextField extends ShapeBase {
 			if (onAction.get() != null) onAction.get().run();
 		});
 		textProperty().bindBidirectional(field.textProperty());
-		promptTextProperty().bind(field.promptTextProperty());
+		promptTextProperty().bindBidirectional(field.promptTextProperty());
 		Rectangle rect = new Rectangle(10,10);
 		field.setShape(rect);
 		rect.setFill(Color.RED);
