@@ -17,7 +17,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseDragged = new SimpleObjectProperty<>();
 
 	public ShapeBase() {
-		System.out.println("A new ShapeBase is created!");
+		
     }
 
     protected void setupClickedHandlers(Node node) {
