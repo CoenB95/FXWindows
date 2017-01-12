@@ -1,80 +1,23 @@
 package fxwindows.wrapped;
 
-import fxwindows.core.ShapeBase;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-public class Text extends ShapeBase {
+public class Text extends TextBase {
 
 	private Group group;
 	private javafx.scene.text.Text textNode;
 	private Rectangle rectNode;
 	private boolean recalculate = true;
-	private ObjectBinding<Paint> fillBinding;
 	
-	private final StringProperty text = new SimpleStringProperty();
-
-	// Font
-	private ObjectProperty<Font> font;
-	public ObjectProperty<Font> fontProperty() {
-		if (font == null) {
-			font = new SimpleObjectProperty<Font>(Font.getDefault());
-			textNode.fontProperty().bind(font);
-		}
-		return font;
-	}
-	public void setFont(Font value) { fontProperty().set(value); }
-	public Font getFont() { return fontProperty().get(); }
-
-
-	// TextColor
-	private ObjectProperty<Paint> textColor;
-	public ObjectProperty<Paint> textColorProperty() {
-		if (textColor == null) {
-			textColor = new SimpleObjectProperty<Paint>(Color.BLACK);
-			textNode.fillProperty().bind(textColor);
-		}
-		return textColor;
-	}
-	public void setTextColor(Paint value) { textColorProperty().set(value); }
-	public Paint getTextColor() { return textColorProperty().get(); }
-
-
-	// Text
-	public StringProperty textProperty() {
-		return text;
-	}
-	public void setText(String value) { textProperty().set(value); }
-	public String getText() { return textProperty().get(); }
-
-
-	// WrappingWidth
-	private DoubleProperty wrappingWidth;
-	public DoubleProperty wrappingWidthProperty() {
-		if (wrappingWidth == null) {
-			wrappingWidth = new SimpleDoubleProperty(0);
-			textNode.wrappingWidthProperty().bind(wrappingWidth.subtract(
-			        paddingXProperty().multiply(2)));
-		}
-		return wrappingWidth;
-	}
-	public void setWrappingWidth(double value) { wrappingWidthProperty().set(value); }
-	public double getWrappingWidth() { return wrappingWidthProperty().get(); }
+	
 
 	public Text() {
 		this("");
@@ -120,17 +63,13 @@ public class Text extends ShapeBase {
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.textProperty().bind(textProperty());
 		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.fillProperty().bind(textColorProperty());
+		textNode.wrappingWidthProperty().bind(Bindings.when(wrapTextProperty())
+				.then(innerWidthProperty()).otherwise(0.0));
 		maxWidthProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.fontProperty().bind(fontProperty());
 		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
-		fillBinding = Bindings.createObjectBinding(() -> {
-			if (group.isHover()) {
-				Color c = (Color) getBackgroundColor();
-				if (c.equals(Color.TRANSPARENT)) return Color.gray(1, 0.2);
-				else return ((Color)getBackgroundColor()).brighter();
-			}
-			return getBackgroundColor();
-		}, backgroundColorProperty(), group.hoverProperty());
-		rectNode.fillProperty().bind(fillBinding);
+		rectNode.fillProperty().bind(backgroundColorProperty());
 		rectNode.strokeProperty().bind(borderColorProperty());
 		rectNode.strokeWidthProperty().bind(borderWidthProperty());
 		recalculate = true;
@@ -158,14 +97,10 @@ public class Text extends ShapeBase {
 	}
 	
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().addAll(group);
-		recalculate = true;
+	public Node getNode() {
+		return group;
 	}
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().removeAll(group);
-	}
+	
 	@Override
 	public void clip(Node n) {
 		group.setClip(n);

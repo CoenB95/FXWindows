@@ -26,9 +26,9 @@ public abstract class ShapeBase extends ColoredBoundedArea {
         hovered.bind(node.hoverProperty());
 	}
 	
-	public abstract void addToPane(Pane p);
+	public abstract Node getNode();
 	public abstract void clip(Node n);
-	public abstract void removeFromPane(Pane p);
+	//public abstract void removeFromPane(Pane p);
 
     /**
      * Called once every frame so that components can update their state.

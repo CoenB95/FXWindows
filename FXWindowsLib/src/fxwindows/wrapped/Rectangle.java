@@ -17,6 +17,9 @@ public class Rectangle extends ShapeBase {
 		rect.widthProperty().bind(widthProperty());
 		rect.heightProperty().bind(heightProperty());
 		rect.fillProperty().bind(backgroundColorProperty());
+		rect.opacityProperty().bind(alphaProperty());
+		rect.strokeProperty().bind(borderColorProperty());
+		rect.strokeWidthProperty().bind(borderWidthProperty());
 	}
 	
 	public Rectangle(double w, double h) {
@@ -32,13 +35,8 @@ public class Rectangle extends ShapeBase {
 	}
 
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(rect);
-	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(rect);
+	public Node getNode() {
+		return rect;
 	}
 
 	@Override

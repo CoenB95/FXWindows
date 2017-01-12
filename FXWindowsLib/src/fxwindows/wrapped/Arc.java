@@ -121,13 +121,8 @@ public class Arc extends ShapeBase {
 	}
 
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(arc);
-	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(arc);
+	public Node getNode() {
+		return arc;
 	}
 
 	@Override

@@ -83,13 +83,8 @@ public class Line extends ShapeBase {
 	}
 
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(line);
-	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(line);
+	public Node getNode() {
+		return line;
 	}
 
 	@Override

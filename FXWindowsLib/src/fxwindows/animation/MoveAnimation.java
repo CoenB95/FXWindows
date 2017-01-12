@@ -26,6 +26,10 @@ public class MoveAnimation extends Animation {
 		toX = new SimpleDoubleProperty();
 		toY = new SimpleDoubleProperty();
 	}
+	public MoveAnimation setShapeBase(ShapeBase value) {
+		drawable = value;
+		return this;
+	}
 	public MoveAnimation setTo(double newX, double newY) {
 		setToX(newX);
 		setToY(newY);

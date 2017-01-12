@@ -122,6 +122,16 @@ public abstract class BoundedArea extends PaddedArea {
 	public void setWidthBehavior(LayoutBehavior value) {
 		widthBehaviorProperty().set(value);
 	}
+	
+	/**
+	 * Sets the LayoutBehavior of both the height and the width of
+	 * this BoundedArea.
+	 * @param value the new LayoutBehavior, defaults to WRAP_CONTENT.
+	 */
+	public void setLayoutBehavior(LayoutBehavior value) {
+		widthBehaviorProperty().set(value);
+		heightBehaviorProperty().set(value);
+	}
 
 	public enum LayoutBehavior {
 		FILL_SPACE, WRAP_CONTENT

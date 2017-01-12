@@ -44,18 +44,12 @@ public class ImageView extends ShapeBase {
 	}
 	
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(view);
+	public Node getNode() {
+		return view;
 	}
 
 	@Override
 	public void clip(Node n) {
 		view.setClip(n);
 	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(view);
-	}
-	
 }

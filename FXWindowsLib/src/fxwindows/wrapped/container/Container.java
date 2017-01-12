@@ -8,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -77,19 +78,23 @@ public abstract class Container extends ShapeBase {
 		getChildren().addListener((ListChangeListener<ShapeBase>) c -> {
             while (c.next()) {
                 for (ShapeBase w : c.getAddedSubList()) {
-                    w.addToPane(innerPane);
+                    innerPane.getChildren().add(w.getNode());
                 }
                 for (ShapeBase w : c.getRemoved()) {
-                    w.removeFromPane(innerPane);
+                    innerPane.getChildren().remove(w.getNode());
                 }
             }
         });
 		setupClickedHandlers(innerPane);
 	}
 
-	public Pane getPane() {
+	protected Pane getPane() {
 	    return pane;
     }
+	
+	public void toFront() {
+		getPane().toFront();
+	}
 
     /**
      * Passes the update call to its children, as requested.
@@ -102,13 +107,8 @@ public abstract class Container extends ShapeBase {
 	}
 
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().addAll(pane);
-	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-        p.getChildren().removeAll(pane);
+	public Node getNode() {
+		return pane;
 	}
 	
 	@Override

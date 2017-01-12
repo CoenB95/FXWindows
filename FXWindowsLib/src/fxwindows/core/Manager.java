@@ -137,7 +137,7 @@ public abstract class Manager extends Application {
         if (oldDone && newDone) {
             // All animations have finished so we can remove the old container
             // (it was kept because it could still be visible).
-            oldContainer.removeFromPane(pane);
+            pane.getChildren().remove(oldContainer.getNode());
             oldContainer = null;
             System.out.println("Removed old root");
         }
@@ -164,8 +164,8 @@ public abstract class Manager extends Application {
         });
         shapeContainer.bindHeight(pane.heightProperty());
         shapeContainer.bindWidth(pane.widthProperty());
-	    shapeContainer.addToPane(pane);
-	    if (!newInFront && oldContainer != null) oldContainer.getPane().toFront();
+	    pane.getChildren().add(shapeContainer.getNode());
+	    if (!newInFront && oldContainer != null) oldContainer.toFront();
 	    // Make sure the fps stays visible.
         fpsText.toFront();
         if (shapeContainer.enterAnimation != null) {

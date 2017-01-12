@@ -7,10 +7,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ListChangeListener.Change;
 
 /**
- * Base class for a vertical-list-like layout.
+ * Container that lays out its children in a vertical fashion.
+ * 
  * @author CoenB95
  */
-public abstract class VerticalContainer extends ScrollContainer {
+public class VerticalContainer extends ScrollContainer {
 
 	private final DoubleProperty margin = new SimpleDoubleProperty();
 	

@@ -1,16 +1,13 @@
 package fxwindows.wrapped;
 
-import fxwindows.core.ShapeBase;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
-public class TextField extends ShapeBase {
+public class TextField extends TextBase {
 
 	private javafx.scene.control.TextField field;
 	private boolean initialized = false;
@@ -48,10 +45,8 @@ public class TextField extends ShapeBase {
 			if (onAction.get() != null) onAction.get().run();
 		});
 		textProperty().bindBidirectional(field.textProperty());
+		field.fontProperty().bind(fontProperty());
 		promptTextProperty().bindBidirectional(field.promptTextProperty());
-		Rectangle rect = new Rectangle(10,10);
-		field.setShape(rect);
-		rect.setFill(Color.RED);
 	}
 	
 	public StringProperty promptTextProperty() {
@@ -87,17 +82,12 @@ public class TextField extends ShapeBase {
 	}
 	
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(field);
+	public Node getNode() {
+		return field;
 	}
 
 	@Override
 	public void clip(Node n) {
 		field.setClip(n);
-	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(field);
 	}
 }

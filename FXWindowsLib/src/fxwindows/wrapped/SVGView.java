@@ -42,18 +42,12 @@ public class SVGView extends ShapeBase {
 	}
 	
 	@Override
-	public void addToPane(Pane p) {
-		p.getChildren().add(path);
+	public Node getNode() {
+		return path;
 	}
 
 	@Override
 	public void clip(Node n) {
 		path.setClip(n);
 	}
-
-	@Override
-	public void removeFromPane(Pane p) {
-		p.getChildren().remove(path);
-	}
-	
 }

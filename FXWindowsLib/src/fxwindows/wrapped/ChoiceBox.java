@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener.Change;
 
-public class ChoiceBox extends VerticalContainer {
+public class ChoiceBox extends ListContainer {
 	
 	private ShapeBase itemSelected;
 	private int itemPosition;
@@ -31,6 +31,7 @@ public class ChoiceBox extends VerticalContainer {
 	
 	public ChoiceBox() {
 		super();
+		selectionAllowedProperty().bind(scrollBlockedProperty().not());
 		interpolator = new SmoothInterpolator(AnimType.DECELERATE);
 		duration = Duration.ofMillis(400);
 		// When the amount of children changes, a vertical re-layout is needed.

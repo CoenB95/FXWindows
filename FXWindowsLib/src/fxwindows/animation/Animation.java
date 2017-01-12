@@ -11,10 +11,13 @@ public abstract class Animation extends Updatable {
 	private long startTime;
 	private Duration duration;
 	private boolean started;
+	private boolean afterEnd;
 	private Interpolator interpolator = Interpolator.EASE_BOTH;
 
 	public Animation(Duration duration) {
 		setDuration(duration);
+		// Prevent auto-start of Updatable.
+		unregister();
 	}
 	
 	public boolean hasFinished() {
@@ -26,23 +29,32 @@ public abstract class Animation extends Updatable {
 			started = true;
 		}
 		if (started) {
-			update(interpolator.interpolate(0.0, 1.0, (time - startTime) /
-					(double) duration.toMillis()));
 			if (time >= startTime + duration.toMillis()) {
-				unregister();
+				update(1.0);
+				if (!afterEnd) unregister();
+			} else {
+				update(interpolator.interpolate(0.0, 1.0, (time - startTime) /
+						(double) duration.toMillis()));
 			}
+			
 		}
 	}
 	public final void start() {
 		started = false;
 		if (isUnregistered()) register();
 		startTime = System.nanoTime()/1000000;
+		afterEnd = false;
+	}
+	public final void startAndStick() {
+		start();
+		afterEnd = true;
 	}
 	public final void startAt(long milisDelay) {
 		start();
 		startTime = System.nanoTime()/1000000 + milisDelay;
 	}
 	public final void stop() {
+		afterEnd = false;
 		unregister();
 	}
 
