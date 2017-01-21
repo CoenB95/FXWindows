@@ -1,11 +1,11 @@
 package fxwindows.wrapped;
 
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -77,8 +77,9 @@ public class Text extends TextBase {
 
 	private void calculateSize() {
 		textNode.setClip(null);
-		setContentHeight(textNode.getBoundsInLocal().getHeight());
-		setContentWidth(textNode.getBoundsInLocal().getWidth());
+		Bounds b = textNode.getBoundsInLocal();
+		setContentHeight(b.getHeight());
+		setContentWidth(b.getWidth());
 		Rectangle textClip = new Rectangle();
 		textClip.setLayoutX(0);
 		textClip.setLayoutY(0);

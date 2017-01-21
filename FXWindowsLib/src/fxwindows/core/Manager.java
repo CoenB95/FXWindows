@@ -2,17 +2,18 @@ package fxwindows.core;
 
 import fxwindows.animation.Animation;
 import fxwindows.wrapped.Line;
+import fxwindows.wrapped.Text;
 import fxwindows.wrapped.container.Container;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -26,7 +27,8 @@ public abstract class Manager extends Application {
 
 	private AnimationTimer timer;
 	private Pane pane;
-	private Text fpsText;
+	private Text debugText;
+	private boolean debugTextVisible;
     private RootContainer oldContainer;
 	private RootContainer shapeContainer;
 	private long frameStart;
@@ -87,21 +89,29 @@ public abstract class Manager extends Application {
 	}
 
 	public void shapeVersion(Stage primaryStage) {
-		fpsText = new Text();
-		fpsText.setX(10);
-		fpsText.setY(10);
+		pane = new Pane();
+		debugText = new Text();
+		debugText.bindX(pane.widthProperty().subtract(debugText.widthProperty())
+				.subtract(10.0));
+		debugText.setY(10);
+		debugText.setAlpha(0.0);
 		Canvas canv = new Canvas(10,10);
 		timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
 				try {
 					frameCount++;
+					StringBuilder builder = new StringBuilder();
 					if (System.currentTimeMillis() > frameStart + 250) {
 						fps = frameCount*4;
 						frameStart = System.currentTimeMillis();
 						frameCount = 0;
-						fpsText.setText(fps + " FPS");
+						builder.append(fps).append(" FPS");
+						builder.append("\nWidth: ").append(pane.getWidth());
+						builder.append("\nHeight: ").append(pane.getHeight());
+						debugText.setText(builder.toString());
 					}
+					debugText.update();
 					canv.getGraphicsContext2D().fillRect(0, 0, 10, 10);
                     Updatable.updateAll(now/1000000);
                     if (shapeContainer != null) shapeContainer.update();
@@ -113,8 +123,7 @@ public abstract class Manager extends Application {
 			}
 		};
 		timer.start();
-		pane = new Pane();
-		pane.getChildren().addAll(canv, fpsText);
+		pane.getChildren().addAll(canv, debugText.getNode());
 		RootContainer startContainer = new RootContainer();
 		setup(startContainer);
         setRoot(startContainer, true);
@@ -143,6 +152,15 @@ public abstract class Manager extends Application {
         }
     }
 
+    public boolean isDebugTextShown() {
+		return debugTextVisible;
+	}
+
+    public void showDebugText(boolean value) {
+		debugTextVisible = value;
+		debugText.setAlpha(debugTextVisible ? 1.0 : 0.0);
+	}
+
 	public void setRoot(RootContainer root, boolean newInFront) {
 	    if (oldContainer != null) {
 	        System.err.println("Root switch canceled: old was still going. " +
@@ -167,7 +185,7 @@ public abstract class Manager extends Application {
 	    pane.getChildren().add(shapeContainer.getNode());
 	    if (!newInFront && oldContainer != null) oldContainer.toFront();
 	    // Make sure the fps stays visible.
-        fpsText.toFront();
+        debugText.getNode().toFront();
         if (shapeContainer.enterAnimation != null) {
             System.out.println("Start enter animation new root");
             shapeContainer.enterAnimation.start();
