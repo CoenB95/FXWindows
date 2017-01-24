@@ -16,7 +16,7 @@ import java.util.ListIterator;
 public abstract class Updatable {
 
     private static final List<Updatable> additionQueue = new ArrayList<>();
-    private static final List<Updatable> updatables = new ArrayList<>();
+    public static final List<Updatable> updatables = new ArrayList<>();
 
     private ReadOnlyBooleanWrapper unregisterRequested = new ReadOnlyBooleanWrapper();
     private boolean unregistered;

@@ -109,6 +109,7 @@ public abstract class Manager extends Application {
 						builder.append(fps).append(" FPS");
 						builder.append("\nWidth: ").append(pane.getWidth());
 						builder.append("\nHeight: ").append(pane.getHeight());
+						builder.append("\nAnimations: ").append(Updatable.getAmountUpdatables());
 						debugText.setText(builder.toString());
 					}
 					debugText.update();

@@ -124,6 +124,13 @@ public class ListContainer extends VerticalContainer {
 		
 		getPane().getChildren().add(1, hoverRect.getNode());
 		getPane().getChildren().add(2, selectionRect.getNode());
+		getPane().parentProperty().addListener((v1,v2,v3) -> {
+			if (v3 == null) {
+				System.out.println("Detected loss of parent for ListContainer. Stop animations.");
+				hoverPositionAnim.stop();
+				selectionPositionAnim.stop();
+			}
+		});
 	}
 	
 	private void moveHoverRect(ShapeBase item) {
