@@ -58,8 +58,10 @@ public class Text extends TextBase {
 		textNode.layoutXProperty().bind(paddingXProperty());
         textNode.layoutYProperty().bind(paddingYProperty());
 		textNode.setTextOrigin(VPos.TOP);
-		group.opacityProperty().bind(alphaProperty());
-		group.visibleProperty().bind(alphaProperty().greaterThan(0));
+
+		setupGeneralBindings(group);
+		setupFillBindings(rectNode);
+
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.textProperty().bind(textProperty());
 		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
@@ -69,9 +71,6 @@ public class Text extends TextBase {
 		maxWidthProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.fontProperty().bind(fontProperty());
 		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
-		rectNode.fillProperty().bind(backgroundColorProperty());
-		rectNode.strokeProperty().bind(borderColorProperty());
-		rectNode.strokeWidthProperty().bind(borderWidthProperty());
 		recalculate = true;
 	}
 

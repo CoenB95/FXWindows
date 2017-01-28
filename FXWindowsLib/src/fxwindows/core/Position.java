@@ -50,7 +50,13 @@ public class Position {
 	}
 	
 	public void setX(double x) { this.baseXProperty().set(x); }
-	public void bindX(DoubleExpression x) { this.baseXProperty().bind(x); }
+	public void bindX(DoubleExpression x) {
+		if (baseXProperty().isBound()) {
+			System.out.println("Rebound x of " + this);
+			baseXProperty().unbind();
+		}
+		baseXProperty().bind(x);
+	}
 
 	/**
 	 * Defines the basis Y coordinate of this <code>Drawable</code>.
@@ -62,7 +68,13 @@ public class Position {
 	}
 	
 	public void setY(double y) { this.baseYProperty().set(y); }
-	public void bindY(DoubleExpression y) { this.baseYProperty().bind(y); }
+	public void bindY(DoubleExpression y) {
+		if (baseYProperty().isBound()) {
+			System.out.println("Rebound y of " + this);
+			baseYProperty().unbind();
+		}
+		baseYProperty().bind(y);
+	}
 
 
 	// Transforms
@@ -117,7 +129,7 @@ public class Position {
 
 	public double getY() { return yProperty().get(); }
 
-	public void bindPosition(Position p) {
+	public void bind(XY p) {
 		bindX(p.xProperty());
 		bindY(p.yProperty());
 	}
@@ -127,11 +139,9 @@ public class Position {
 		bindY(y);
 	}
 	
-	public void setPosition(Position p) {
+	public void set(XY p) {
 		setX(p.getX());
 		setY(p.getY());
-		setTransformX(p.getTransformX());
-		setTransformY(p.getTransformY());
 	}
 
 	/**Sets the base position.

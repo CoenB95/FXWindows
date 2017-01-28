@@ -48,6 +48,7 @@ public abstract class Container extends ShapeBase {
 		pane.prefWidthProperty().bind(widthProperty());
         pane.prefHeightProperty().bind(heightProperty());
         pane.opacityProperty().bind(alphaProperty());
+        pane.rotateProperty().bind(rotationProperty());
         
         // Setup all things needed to clip the children to the max height;
         innerPane = new Pane();

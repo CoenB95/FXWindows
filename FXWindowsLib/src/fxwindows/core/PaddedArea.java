@@ -37,6 +37,15 @@ public class PaddedArea extends Area {
         paddingY.set(value);
     }
 
+    public void setPaddingXY(double x, double y) {
+    	setPaddingX(x);
+    	setPaddingY(y);
+	}
+
+	public void setPadding(double value) {
+    	setPaddingXY(value, value);
+	}
+
     private final ReadOnlyDoubleWrapper innerX = new ReadOnlyDoubleWrapper();
     private final ReadOnlyDoubleWrapper innerY = new ReadOnlyDoubleWrapper();
     private final ReadOnlyDoubleWrapper innerHeight = new ReadOnlyDoubleWrapper();

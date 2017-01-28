@@ -6,7 +6,6 @@ import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 
 public class Line extends ShapeBase {
 
@@ -77,7 +76,7 @@ public class Line extends ShapeBase {
 		endY.bind(y);
 	}
 	
-	public void bindEndPosition(Position p) {
+	public void bindEnd(Position p) {
 		endX.bind(p.xProperty());
 		endY.bind(p.yProperty());
 	}

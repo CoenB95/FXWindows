@@ -1,24 +1,37 @@
 package fxwindows.core;
 
 import fxwindows.core.ColoredBoundedArea;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 
 public abstract class ShapeBase extends ColoredBoundedArea {
 
 	private final ReadOnlyBooleanWrapper hovered = new ReadOnlyBooleanWrapper();
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseClicked = new SimpleObjectProperty<>();
     private final ObjectProperty<EventHandler<MouseEvent>> onMouseDragged = new SimpleObjectProperty<>();
+    private final DoubleProperty rotation = new SimpleDoubleProperty();
 
 	public ShapeBase() {
 		
     }
+
+    /**Alpha, Rotation*/
+    protected void setupGeneralBindings(Node node) {
+		node.opacityProperty().bind(alphaProperty());
+		node.visibleProperty().bind(alphaProperty().greaterThan(0));
+		node.rotateProperty().bind(rotationProperty());
+	}
+
+	/**Background and Border color, border width*/
+	protected void setupFillBindings(Shape node) {
+		node.fillProperty().bind(backgroundColorProperty());
+		node.strokeProperty().bind(borderColorProperty());
+		node.strokeWidthProperty().bind(borderWidthProperty());
+	}
 
     protected void setupClickedHandlers(Node node) {
         node.onMouseClickedProperty().bind(onMouseClicked);
@@ -71,4 +84,16 @@ public abstract class ShapeBase extends ColoredBoundedArea {
     public void setOnMouseDragged(EventHandler<MouseEvent> value) {
 	    onMouseDraggedProperty().set(value);
     }
+
+    public DoubleProperty rotationProperty() {
+		return rotation;
+	}
+
+	public double getRotation() {
+		return rotation.get();
+	}
+
+	public void setRotation(double value) {
+		rotation.set(value);
+	}
 }
