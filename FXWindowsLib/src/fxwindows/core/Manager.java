@@ -35,6 +35,8 @@ public abstract class Manager extends Application {
 	private long frameCount;
 	private long fps;
 
+	public static Stage stage;
+
 	public static void main(String[] args) {
 	    start(Test.class, args);
     }
@@ -81,6 +83,7 @@ public abstract class Manager extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
+		stage = primaryStage;
 		try {
 			shapeVersion(primaryStage);
 		} catch (Exception e) {
