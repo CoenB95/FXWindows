@@ -82,6 +82,14 @@ public class Line extends ShapeBase {
 		endY.bind(p.yProperty());
 	}
 
+	public double getEndX() {
+		return endX.get();
+	}
+
+	public double getEndY() {
+		return endY.get();
+	}
+
 	public void setEndX(double value) {
 		endX.set(value);
 	}
