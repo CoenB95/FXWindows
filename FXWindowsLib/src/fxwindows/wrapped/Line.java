@@ -26,6 +26,7 @@ public class Line extends ShapeBase {
 		line.strokeWidthProperty().bind(borderWidthProperty());
 		lengthX.bind(endX.subtract(xProperty()));
 		lengthY.bind(endY.subtract(yProperty()));
+		setupGeneralBindings(line);
 		setupClickedHandlers(line);
 	}
 	
@@ -90,8 +91,8 @@ public class Line extends ShapeBase {
 	}
 
 	public void setEndXY(double xValue, double yValue) {
-		setX(xValue);
-		setY(yValue);
+		setEndX(xValue);
+		setEndY(yValue);
 	}
 
 	public void setLine(double x1, double y1, double x2, double y2) {
