@@ -59,8 +59,8 @@ public class Text extends TextBase {
         textNode.layoutYProperty().bind(paddingYProperty());
 		textNode.setTextOrigin(VPos.TOP);
 
-		setupGeneralBindings(group);
-		setupFillBindings(rectNode);
+		setupBasicBindings(rectNode);
+		setupBasicBindings(group);
 
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.textProperty().bind(textProperty());

@@ -2,6 +2,7 @@ package fxwindows.core;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
 
 /**
@@ -27,4 +28,8 @@ public interface Colorable {
 	ObjectProperty<Paint> backgroundColorProperty();
 	void setBackgroundColor(Paint value);
 	Paint getBackgroundColor();
+
+	ObjectProperty<Effect> effectProperty();
+	void setEffect(Effect value);
+	Effect getEffect();
 }

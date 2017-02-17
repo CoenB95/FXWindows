@@ -16,10 +16,7 @@ public class Rectangle extends ShapeBase {
 		rect.layoutYProperty().bind(yProperty());
 		rect.widthProperty().bind(widthProperty());
 		rect.heightProperty().bind(heightProperty());
-		rect.fillProperty().bind(backgroundColorProperty());
-		rect.opacityProperty().bind(alphaProperty());
-		rect.strokeProperty().bind(borderColorProperty());
-		rect.strokeWidthProperty().bind(borderWidthProperty());
+		setupBasicBindings(rect);
 	}
 	
 	public Rectangle(double w, double h) {

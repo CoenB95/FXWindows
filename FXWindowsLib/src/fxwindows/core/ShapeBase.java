@@ -16,21 +16,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
     private final DoubleProperty rotation = new SimpleDoubleProperty();
 
 	public ShapeBase() {
-		
-	}
 
-    /**Alpha, Rotation*/
-    protected void setupGeneralBindings(Node node) {
-		node.opacityProperty().bind(alphaProperty());
-		node.visibleProperty().bind(alphaProperty().greaterThan(0));
-		node.rotateProperty().bind(rotationProperty());
-	}
-
-	/**Background and Border color, border width*/
-	protected void setupFillBindings(Shape node) {
-		node.fillProperty().bind(backgroundColorProperty());
-		node.strokeProperty().bind(borderColorProperty());
-		node.strokeWidthProperty().bind(borderWidthProperty());
 	}
 
 	public void setDraggable(Draggable draggable) {
@@ -139,5 +125,16 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 
 	public void setRotation(double value) {
 		rotation.set(value);
+	}
+
+	/**
+	 * Shapebase adds bindings for the rotation.
+	 *
+	 * @param shape the base shape.
+	 */
+	@Override
+	protected void setupBasicBindings(Node shape) {
+		super.setupBasicBindings(shape);
+		shape.rotateProperty().bind(rotationProperty());
 	}
 }

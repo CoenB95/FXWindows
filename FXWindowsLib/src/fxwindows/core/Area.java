@@ -12,8 +12,7 @@ public abstract class Area extends Position {
 
 	// Width and Height
 	private final DoubleProperty baseHeight = new SimpleDoubleProperty();
-	private final ReadOnlyDoubleWrapper transformedHeight =
-            new ReadOnlyDoubleWrapper();
+	private final ReadOnlyDoubleWrapper transformedHeight = new ReadOnlyDoubleWrapper();
 
 	public ReadOnlyDoubleProperty heightProperty() {
 		return transformedHeight.getReadOnlyProperty();
@@ -37,8 +36,7 @@ public abstract class Area extends Position {
 	}
 
 	private final DoubleProperty baseWidth = new SimpleDoubleProperty();
-	private final ReadOnlyDoubleWrapper transformedWidth =
-            new ReadOnlyDoubleWrapper();
+	private final ReadOnlyDoubleWrapper transformedWidth = new ReadOnlyDoubleWrapper();
 
 	public ReadOnlyDoubleProperty widthProperty() {
 		return transformedWidth.getReadOnlyProperty();

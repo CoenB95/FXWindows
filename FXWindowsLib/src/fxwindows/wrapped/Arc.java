@@ -7,7 +7,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.ArcType;
 
 public class Arc extends ShapeBase {
@@ -22,7 +21,6 @@ public class Arc extends ShapeBase {
 			ArcType.OPEN);
 	
 	public Arc() {
-		super();
 		arc = new javafx.scene.shape.Arc();
 		arc.centerXProperty().bind(xProperty());
 		arc.centerYProperty().bind(yProperty());
@@ -30,11 +28,8 @@ public class Arc extends ShapeBase {
 		arc.radiusYProperty().bind(radiusY);
 		arc.startAngleProperty().bind(startAngle);
 		arc.lengthProperty().bind(angleLength);
-		arc.rotateProperty().bind(rotation);
-		arc.fillProperty().bind(backgroundColorProperty());
-		arc.strokeProperty().bind(borderColorProperty());
-		arc.strokeWidthProperty().bind(borderWidthProperty());
 		arc.typeProperty().bind(type);
+		setupBasicBindings(arc);
 	}
 	
 	public Arc(double startX, double startY) {
@@ -42,13 +37,13 @@ public class Arc extends ShapeBase {
 		setXY(startX, startY);
 	}
 	
-	public Arc(DoubleExpression startY, DoubleExpression startX) {
+	public Arc(DoubleExpression startX, DoubleExpression startY) {
 		this();
 		bindX(startX);
 		bindY(startY);
 	}
 	
-	public Arc(DoubleExpression startY, DoubleExpression startX,
+	public Arc(DoubleExpression startX, DoubleExpression startY,
 			DoubleExpression radiusX, DoubleExpression radiusY) {
 		this(startX, startY);
 		bindRadiusX(radiusX);

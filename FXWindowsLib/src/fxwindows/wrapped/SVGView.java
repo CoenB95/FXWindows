@@ -28,7 +28,7 @@ public class SVGView extends ShapeBase {
 		path.scaleXProperty().bind(widthProperty().divide(contentWidthProperty()));
 		path.scaleYProperty().bind(heightProperty().divide(contentHeightProperty()));
 		path.contentProperty().addListener((v1,v2,v3) -> recalculate = true);
-		path.fillProperty().bind(super.backgroundColorProperty());
+		setupBasicBindings(path);
 	}
 	
 	@Override

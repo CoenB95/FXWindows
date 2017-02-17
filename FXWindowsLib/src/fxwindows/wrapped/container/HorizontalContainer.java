@@ -1,4 +1,4 @@
-package fxwindows.wrapped;
+package fxwindows.wrapped.container;
 
 import fxwindows.core.ShapeBase;
 import fxwindows.wrapped.container.ScrollContainer;
