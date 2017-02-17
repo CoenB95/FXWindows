@@ -22,12 +22,10 @@ public class Circle extends ShapeBase {
 		circle.layoutXProperty().bind(innerXProperty().add(radiusProperty()));
 		circle.layoutYProperty().bind(innerYProperty().add(radiusProperty()));
 		circle.radiusProperty().bind(radiusProperty());
-		circle.opacityProperty().bind(alphaProperty());
-		circle.fillProperty().bind(backgroundColorProperty());
-		circle.strokeProperty().bind(borderColorProperty());
-		circle.strokeWidthProperty().bind(borderWidthProperty());
 		contentWidthProperty().bind(radiusProperty().multiply(2));
 		contentHeightProperty().bind(radiusProperty().multiply(2));
+		setupFillBindings(circle);
+		setupGeneralBindings(circle);
 	}
 
 	public DoubleProperty radiusProperty() {

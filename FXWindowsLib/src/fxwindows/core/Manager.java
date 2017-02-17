@@ -8,9 +8,11 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -91,7 +93,7 @@ public abstract class Manager extends Application {
 		}
 	}
 
-	public void shapeVersion(Stage primaryStage) {
+	private void shapeVersion(Stage primaryStage) {
 		pane = new Pane();
 		debugText = new Text();
 		debugText.bindX(pane.widthProperty().subtract(debugText.widthProperty())
@@ -165,6 +167,10 @@ public abstract class Manager extends Application {
 		debugText.setAlpha(debugTextVisible ? 1.0 : 0.0);
 	}
 
+	public void setFullScreen(boolean value) {
+		stage.setFullScreen(value);
+	}
+
 	public void setRoot(RootContainer root, boolean newInFront) {
 	    if (oldContainer != null) {
 	        System.err.println("Root switch canceled: old was still going. " +
@@ -203,6 +209,10 @@ public abstract class Manager extends Application {
 
 		private Animation enterAnimation;
 		private Animation exitAnimation;
+
+		public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
+			getNode().setOnKeyTyped(event);
+		}
 
 		public void setEnterAnimation(Animation value) {
 		    enterAnimation = value;
