@@ -26,11 +26,8 @@ public class Line extends ShapeBase {
 		line.strokeWidthProperty().bind(borderWidthProperty());
 		lengthX.bind(endX.subtract(xProperty()));
 		lengthY.bind(endY.subtract(yProperty()));
-		setupBasicBindings(line);
+		setupBasicBindings(line, false);
 		setupClickedHandlers(line);
-		//Bug: Filling a line hits performance (and is unneeded)
-		line.fillProperty().unbind();
-		line.setFill(null);
 		backgroundColorProperty().addListener((v1, v2, v3) -> {
 			throw new UnsupportedOperationException("A line has no background. Did you mean borderColor?");
 		});

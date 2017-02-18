@@ -88,6 +88,17 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	 * @param shape the base shape.
 	 */
 	protected void setupBasicBindings(Shape shape) {
+		setupBasicBindings(shape, true);
+	}
+
+	/**
+	 * Creates bindings for the alpha, background color,
+	 * border color border width and effect of this Shape.
+	 *
+	 * @param shape the base shape.
+	 * @param fill whether fill should be bound (Line bug).
+	 */
+	protected void setupBasicBindings(Shape shape, boolean fill) {
 		shape.fillProperty().bind(backgroundColorProperty());
 		shape.strokeProperty().bind(borderColorProperty());
 		shape.strokeWidthProperty().bind(borderWidthProperty());
