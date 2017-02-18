@@ -5,7 +5,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.effect.Effect;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -21,7 +20,6 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	private ObjectProperty<Paint> backgroundColor = new SimpleObjectProperty<>(Color.TRANSPARENT);
 	private ObjectProperty<Paint> borderColor = new SimpleObjectProperty<>(Color.TRANSPARENT);
 	private DoubleProperty borderWidth = new SimpleDoubleProperty(1);
-	private ObjectProperty<Effect> effect = new SimpleObjectProperty<>(null);
 	
 	@Override
 	public DoubleProperty alphaProperty() {
@@ -41,11 +39,6 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	@Override
 	public DoubleProperty borderWidthProperty() {
 		return borderWidth;
-	}
-
-	@Override
-	public ObjectProperty<Effect> effectProperty() {
-		return effect;
 	}
 	
 	@Override
@@ -69,11 +62,6 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	}
 
 	@Override
-	public Effect getEffect() {
-		return effectProperty().get();
-	}
-
-	@Override
 	public void setAlpha(double value) {
 		alphaProperty().set(value);
 	}
@@ -91,11 +79,6 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	@Override
 	public void setBorderWidth(double value) {
 		borderWidthProperty().set(value);
-	}
-
-	@Override
-	public void setEffect(Effect effect) {
-		effectProperty().set(effect);
 	}
 
 	/**
@@ -120,6 +103,5 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	protected void setupBasicBindings(Node node) {
 		node.opacityProperty().bind(alphaProperty());
 		node.visibleProperty().bind(alphaProperty().greaterThan(0));
-		node.effectProperty().bind(effectProperty());
 	}
 }

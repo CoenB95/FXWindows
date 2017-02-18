@@ -28,8 +28,4 @@ public interface Colorable {
 	ObjectProperty<Paint> backgroundColorProperty();
 	void setBackgroundColor(Paint value);
 	Paint getBackgroundColor();
-
-	ObjectProperty<Effect> effectProperty();
-	void setEffect(Effect value);
-	Effect getEffect();
 }
