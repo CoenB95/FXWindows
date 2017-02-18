@@ -99,7 +99,7 @@ public abstract class ColoredBoundedArea extends BoundedArea implements Colorabl
 	 * @param fill whether fill should be bound (Line bug).
 	 */
 	protected void setupBasicBindings(Shape shape, boolean fill) {
-		shape.fillProperty().bind(backgroundColorProperty());
+		if (fill) shape.fillProperty().bind(backgroundColorProperty());
 		shape.strokeProperty().bind(borderColorProperty());
 		shape.strokeWidthProperty().bind(borderWidthProperty());
 		setupBasicBindings((Node) shape);
