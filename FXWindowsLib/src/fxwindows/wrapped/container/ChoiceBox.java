@@ -99,11 +99,10 @@ public class ChoiceBox extends ListContainer {
 			heightAnim = new ValueAnimation(duration).setFrom(fromHeight).setTo(toHeight);
 			heightAnim.setInterpolator(interpolator);
 			heightAnim.start();
-			unbindHeight();
 		}
 		if (heightAnim != null && !heightAnim.hasFinished())
-			setHeight(heightAnim.getValue() + getPaddingY()*2);
-		else if (!expanding) setHeight(toHeight.get() + getPaddingY()*2);
+			setMaxHeight(heightAnim.getValue() + getPaddingY()*2);
+		else if (!expanding) setMaxHeight(toHeight.get() + getPaddingY()*2);
 	}
 
 	public ObjectProperty<OnItemSelectedListener> onItemSelectedProperty() {

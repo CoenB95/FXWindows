@@ -190,8 +190,8 @@ public abstract class Manager extends Application {
             shapeContainer.mouseX.set(e.getSceneX());
             shapeContainer.mouseY.set(e.getSceneY());
         });
-        shapeContainer.bindHeight(pane.heightProperty());
-        shapeContainer.bindWidth(pane.widthProperty());
+        shapeContainer.maxHeightProperty().bind(pane.heightProperty());
+        shapeContainer.maxWidthProperty().bind(pane.widthProperty());
 	    pane.getChildren().add(shapeContainer.getNode());
 	    if (!newInFront && oldContainer != null) oldContainer.toFront();
 	    // Make sure the fps stays visible.

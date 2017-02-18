@@ -21,14 +21,24 @@ public class Rectangle extends ShapeBase {
 	
 	public Rectangle(double w, double h) {
 		this();
-		setHeight(h);
-		setWidth(w);
+		setContentHeight(h);
+		setContentWidth(w);
+	}
+
+	public Rectangle(double x, double y, double w, double h) {
+		this(w, h);
+		setXY(x, y);
 	}
 	
 	public Rectangle(DoubleExpression w, DoubleExpression h) {
 		this();
-		bindWidth(w);
-		bindHeight(h);
+		contentWidthProperty().bind(w);
+		contentHeightProperty().bind(h);
+	}
+
+	public Rectangle(DoubleExpression x, DoubleExpression y, DoubleExpression w, DoubleExpression h) {
+		this(w, h);
+		bindXY(x, y);
 	}
 
 	@Override

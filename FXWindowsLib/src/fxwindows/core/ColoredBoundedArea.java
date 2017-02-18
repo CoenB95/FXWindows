@@ -14,7 +14,7 @@ import javafx.scene.shape.Shape;
  * @author CoenB95
  *
  */
-public abstract class ColoredBoundedArea extends BoundedArea implements Colorable {
+public abstract class ColoredBoundedArea extends Area implements Colorable {
 	
 	private DoubleProperty alpha = new SimpleDoubleProperty(1);
 	private ObjectProperty<Paint> backgroundColor = new SimpleObjectProperty<>(Color.TRANSPARENT);
