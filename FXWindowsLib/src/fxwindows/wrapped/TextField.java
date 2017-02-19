@@ -47,6 +47,7 @@ public class TextField extends TextBase {
 		textProperty().bindBidirectional(field.textProperty());
 		field.fontProperty().bind(fontProperty());
 		promptTextProperty().bindBidirectional(field.promptTextProperty());
+		setupTopLevelBindings(field);
 	}
 	
 	public StringProperty promptTextProperty() {

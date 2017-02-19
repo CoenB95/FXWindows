@@ -86,7 +86,9 @@ public abstract class Container extends ShapeBase {
                 }
             }
         });
-		setupClickedHandlers(innerPane);
+		setupTopLevelBindings(pane);
+		setupBackgroundBindings(background);
+		setupMouseBindings(pane);
 	}
 
 	protected Pane getPane() {

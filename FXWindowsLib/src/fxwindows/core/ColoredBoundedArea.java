@@ -80,39 +80,4 @@ public abstract class ColoredBoundedArea extends Area implements Colorable {
 	public void setBorderWidth(double value) {
 		borderWidthProperty().set(value);
 	}
-
-	/**
-	 * Creates bindings for the alpha, background color,
-	 * border color border width and effect of this Shape.
-	 *
-	 * @param shape the base shape.
-	 */
-	protected void setupBasicBindings(Shape shape) {
-		setupBasicBindings(shape, true);
-	}
-
-	/**
-	 * Creates bindings for the alpha, background color,
-	 * border color border width and effect of this Shape.
-	 *
-	 * @param shape the base shape.
-	 * @param fill whether fill should be bound (Line bug).
-	 */
-	protected void setupBasicBindings(Shape shape, boolean fill) {
-		if (fill) shape.fillProperty().bind(backgroundColorProperty());
-		shape.strokeProperty().bind(borderColorProperty());
-		shape.strokeWidthProperty().bind(borderWidthProperty());
-		setupBasicBindings((Node) shape);
-	}
-
-	/**
-	 * Creates a limited set of bindings for the alpha and effect
-	 * of this Node.
-	 *
-	 * @param node the base node.
-	 */
-	protected void setupBasicBindings(Node node) {
-		node.opacityProperty().bind(alphaProperty());
-		node.visibleProperty().bind(alphaProperty().greaterThan(0));
-	}
 }

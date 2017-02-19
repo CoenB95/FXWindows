@@ -42,7 +42,7 @@ public class Button extends TextBase {
 		styleBinding = Bindings.createStringBinding(() -> "-fx-base: " + getBackgroundColor().toString()
 				.replace("0x", "#"), backgroundColorProperty());
 		button.styleProperty().bind(styleBinding);
-		setupBasicBindings(button);
+		setupTopLevelBindings(button);
 	}
 	
 	public Runnable getOnAction() {

@@ -24,7 +24,9 @@ public class Circle extends ShapeBase {
 		circle.radiusProperty().bind(radiusProperty());
 		contentWidthProperty().bind(radiusProperty().multiply(2));
 		contentHeightProperty().bind(radiusProperty().multiply(2));
-		setupBasicBindings(circle);
+		setupTopLevelBindings(circle);
+		setupBackgroundBindings(circle);
+		setupMouseBindings(circle);
 	}
 
 	public DoubleProperty radiusProperty() {

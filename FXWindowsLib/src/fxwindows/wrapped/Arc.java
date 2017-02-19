@@ -29,7 +29,9 @@ public class Arc extends ShapeBase {
 		arc.startAngleProperty().bind(startAngle);
 		arc.lengthProperty().bind(angleLength);
 		arc.typeProperty().bind(type);
-		setupBasicBindings(arc);
+		setupTopLevelBindings(arc);
+		setupBackgroundBindings(arc);
+		setupMouseBindings(arc);
 	}
 	
 	public Arc(double startX, double startY) {

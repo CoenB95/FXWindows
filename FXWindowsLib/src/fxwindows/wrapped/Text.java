@@ -50,7 +50,6 @@ public class Text extends TextBase {
 	}
 
 	private void setupBindings() {
-		setupClickedHandlers(group);
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
@@ -59,8 +58,9 @@ public class Text extends TextBase {
         textNode.layoutYProperty().bind(paddingYProperty());
 		textNode.setTextOrigin(VPos.TOP);
 
-		setupBasicBindings(rectNode);
-		setupBasicBindings(group);
+		setupTopLevelBindings(group);
+		setupBackgroundBindings(rectNode);
+		setupMouseBindings(group);
 
 		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
 		textNode.textProperty().bind(textProperty());

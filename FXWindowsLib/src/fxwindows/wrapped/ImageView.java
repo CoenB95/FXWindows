@@ -31,7 +31,8 @@ public class ImageView extends ShapeBase {
 		view.fitWidthProperty().bind(maxWidthProperty());
 		view.fitHeightProperty().bind(maxHeightProperty());
 		view.imageProperty().addListener((v1,v2,v3) -> recalculate = true);
-		setupBasicBindings(view);
+		setupTopLevelBindings(view);
+		setupMouseBindings(view);
 	}
 	
 	@Override

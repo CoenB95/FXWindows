@@ -62,16 +62,9 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 			event.consume();
 		});
 	}
-
-	protected void setupClickedHandlers(Node node) {
-		node.onMouseClickedProperty().bind(onMouseClicked);
-		node.onMouseDraggedProperty().bind(onMouseDragged);
-		hovered.bind(node.hoverProperty());
-	}
 	
 	public abstract Node getNode();
 	public abstract void clip(Node n);
-	//public abstract void removeFromPane(Pane p);
 
 	/**
 	 * Called once every frame so that components can update their state.
@@ -128,13 +121,47 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Shapebase adds bindings for the rotation.
+	 * Creates bindings for the alpha, background color,
+	 * border color and border width of this Shape.
 	 *
 	 * @param shape the base shape.
 	 */
-	@Override
-	protected void setupBasicBindings(Node shape) {
-		super.setupBasicBindings(shape);
-		shape.rotateProperty().bind(rotationProperty());
+	protected void setupBackgroundBindings(Shape shape) {
+		setupBackgroundBindings(shape, true);
+	}
+
+	/**
+	 * Creates bindings for the background color,
+	 * border color and border width of this Shape.
+	 *
+	 * @param shape the base shape.
+	 * @param fill whether fill should be bound (Line bug).
+	 */
+	protected void setupBackgroundBindings(Shape shape, boolean fill) {
+		if (fill) shape.fillProperty().bind(backgroundColorProperty());
+		shape.strokeProperty().bind(borderColorProperty());
+		shape.strokeWidthProperty().bind(borderWidthProperty());
+	}
+
+	/**
+	 * Creates bindings for the alpha, visibility and rotation.
+	 *
+	 * @param node the base node.
+	 */
+	protected void setupTopLevelBindings(Node node) {
+		node.opacityProperty().bind(alphaProperty());
+		node.visibleProperty().bind(alphaProperty().greaterThan(0));
+		node.rotateProperty().bind(rotationProperty());
+	}
+
+	/**
+	 * Creates bindings for the mouseClick and mouseDrag.
+	 *
+	 * @param node the base node.
+	 */
+	protected void setupMouseBindings(Node node) {
+		node.onMouseClickedProperty().bind(onMouseClicked);
+		node.onMouseDraggedProperty().bind(onMouseDragged);
+		hovered.bind(node.hoverProperty());
 	}
 }

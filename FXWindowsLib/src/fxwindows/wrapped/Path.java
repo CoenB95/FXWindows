@@ -26,7 +26,9 @@ public class Path extends ShapeBase {
 		path = new javafx.scene.shape.Path();
 		path.layoutXProperty().bind(innerXProperty());
 		path.layoutYProperty().bind(innerYProperty());
-		setupBasicBindings(path);
+		setupTopLevelBindings(path);
+		setupBackgroundBindings(path);
+		setupMouseBindings(path);
 	}
 
 	public ObservableList<PathElement> getElements() {

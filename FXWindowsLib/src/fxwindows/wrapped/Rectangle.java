@@ -16,7 +16,9 @@ public class Rectangle extends ShapeBase {
 		rect.layoutYProperty().bind(yProperty());
 		rect.widthProperty().bind(widthProperty());
 		rect.heightProperty().bind(heightProperty());
-		setupBasicBindings(rect);
+		setupTopLevelBindings(rect);
+		setupBackgroundBindings(rect);
+		setupMouseBindings(rect);
 	}
 	
 	public Rectangle(double w, double h) {
