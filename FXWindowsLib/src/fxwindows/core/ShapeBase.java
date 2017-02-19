@@ -84,26 +84,50 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 		return hoveredProperty().get();
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.onMouseClickedProperty() instead.
+	 */
+	@Deprecated
 	public ObjectProperty<EventHandler<MouseEvent>> onMouseClickedProperty() {
 		return onMouseClicked;
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.getOnMouseClicked() instead.
+	 */
+	@Deprecated
 	public EventHandler<MouseEvent> getOnMouseClicked() {
 		return onMouseClickedProperty().get();
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.setOnMouseClicked() instead.
+	 */
+	@Deprecated
 	public void setOnMouseClicked(EventHandler<MouseEvent> value) {
 		onMouseClickedProperty().set(value);
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.onMouseDraggedProperty() instead.
+	 */
+	@Deprecated
 	public ObjectProperty<EventHandler<MouseEvent>> onMouseDraggedProperty() {
 		return onMouseDragged;
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.getOnMouseDragged() instead.
+	 */
+	@Deprecated
 	public EventHandler<MouseEvent> getOnMouseDragged() {
 		return onMouseDraggedProperty().get();
 	}
 
+	/**
+	 * @deprecated use {@link #getNode()}.setOnMouseDragged() instead.
+	 */
+	@Deprecated
     public void setOnMouseDragged(EventHandler<MouseEvent> value) {
 	    onMouseDraggedProperty().set(value);
     }
@@ -160,8 +184,8 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	 * @param node the base node.
 	 */
 	protected void setupMouseBindings(Node node) {
-		node.onMouseClickedProperty().bind(onMouseClicked);
-		node.onMouseDraggedProperty().bind(onMouseDragged);
+		//node.onMouseClickedProperty().bind(onMouseClicked);
+		//node.onMouseDraggedProperty().bind(onMouseDragged);
 		hovered.bind(node.hoverProperty());
 	}
 }
