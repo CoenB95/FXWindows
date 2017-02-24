@@ -34,6 +34,7 @@ public class ChoiceBox extends ListContainer {
 		selectionAllowedProperty().bind(scrollBlockedProperty().not());
 		interpolator = new SmoothInterpolator(AnimType.DECELERATE);
 		duration = Duration.ofMillis(400);
+		clipChildren(true);
 		// When the amount of children changes, a vertical re-layout is needed.
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
