@@ -63,9 +63,9 @@ public abstract class Manager extends Application {
         }
 
         @Override
-        public void setup(RootContainer canvas) {
+        public void setup() {
         	TestContainer container = new TestContainer();
-        	canvas.getChildren().add(container);
+        	setRoot(container, true);
         }
 
         @Override
@@ -130,9 +130,7 @@ public abstract class Manager extends Application {
 		};
 		timer.start();
 		pane.getChildren().addAll(canv, debugText.getNode());
-		RootContainer startContainer = new RootContainer();
-		setup(startContainer);
-        setRoot(startContainer, true);
+		setup();
 		primaryStage.setScene(new Scene(new BorderPane(pane),500,500));
 		primaryStage.setOnCloseRequest((e) -> shutdown());
 		primaryStage.show();
@@ -232,7 +230,7 @@ public abstract class Manager extends Application {
 		}
 	}
 
-	public abstract void setup(RootContainer canvas);
+	public abstract void setup();
 	public abstract void frame();
 	public abstract void shutdown();
 }
