@@ -15,6 +15,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 /**
@@ -49,10 +50,10 @@ public class ListContainer extends VerticalContainer {
 	public ListContainer() {
 		super();
 		
-		getPane().setFocusTraversable(true);
-		getPane().setOnKeyPressed(event -> {
+		getNode().setFocusTraversable(true);
+		getNode().setOnKeyPressed(event -> {
 			if (!isSelectionAllowed()) {
-				if (getPane().isFocused() && event.getCode() == KeyCode.ENTER) {
+				if (getNode().isFocused() && event.getCode() == KeyCode.ENTER) {
 					// Temp solution to make ChoiceBox work once closed.
 					getChildren().get(selectedPosition.get()).getOnMouseClicked()
 					.handle(null);
@@ -100,13 +101,13 @@ public class ListContainer extends VerticalContainer {
 		
 		hoverRect = new Rectangle(widthProperty(), hoverHeightAnim
 				.valueProperty());
-		hoverRect.alphaProperty().bind(Bindings.when(hoveredProperty().or(getPane()
+		hoverRect.alphaProperty().bind(Bindings.when(hoveredProperty().or(getNode()
 				.focusedProperty())).then(0.2).otherwise(0.0));
 		hoverRect.setBackgroundColor(Color.WHITE);
 		
 		selectionRect = new Rectangle(widthProperty(), selectionHeightAnim
 				.valueProperty());
-		selectionRect.alphaProperty().bind(Bindings.when(getPane().focusedProperty()
+		selectionRect.alphaProperty().bind(Bindings.when(getNode().focusedProperty()
 				.and(selectionAllowed)).then(1.0).otherwise(0.0));
 		selectionRect.setBackgroundColor(Color.TRANSPARENT);
 		selectionRect.setBorderColor(Color.DEEPSKYBLUE);
@@ -120,9 +121,9 @@ public class ListContainer extends VerticalContainer {
 			getChildren().get(v3.intValue()).getOnMouseClicked().handle(null);
 		});
 		
-		getPane().getChildren().add(1, hoverRect.getNode());
-		getPane().getChildren().add(2, selectionRect.getNode());
-		getPane().parentProperty().addListener((v1,v2,v3) -> {
+		((Pane) getNode()).getChildren().add(1, hoverRect.getNode());
+		((Pane) getNode()).getChildren().add(2, selectionRect.getNode());
+		getNode().parentProperty().addListener((v1,v2,v3) -> {
 			if (v3 == null) {
 				System.out.println("Detected loss of parent for ListContainer. Stop animations.");
 				hoverPositionAnim.stop();

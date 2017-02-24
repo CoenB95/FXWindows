@@ -61,7 +61,6 @@ public abstract class Container extends ShapeBase {
         // Don't bind position of rect, background and children. See note.
         rect.widthProperty().bind(innerWidthProperty());
         rect.heightProperty().bind(innerHeightProperty());
-        innerPane.setClip(rect);
 
 
         // The background of this container.
@@ -91,12 +90,8 @@ public abstract class Container extends ShapeBase {
 		setupMouseBindings(pane);
 	}
 
-	protected Pane getPane() {
-	    return pane;
-    }
-	
-	public void toFront() {
-		getPane().toFront();
+	public void clipChildren(boolean value) {
+		innerPane.setClip(value ? rect : null);
 	}
 
     /**

@@ -192,7 +192,7 @@ public abstract class Manager extends Application {
         shapeContainer.maxWidthProperty().bind(pane.widthProperty());
         shapeContainer.setLayoutBehavior(LayoutBehavior.FILL_SPACE);
 	    pane.getChildren().add(shapeContainer.getNode());
-	    if (!newInFront && oldContainer != null) oldContainer.toFront();
+	    if (!newInFront && oldContainer != null) oldContainer.getNode().toFront();
 	    // Make sure the fps stays visible.
         debugText.getNode().toFront();
         if (shapeContainer.enterAnimation != null) {

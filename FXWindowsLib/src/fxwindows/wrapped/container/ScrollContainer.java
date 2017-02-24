@@ -48,7 +48,7 @@ public abstract class ScrollContainer extends Container {
         scrollYAnim.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));
         scrollXAnim.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));
 
-        getPane().setOnScroll((e) -> {
+        getNode().setOnScroll((e) -> {
             if (isScrollBlocked()) return;
 
             double oldScrollY = scrollYAnim.getTo();
