@@ -5,6 +5,7 @@ import java.time.Duration;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.SmoothInterpolator.AnimType;
 import fxwindows.animation.ValueAnimation;
+import fxwindows.core.LayoutBehavior;
 import fxwindows.core.ShapeBase;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -31,6 +32,7 @@ public class ChoiceBox extends ListContainer {
 	
 	public ChoiceBox() {
 		super();
+		setHeightBehavior(LayoutBehavior.FILL_SPACE);
 		selectionAllowedProperty().bind(scrollBlockedProperty().not());
 		interpolator = new SmoothInterpolator(AnimType.DECELERATE);
 		duration = Duration.ofMillis(400);
@@ -40,7 +42,7 @@ public class ChoiceBox extends ListContainer {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
 					w.heightProperty().addListener((v1,v2,v3) -> relayout = true);
-					w.setOnMouseClicked((e) -> {
+					w.getNode().setOnMouseClicked((e) -> {
 						itemSelected = w;
 						itemUpdate = true;
 						expanding = !expanding;

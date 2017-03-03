@@ -35,6 +35,8 @@ public abstract class Area extends Position {
 							return getMaxHeight();
 						case WRAP_CONTENT:
 							return getContentHeight() + 2 * getPaddingY();
+						case WRAP_TILL_MAX:
+							return Math.min(getContentHeight() + 2 * getPaddingY(), getMaxHeight());
 						default:
 							return 0.0;
 					}
@@ -47,6 +49,8 @@ public abstract class Area extends Position {
 							return getMaxWidth();
 						case WRAP_CONTENT:
 							return getContentWidth() + 2 * getPaddingX();
+						case WRAP_TILL_MAX:
+							return Math.min(getContentWidth() + 2 * getPaddingX(), getMaxWidth());
 						default:
 							return 0.0;
 					}

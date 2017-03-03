@@ -14,7 +14,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -55,11 +57,11 @@ public class ListContainer extends VerticalContainer {
 			if (!isSelectionAllowed()) {
 				if (getNode().isFocused() && event.getCode() == KeyCode.ENTER) {
 					// Temp solution to make ChoiceBox work once closed.
-					getChildren().get(selectedPosition.get()).getOnMouseClicked()
-					.handle(null);
+					EventHandler<? super MouseEvent> e =
+							getChildren().get(selectedPosition.get()).getNode().getOnMouseClicked();
+					if (e != null) e.handle(null);
 					event.consume();
 				}
-				return;
 			} else {
 				if (event.getCode() == KeyCode.UP && hoveredPosition > 0) {
 					hoveredPosition--;
@@ -81,6 +83,8 @@ public class ListContainer extends VerticalContainer {
 		getChildren().addListener((ListChangeListener<ShapeBase>) c -> {
             while (c.next()) {
             	hoveredPosition = 0;
+            	moveHoverRect(null);
+            	moveSelectionRect(null);
                 for (ShapeBase w : c.getAddedSubList()) {
                     w.hoveredProperty().addListener((v1, v2, v3) -> {
                     	if (v3 && isSelectionAllowed()) {
@@ -118,7 +122,9 @@ public class ListContainer extends VerticalContainer {
 		
 		selectedPositionProperty().addListener((v1,v2,v3) -> {
 			moveSelectionRect(getChildren().get(v3.intValue()));
-			getChildren().get(v3.intValue()).getOnMouseClicked().handle(null);
+			EventHandler<? super MouseEvent> e =
+					getChildren().get(v3.intValue()).getNode().getOnMouseClicked();
+			if (e != null) e.handle(null);
 		});
 		
 		((Pane) getNode()).getChildren().add(1, hoverRect.getNode());
@@ -133,26 +139,37 @@ public class ListContainer extends VerticalContainer {
 	}
 	
 	private void moveHoverRect(ShapeBase item) {
-		hoverPositionAnim.setFrom(0, hoverRect.getY())
-		.setTo(item.xProperty(), item.yProperty().add(paddingYProperty()))
-		.startAndStick();
-		hoverHeightAnim.setFrom(hoverRect.getHeight())
-		.setTo(item.getHeight()).start();
-		if (item.getY() + item.getHeight() > getInnerHeight()) {
-			setScrollY(getScrollY() + getInnerHeight() - 
-					(item.getY() + item.getHeight()));
+		hoverPositionAnim.setFrom(0, hoverRect.getY());
+		hoverHeightAnim.setFrom(hoverRect.getHeight());
+		if (item == null) {
+			hoverPositionAnim.setTo(0, 0);
+			hoverHeightAnim.setTo(0);
 		}
-		if (item.getY() < 0) {
-			setScrollY(getScrollY() - item.getY());
+		else {
+			hoverPositionAnim.setTo(item.xProperty(), item.yProperty().add(paddingYProperty()))
+					.startAndStick();
+			hoverHeightAnim.setTo(item.getHeight()).start();
+			if (item.getY() + item.getHeight() > getInnerHeight()) {
+				setScrollY(getScrollY() + getInnerHeight() -
+						(item.getY() + item.getHeight()));
+			}
+			if (item.getY() < 0) {
+				setScrollY(getScrollY() - item.getY());
+			}
 		}
 	}
 	
 	private void moveSelectionRect(ShapeBase item) {
-		selectionPositionAnim.setFrom(0, selectionRect.getY())
-		.setTo(item.xProperty(), item.yProperty().add(paddingYProperty()))
-		.startAndStick();
-		selectionHeightAnim.setFrom(selectionRect.getHeight())
-		.setTo(item.getHeight()).start();
+		selectionPositionAnim.setFrom(0, selectionRect.getY());
+		selectionHeightAnim.setFrom(selectionRect.getHeight());
+		if (item == null) {
+			selectionPositionAnim.setTo(0, 0);
+			selectionHeightAnim.setTo(0);
+		} else {
+			selectionPositionAnim.setTo(item.xProperty(), item.yProperty().add(paddingYProperty()))
+					.startAndStick();
+			selectionHeightAnim.setTo(item.getHeight()).start();
+		}
 	}
 	
 	public IntegerProperty selectedPositionProperty() {
