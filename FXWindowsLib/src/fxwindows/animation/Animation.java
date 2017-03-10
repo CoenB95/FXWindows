@@ -44,6 +44,7 @@ public abstract class Animation extends Updatable {
 		if (isUnregistered()) register();
 		startTime = System.nanoTime()/1000000;
 		afterEnd = false;
+		update(startTime);
 	}
 	public final void startAndStick() {
 		start();
