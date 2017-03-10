@@ -65,6 +65,11 @@ public final class XY {
 				other.yProperty());
 	}
 
+	public static XY centerOf(Area other) {
+		return new XY(other.xProperty().add(other.widthProperty().divide(2)),
+				other.yProperty().add(other.heightProperty().divide(2)));
+	}
+
 	public double getX() {
 		return x.get();
 	}
