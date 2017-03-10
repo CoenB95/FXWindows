@@ -32,6 +32,19 @@ public final class XY {
 		this.y.bind(y);
 	}
 
+	public XY minus(Area other) {
+		return new XY(xProperty().subtract(other.widthProperty()),
+				yProperty().subtract(other.heightProperty()));
+	}
+
+	public XY minusWidth(Area other) {
+		return new XY(xProperty().subtract(other.widthProperty()), yProperty());
+	}
+
+	public XY minusHeight(Area other) {
+		return new XY(xProperty(), yProperty().subtract(other.heightProperty()));
+	}
+
 	public static XY bottomLeftOf(Area other) {
 		return new XY(other.xProperty(),
 				other.yProperty().add(other.heightProperty()));
