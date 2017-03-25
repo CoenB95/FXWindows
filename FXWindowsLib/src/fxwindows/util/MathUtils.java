@@ -6,7 +6,12 @@ import javafx.geometry.Point2D;
  * @author Coen Boelhouwers
  * @version 1.0
  */
-public class MathUtil {
+public class MathUtils {
+
+	public double random(double min, double max) {
+		double diff = max - min;
+		return Math.random() * diff + min;
+	}
 
 	public static Point2D randomDistanceForce(double angle, double minDistance, double maxDistance) {
 		double diffDistance = maxDistance - minDistance;
