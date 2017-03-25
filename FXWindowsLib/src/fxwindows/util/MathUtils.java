@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
  */
 public class MathUtils {
 
-	public double random(double min, double max) {
+	public static double random(double min, double max) {
 		double diff = max - min;
 		return Math.random() * diff + min;
 	}
