@@ -1,6 +1,7 @@
 package fxwindows.core;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.*;
 
 /**
@@ -113,6 +114,15 @@ public abstract class Area extends Position {
 			innerY.bind(yProperty().add(paddingYProperty().multiply(scaleYProperty())));
 		}
 		return innerY.getReadOnlyProperty();
+	}
+
+	public void bindMaxBoundsToInner(Area other) {
+		bindMaxBounds(other.innerWidthProperty(), other.innerHeightProperty());
+	}
+
+	public void bindMaxBounds(DoubleExpression w, DoubleExpression h) {
+		maxHeightProperty().bind(h);
+		maxWidthProperty().bind(w);
 	}
 
 	public DoubleProperty maxHeightProperty() {
