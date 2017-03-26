@@ -7,6 +7,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 
 public abstract class ShapeBase extends ColoredBoundedArea {
 
@@ -168,7 +170,19 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the alpha, visibility, rotation and scaling.
+	 * Creates bindings for the scale.
+	 *
+	 * @param node the base node.
+	 */
+	protected void setupScaleBindings(Node node) {
+		Scale scale = Transform.scale(1, 1, 0, 0);
+		scale.xProperty().bind(scaleXProperty());
+		scale.yProperty().bind(scaleYProperty());
+		node.getTransforms().add(scale);
+	}
+
+	/**
+	 * Creates bindings for the alpha, visibility and rotation.
 	 *
 	 * @param node the base node.
 	 */
@@ -176,8 +190,6 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 		node.opacityProperty().bind(alphaProperty());
 		node.visibleProperty().bind(alphaProperty().greaterThan(0));
 		node.rotateProperty().bind(rotationProperty());
-		node.scaleXProperty().bind(scaleXProperty());
-		node.scaleYProperty().bind(scaleYProperty());
 	}
 
 	/**

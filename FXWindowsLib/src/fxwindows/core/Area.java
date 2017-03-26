@@ -98,7 +98,7 @@ public abstract class Area extends Position {
 	public ReadOnlyDoubleProperty innerXProperty() {
 		if (innerX == null) {
 			innerX = new ReadOnlyDoubleWrapper();
-			innerX.bind(xProperty().add(paddingXProperty()));
+			innerX.bind(xProperty().add(paddingXProperty().multiply(scaleXProperty())));
 		}
 		return innerX.getReadOnlyProperty();
 	}
@@ -106,7 +106,7 @@ public abstract class Area extends Position {
 	public ReadOnlyDoubleProperty innerYProperty() {
 		if (innerY == null) {
 			innerY = new ReadOnlyDoubleWrapper();
-			innerY.bind(yProperty().add(paddingYProperty()));
+			innerY.bind(yProperty().add(paddingYProperty().multiply(scaleYProperty())));
 		}
 		return innerY.getReadOnlyProperty();
 	}

@@ -56,11 +56,12 @@ public class Text extends TextBase {
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
 		group.layoutYProperty().bind(yProperty());
-		textNode.layoutXProperty().bind(paddingXProperty());
-        textNode.layoutYProperty().bind(paddingYProperty());
+		textNode.layoutXProperty().bind(paddingXProperty().multiply(scaleXProperty()));
+        textNode.layoutYProperty().bind(paddingYProperty().multiply(scaleYProperty()));
 		textNode.setTextOrigin(VPos.TOP);
 
 		setupTopLevelBindings(group);
+		setupScaleBindings(textNode);
 		setupBackgroundBindings(rectNode);
 		setupMouseBindings(group);
 
