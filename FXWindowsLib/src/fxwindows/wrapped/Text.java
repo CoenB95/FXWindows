@@ -1,6 +1,7 @@
 package fxwindows.wrapped;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
@@ -50,6 +51,7 @@ public class Text extends TextBase {
 	}
 
 	private void setupBindings() {
+		ChangeListener l = (a,b,c) -> recalculate = true;
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
@@ -62,15 +64,15 @@ public class Text extends TextBase {
 		setupBackgroundBindings(rectNode);
 		setupMouseBindings(group);
 
-		textNode.fontProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.fontProperty().addListener(l);
 		textNode.textProperty().bind(textProperty());
-		textNode.textProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.textProperty().addListener(l);
 		textNode.fillProperty().bind(textColorProperty());
 		textNode.wrappingWidthProperty().bind(Bindings.when(wrapTextProperty())
 				.then(innerWidthProperty()).otherwise(0.0));
-		maxWidthProperty().addListener((a,b,c) -> recalculate = true);
+		maxWidthProperty().addListener(l);
 		textNode.fontProperty().bind(fontProperty());
-		textNode.wrappingWidthProperty().addListener((a,b,c) -> recalculate = true);
+		textNode.wrappingWidthProperty().addListener(l);
 		recalculate = true;
 	}
 

@@ -168,7 +168,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the alpha, visibility and rotation.
+	 * Creates bindings for the alpha, visibility, rotation and scaling.
 	 *
 	 * @param node the base node.
 	 */
@@ -176,6 +176,8 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 		node.opacityProperty().bind(alphaProperty());
 		node.visibleProperty().bind(alphaProperty().greaterThan(0));
 		node.rotateProperty().bind(rotationProperty());
+		node.scaleXProperty().bind(scaleXProperty());
+		node.scaleYProperty().bind(scaleYProperty());
 	}
 
 	/**

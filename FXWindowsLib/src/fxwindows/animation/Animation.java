@@ -40,19 +40,18 @@ public abstract class Animation extends Updatable {
 		}
 	}
 	public final void start() {
-		started = false;
-		if (isUnregistered()) register();
-		startTime = System.nanoTime()/1000000;
-		afterEnd = false;
-		update(startTime);
+		startAt(0);
 	}
 	public final void startAndStick() {
-		start();
+		startAt(0);
 		afterEnd = true;
 	}
 	public final void startAt(long milisDelay) {
-		start();
+		started = false;
+		if (isUnregistered()) register();
 		startTime = System.nanoTime()/1000000 + milisDelay;
+		afterEnd = false;
+		update(startTime - milisDelay);
 	}
 	public final void stop() {
 		afterEnd = false;

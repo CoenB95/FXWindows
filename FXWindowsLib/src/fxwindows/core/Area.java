@@ -19,6 +19,8 @@ public abstract class Area extends Position {
 	private final DoubleProperty maxWidth = new SimpleDoubleProperty();
 	private final DoubleProperty paddingX = new SimpleDoubleProperty();
 	private final DoubleProperty paddingY = new SimpleDoubleProperty();
+	private final DoubleProperty scaleX = new SimpleDoubleProperty(1);
+	private final DoubleProperty scaleY = new SimpleDoubleProperty(1);
 	private final ReadOnlyDoubleWrapper width = new ReadOnlyDoubleWrapper();
 	private final ObjectProperty<LayoutBehavior> widthBehavior =
 			new SimpleObjectProperty<>(LayoutBehavior.WRAP_CONTENT);
@@ -32,30 +34,32 @@ public abstract class Area extends Position {
 		height.bind(Bindings.createDoubleBinding(() -> {
 					switch(getHeightBehavior()) {
 						case FILL_SPACE:
-							return getMaxHeight();
+							return getMaxHeight() * getScaleY();
 						case WRAP_CONTENT:
-							return getContentHeight() + 2 * getPaddingY();
+							return (getContentHeight() + 2 * getPaddingY()) * getScaleY();
 						case WRAP_TILL_MAX:
-							return Math.min(getContentHeight() + 2 * getPaddingY(), getMaxHeight());
+							return Math.min(getContentHeight() + 2 * getPaddingY(), getMaxHeight())
+									* getScaleY();
 						default:
 							return 0.0;
 					}
 				}, contentHeightProperty(), maxHeightProperty(), heightBehaviorProperty(),
-				paddingYProperty()));
+				paddingYProperty(), scaleYProperty()));
 
 		width.bind(Bindings.createDoubleBinding(() -> {
 					switch(getWidthBehavior()) {
 						case FILL_SPACE:
-							return getMaxWidth();
+							return getMaxWidth() * getScaleX();
 						case WRAP_CONTENT:
-							return getContentWidth() + 2 * getPaddingX();
+							return (getContentWidth() + 2 * getPaddingX()) * getScaleX();
 						case WRAP_TILL_MAX:
-							return Math.min(getContentWidth() + 2 * getPaddingX(), getMaxWidth());
+							return Math.min(getContentWidth() + 2 * getPaddingX(), getMaxWidth())
+									* getScaleX();
 						default:
 							return 0.0;
 					}
 				}, contentWidthProperty(), maxWidthProperty(), widthBehaviorProperty(),
-				paddingXProperty()));
+				paddingXProperty(), scaleXProperty()));
 	}
 
 	//Properties
@@ -123,6 +127,14 @@ public abstract class Area extends Position {
 		return paddingY;
 	}
 
+	public DoubleProperty scaleXProperty() {
+		return scaleX;
+	}
+
+	public DoubleProperty scaleYProperty() {
+		return scaleY;
+	}
+
 	public ObjectProperty<LayoutBehavior> widthBehaviorProperty() {
 		return widthBehavior;
 	}
@@ -180,6 +192,14 @@ public abstract class Area extends Position {
 		return paddingYProperty().get();
 	}
 
+	public double getScaleX() {
+		return scaleXProperty().get();
+	}
+
+	public double getScaleY() {
+		return scaleYProperty().get();
+	}
+
 	public double getWidth() {
 		return widthProperty().get();
 	}
@@ -234,6 +254,14 @@ public abstract class Area extends Position {
 
 	public void setPaddingY(double value) {
 		paddingY.set(value);
+	}
+
+	public void setScaleX(double value) {
+		scaleXProperty().set(value);
+	}
+
+	public void setScaleY(double value) {
+		scaleYProperty().set(value);
 	}
 
 	public void setWidthBehavior(LayoutBehavior value) {
