@@ -19,6 +19,16 @@ public class FadeAnimation extends ValueAnimation {
 	}
 
 	@Override
+	public FadeAnimation then(Animation other) {
+		return then(other, 0);
+	}
+
+	@Override
+	public FadeAnimation then(Animation other, long millisDelay) {
+		return (FadeAnimation) super.then(other, millisDelay);
+	}
+
+	@Override
 	public void update(double progress) {
 		super.update(progress);
 		animatedColorable.setAlpha(getValue());

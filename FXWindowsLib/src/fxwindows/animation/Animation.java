@@ -39,13 +39,16 @@ public abstract class Animation extends Updatable {
 			
 		}
 	}
+
 	public final void start() {
 		startAt(0);
 	}
+
 	public final void startAndStick() {
 		startAt(0);
 		afterEnd = true;
 	}
+
 	public final void startAt(long milisDelay) {
 		started = false;
 		if (isUnregistered()) register();
@@ -53,17 +56,32 @@ public abstract class Animation extends Updatable {
 		afterEnd = false;
 		update(startTime - milisDelay);
 	}
+
 	public final void stop() {
 		afterEnd = false;
 		unregister();
 	}
 
+	public Animation then(Animation other) {
+		return then(other, 0);
+	}
+
+	public Animation then(Animation other, long millisDelay) {
+		unregisteredProperty().addListener((v1, v2, v3) -> {
+			if (v3) other.startAt(millisDelay);
+		});
+		return this;
+	}
+
 	public final void setDuration(Duration duration) {
 		this.duration = duration;
 	}
-	public final void setInterpolator(Interpolator value) {
+
+	public Animation setInterpolator(Interpolator value) {
 		interpolator = value;
+		return this;
 	}
+
 	public final Duration getDuration() {
 		return this.duration;
 	}

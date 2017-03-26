@@ -18,6 +18,7 @@ public class MoveAnimation extends Animation {
 	public MoveAnimation(Duration duration) {
 		super(duration);
 	}
+
 	public MoveAnimation(ShapeBase drawable, Duration duration) {
 		super(duration);
 		this.drawable = drawable;
@@ -26,61 +27,84 @@ public class MoveAnimation extends Animation {
 		toX = new SimpleDoubleProperty();
 		toY = new SimpleDoubleProperty();
 	}
+
 	public MoveAnimation setShapeBase(ShapeBase value) {
 		drawable = value;
 		return this;
 	}
+
 	public MoveAnimation setTo(double newX, double newY) {
 		setToX(newX);
 		setToY(newY);
 		return this;
 	}
+
 	public MoveAnimation setTo(DoubleExpression newX, DoubleExpression newY) {
 		setToX(newX);
 		setToY(newY);
 		return this;
 	}
+
 	public MoveAnimation setToX(double newX) {
 		toX = new SimpleDoubleProperty(newX);
 		return this;
 	}
+
 	public MoveAnimation setToX(DoubleExpression newX) {
 		toX = newX;
 		return this;
 	}
+
 	public MoveAnimation setToY(double newY) {
 		toY = new SimpleDoubleProperty(newY);
 		return this;
 	}
+
 	public MoveAnimation setToY(DoubleExpression newY) {
 		toY = newY;
 		return this;
 	}
+
 	public MoveAnimation setFrom(double newX, double newY) {
 		setFromX(newX);
 		setFromY(newY);
 		return this;
 	}
+
 	public MoveAnimation setFrom(DoubleExpression newX, DoubleExpression newY) {
 		setFromX(newX);
 		setFromY(newY);
 		return this;
 	}
+
 	public MoveAnimation setFromX(double newX) {
 		fromX = new SimpleDoubleProperty(newX);
 		return this;
 	}
+
 	public MoveAnimation setFromX(DoubleExpression newX) {
 		fromX = newX;
 		return this;
 	}
+
 	public MoveAnimation setFromY(double newY) {
 		fromY = new SimpleDoubleProperty(newY);
 		return this;
 	}
+
 	public MoveAnimation setFromY(DoubleExpression newY) {
 		fromY = newY;
 		return this;
+	}
+
+	@Override
+	public MoveAnimation then(Animation other) {
+		return then(other, 0);
+	}
+
+	@Override
+	public MoveAnimation then(Animation other, long millisDelay) {
+		return (MoveAnimation) super.then(other, millisDelay);
 	}
 
 	@Override

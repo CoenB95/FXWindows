@@ -1,6 +1,7 @@
 package fxwindows.animation;
 
 
+import javafx.animation.Interpolator;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -38,16 +39,34 @@ public class ValueAnimation extends Animation {
 		value.set(fromValue.get());
 		return this;
 	}
+
 	public ValueAnimation setFrom(DoubleExpression newO) {
 		fromValue = newO;
 		value.set(fromValue.get());
 		return this;
 	}
+
 	public DoubleProperty valueProperty() {
 		return value;
 	}
+
 	public double getValue() {
 		return value.get();
+	}
+
+	@Override
+	public ValueAnimation setInterpolator(Interpolator value) {
+		return (ValueAnimation) super.setInterpolator(value);
+	}
+
+	@Override
+	public ValueAnimation then(Animation other) {
+		return then(other, 0);
+	}
+
+	@Override
+	public ValueAnimation then(Animation other, long millisDelay) {
+		return (ValueAnimation) super.then(other, millisDelay);
 	}
 
 	@Override

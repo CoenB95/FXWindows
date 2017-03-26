@@ -13,11 +13,13 @@ public class SmoothInterpolator extends Interpolator {
 	}
 
 	private double accel(double prog, double f) {
-		return Math.pow(prog/f*4, 2)/16*f;
+		return 1.0 - Math.cos(prog/f*Math.PI/2);
+		//return Math.pow(prog/f*4, 2)/16*f;
 	}
 
 	private double decel(double prog, double f) {
-		return 1-(Math.pow((prog-1)/f*4, 2)/16*f);
+		return Math.sin(prog/f*Math.PI/2);
+		//return 1-(Math.pow((prog-1)/f*4, 2)/16*f);
 	}
 
 	@Override
