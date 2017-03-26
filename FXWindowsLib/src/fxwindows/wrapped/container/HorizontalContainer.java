@@ -2,6 +2,7 @@ package fxwindows.wrapped.container;
 
 import fxwindows.core.ShapeBase;
 import fxwindows.wrapped.container.ScrollContainer;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ListChangeListener.Change;
@@ -19,15 +20,6 @@ public class HorizontalContainer extends ScrollContainer {
 		super();
 		setMaxHeight(100);
 		setMaxWidth(250);
-
-		// When the amount of children changes, a vertical re-layout is needed.
-		getChildren().addListener((Change<? extends ShapeBase> c) -> {
-			while (c.next()) {
-				for (ShapeBase w : c.getAddedSubList()) {
-					w.maxWidthProperty().bind(maxWidthProperty());
-				}
-			}
-		});
 	}
 	
 	public DoubleProperty marginProperty() {
