@@ -24,7 +24,7 @@ public class VerticalContainer extends ScrollContainer {
 		getChildren().addListener((Change<? extends ShapeBase> c) -> {
 			while (c.next()) {
 				for (ShapeBase w : c.getAddedSubList()) {
-					w.maxWidthProperty().bind(maxWidthProperty());
+					w.maxWidthProperty().bind(innerWidthProperty());
 				}
 			}
 		});

@@ -4,20 +4,25 @@ package fxwindows.animation;
 import javafx.animation.Interpolator;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 
 import java.time.Duration;
 
 public class ValueAnimation extends Animation {
-	
-	private DoubleExpression fromValue;
-	private DoubleExpression toValue;
+
+	private Property<Number> listener;
+	private final DoubleProperty fromValue = new SimpleDoubleProperty();
+	private final DoubleProperty toValue = new SimpleDoubleProperty();
 	private final DoubleProperty value = new SimpleDoubleProperty();
 	
 	public ValueAnimation(Duration duration) {
 		super(duration);
-		fromValue = new SimpleDoubleProperty();
-		toValue = new SimpleDoubleProperty();
+	}
+
+	public ValueAnimation(Property<Number> listener, Duration duration) {
+		super(duration);
+		this.listener = listener;
 	}
 	
 	public double getTo() {
@@ -25,23 +30,23 @@ public class ValueAnimation extends Animation {
 	}
 	
 	public ValueAnimation setTo(double newO) {
-		toValue = new SimpleDoubleProperty(newO);
+		toValue.set(newO);
 		return this;
 	}
 	
 	public ValueAnimation setTo(DoubleExpression newO) {
-		toValue = newO;
+		toValue.bind(newO);
 		return this;
 	}
 	
 	public ValueAnimation setFrom(double newO) {
-		fromValue = new SimpleDoubleProperty(newO);
+		fromValue.set(newO);
 		value.set(fromValue.get());
 		return this;
 	}
 
 	public ValueAnimation setFrom(DoubleExpression newO) {
-		fromValue = newO;
+		fromValue.bind(newO);
 		value.set(fromValue.get());
 		return this;
 	}
@@ -73,5 +78,6 @@ public class ValueAnimation extends Animation {
 	public void update(double progress) {
 		value.set(fromValue.get() + 
 				(toValue.get() - fromValue.get()) * progress);
+		if (listener != null) listener.setValue(value.get());
 	}
 }

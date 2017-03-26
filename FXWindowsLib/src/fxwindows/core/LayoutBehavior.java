@@ -9,5 +9,5 @@ public enum LayoutBehavior {
 	/**Take up only as much space as wanted by this shape, ignoring maximum bounds*/
 	WRAP_CONTENT,
 	/**Take up only as much space as wanted by this shape, respecting maximum bounds*/
-	WRAP_TILL_MAX
+	WRAP_CONTENT_TILL_MAX
 }

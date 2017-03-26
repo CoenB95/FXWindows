@@ -62,6 +62,13 @@ public abstract class Animation extends Updatable {
 		unregister();
 	}
 
+	public Animation then(Runnable r) {
+		unregisteredProperty().addListener((v1, v2, v3) -> {
+			if (v3) r.run();
+		});
+		return this;
+	}
+
 	public Animation then(Animation other) {
 		return then(other, 0);
 	}

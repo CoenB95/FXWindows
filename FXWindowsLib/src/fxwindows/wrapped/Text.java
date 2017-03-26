@@ -1,7 +1,6 @@
 package fxwindows.wrapped;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
@@ -16,8 +15,8 @@ public class Text extends TextBase {
 	private Group group;
 	private javafx.scene.text.Text textNode;
 	private Rectangle rectNode;
-	private boolean recalculate = true;
-	
+	private boolean calculateSize = true;
+	private boolean calculateClip = false;
 	
 
 	public Text() {
@@ -51,7 +50,6 @@ public class Text extends TextBase {
 	}
 
 	private void setupBindings() {
-		ChangeListener l = (a,b,c) -> recalculate = true;
 		rectNode.widthProperty().bind(widthProperty());
 		rectNode.heightProperty().bind(heightProperty());
 		group.layoutXProperty().bind(xProperty());
@@ -65,16 +63,18 @@ public class Text extends TextBase {
 		setupBackgroundBindings(rectNode);
 		setupMouseBindings(group);
 
-		textNode.fontProperty().addListener(l);
+		textNode.fontProperty().addListener((a,b,c) -> calculateSize = true);
 		textNode.textProperty().bind(textProperty());
-		textNode.textProperty().addListener(l);
+		textNode.textProperty().addListener((a,b,c) -> calculateSize = true);
 		textNode.fillProperty().bind(textColorProperty());
 		textNode.wrappingWidthProperty().bind(Bindings.when(wrapTextProperty())
 				.then(innerWidthProperty()).otherwise(0.0));
-		maxWidthProperty().addListener(l);
+		maxWidthProperty().addListener((a,b,c) -> calculateSize = true);
+		widthProperty().addListener((a,b,c) -> calculateClip = true);
+		heightProperty().addListener((a,b,c) -> calculateClip = true);
 		textNode.fontProperty().bind(fontProperty());
-		textNode.wrappingWidthProperty().addListener(l);
-		recalculate = true;
+		textNode.wrappingWidthProperty().addListener((a,b,c) -> calculateSize = true);
+		calculateSize = true;
 	}
 
 	private void calculateSize() {
@@ -82,21 +82,23 @@ public class Text extends TextBase {
 		Bounds b = textNode.getBoundsInLocal();
 		setContentHeight(b.getHeight());
 		setContentWidth(b.getWidth());
+	}
+
+	private void calculateClip() {
 		Rectangle textClip = new Rectangle();
 		textClip.setLayoutX(0);
 		textClip.setLayoutY(0);
-		textClip.setHeight(getHeight());
-		textClip.setWidth(getWidth());
-		//textClip.setHeight(100);
+		textClip.setHeight(getInnerHeight());
+		textClip.setWidth(getInnerWidth());
 		textNode.setClip(textClip);
 	}
 
 	@Override
 	public void update() {
-		if (recalculate) {
-			recalculate = false;
-			calculateSize();
-		}
+		if (calculateSize) calculateSize();
+		if (calculateSize || calculateClip) calculateClip();
+		calculateSize = false;
+		calculateClip = false;
 	}
 	
 	@Override

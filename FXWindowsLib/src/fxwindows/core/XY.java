@@ -65,6 +65,26 @@ public final class XY {
 				other.yProperty());
 	}
 
+	public static XY innerBottomLeftOf(Area other) {
+		return new XY(other.innerXProperty(),
+				other.innerYProperty().add(other.innerHeightProperty()));
+	}
+
+	public static XY innerBottomRightOf(Area other) {
+		return new XY(other.innerXProperty().add(other.innerWidthProperty()),
+				other.innerYProperty().add(other.innerHeightProperty()));
+	}
+
+	public static XY innerTopLeftOf(Area other) {
+		return new XY(other.innerXProperty(),
+				other.innerYProperty());
+	}
+
+	public static XY innerTopRightOf(Area other) {
+		return new XY(other.innerXProperty().add(other.innerWidthProperty()),
+				other.innerYProperty());
+	}
+
 	public static XY centerOf(Area other) {
 		return new XY(other.xProperty().add(other.widthProperty().divide(2)),
 				other.yProperty().add(other.heightProperty().divide(2)));

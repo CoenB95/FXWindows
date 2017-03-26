@@ -14,7 +14,7 @@ public abstract class Area extends Position {
 	private final DoubleProperty contentWidth = new SimpleDoubleProperty();
 	private final ReadOnlyDoubleWrapper height = new ReadOnlyDoubleWrapper();
 	private final ObjectProperty<LayoutBehavior> heightBehavior =
-			new SimpleObjectProperty<>(LayoutBehavior.WRAP_CONTENT);
+			new SimpleObjectProperty<>(LayoutBehavior.WRAP_CONTENT_TILL_MAX);
 	private final DoubleProperty maxHeight = new SimpleDoubleProperty();
 	private final DoubleProperty maxWidth = new SimpleDoubleProperty();
 	private final DoubleProperty paddingX = new SimpleDoubleProperty();
@@ -23,7 +23,7 @@ public abstract class Area extends Position {
 	private final DoubleProperty scaleY = new SimpleDoubleProperty(1);
 	private final ReadOnlyDoubleWrapper width = new ReadOnlyDoubleWrapper();
 	private final ObjectProperty<LayoutBehavior> widthBehavior =
-			new SimpleObjectProperty<>(LayoutBehavior.WRAP_CONTENT);
+			new SimpleObjectProperty<>(LayoutBehavior.WRAP_CONTENT_TILL_MAX);
 	private ReadOnlyDoubleWrapper innerX;
 	private ReadOnlyDoubleWrapper innerY;
 	private ReadOnlyDoubleWrapper innerWidth;
@@ -37,9 +37,11 @@ public abstract class Area extends Position {
 							return getMaxHeight() * getScaleY();
 						case WRAP_CONTENT:
 							return (getContentHeight() + 2 * getPaddingY()) * getScaleY();
-						case WRAP_TILL_MAX:
-							return Math.min(getContentHeight() + 2 * getPaddingY(), getMaxHeight())
-									* getScaleY();
+						case WRAP_CONTENT_TILL_MAX:
+							double value = (getContentHeight() + 2 * getPaddingY()) * getScaleY();
+							if (getMaxHeight() > 0 && value > getMaxHeight())
+								return getMaxHeight();
+							else return value;
 						default:
 							return 0.0;
 					}
@@ -52,9 +54,11 @@ public abstract class Area extends Position {
 							return getMaxWidth() * getScaleX();
 						case WRAP_CONTENT:
 							return (getContentWidth() + 2 * getPaddingX()) * getScaleX();
-						case WRAP_TILL_MAX:
-							return Math.min(getContentWidth() + 2 * getPaddingX(), getMaxWidth())
-									* getScaleX();
+						case WRAP_CONTENT_TILL_MAX:
+							double value = (getContentWidth() + 2 * getPaddingX()) * getScaleX();
+							if (getMaxWidth() > 0 && value > getMaxWidth())
+								return getMaxWidth();
+							else return value;
 						default:
 							return 0.0;
 					}

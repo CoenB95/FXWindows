@@ -8,6 +8,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -210,6 +211,18 @@ public abstract class Manager extends Application {
 
 		private Animation enterAnimation;
 		private Animation exitAnimation;
+
+		public RootContainer() {
+			getChildren().addListener((ListChangeListener.Change<? extends ShapeBase> c) -> {
+				while (c.next()) {
+					for (ShapeBase w : c.getAddedSubList()) {
+						w.setLayoutBehavior(LayoutBehavior.WRAP_CONTENT);
+						w.maxWidthProperty().bind(innerWidthProperty());
+						w.maxHeightProperty().bind(innerHeightProperty());
+					}
+				}
+			});
+		}
 
 		public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
 			getNode().setOnKeyTyped(event);
