@@ -188,7 +188,6 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	 */
 	protected void setupTopLevelBindings(Node node) {
 		node.opacityProperty().bind(alphaProperty());
-		node.visibleProperty().bind(alphaProperty().greaterThan(0));
 		node.rotateProperty().bind(rotationProperty());
 	}
 

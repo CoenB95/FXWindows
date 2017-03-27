@@ -49,8 +49,8 @@ public class HorizontalContainer extends ScrollContainer {
 			width += w.getWidth() + getMargin();
 			if ((width + getScrollX() <= 0) ||
 					(width + getScrollX() - w.getWidth()  > getInnerWidth())) {
-				w.setAlpha(0);
-			} else w.setAlpha(1);
+				w.getNode().setVisible(false);
+			} else w.getNode().setVisible(true);
 
 			if (w.getHeight() > height) height = w.getHeight();
 		}

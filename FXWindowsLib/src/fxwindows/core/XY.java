@@ -26,6 +26,18 @@ public final class XY {
 		this.y.set(y);
 	}
 
+	private XY(double x, DoubleExpression y) {
+		this();
+		this.x.set(x);
+		this.y.bind(y);
+	}
+
+	private XY(DoubleExpression x, double y) {
+		this();
+		this.x.bind(x);
+		this.y.set(y);
+	}
+
 	private XY(DoubleExpression x, DoubleExpression y) {
 		this();
 		this.x.bind(x);
@@ -67,22 +79,21 @@ public final class XY {
 
 	public static XY innerBottomLeftOf(Area other) {
 		return new XY(other.innerXProperty(),
-				other.innerYProperty().add(other.innerHeightProperty()));
+				other.innerHeightProperty());
 	}
 
 	public static XY innerBottomRightOf(Area other) {
-		return new XY(other.innerXProperty().add(other.innerWidthProperty()),
-				other.innerYProperty().add(other.innerHeightProperty()));
+		return new XY(other.innerWidthProperty(),
+				other.innerHeightProperty());
 	}
 
 	public static XY innerTopLeftOf(Area other) {
-		return new XY(other.innerXProperty(),
-				other.innerYProperty());
+		return new XY(0, 0);
 	}
 
 	public static XY innerTopRightOf(Area other) {
-		return new XY(other.innerXProperty().add(other.innerWidthProperty()),
-				other.innerYProperty());
+		return new XY(other.innerWidthProperty(),
+				0);
 	}
 
 	public static XY centerOf(Area other) {
