@@ -12,6 +12,8 @@ public abstract class Animation extends Updatable {
 	private Duration duration;
 	private boolean started;
 	private boolean afterEnd;
+	private boolean paused;
+	private long pauseTime = -1;
 	private Interpolator interpolator = Interpolator.EASE_BOTH;
 
 	public Animation(Duration duration) {
@@ -24,6 +26,13 @@ public abstract class Animation extends Updatable {
 		return isUnregistered();
 	}
 	public final void update(long time) {
+		if (paused) {
+			if (pauseTime < 0) pauseTime = time;
+			return;
+		} else if (pauseTime > 0) {
+			startTime += (time - pauseTime);
+			pauseTime = -1;
+		}
 		if (hasFinished()) return;
 		if (!started && time >= startTime) {
 			started = true;
@@ -38,6 +47,10 @@ public abstract class Animation extends Updatable {
 			}
 			
 		}
+	}
+
+	public void pause(boolean value) {
+		paused = value;
 	}
 
 	public final void start() {
@@ -64,7 +77,7 @@ public abstract class Animation extends Updatable {
 
 	public Animation then(Runnable r) {
 		unregisteredProperty().addListener((v1, v2, v3) -> {
-			if (v3) r.run();
+			if (started && v3) r.run();
 		});
 		return this;
 	}
