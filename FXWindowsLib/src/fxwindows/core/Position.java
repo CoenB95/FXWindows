@@ -129,20 +129,10 @@ public class Position {
 	}
 
 	public double getY() { return yProperty().get(); }
-
-	public void bind(XY p) {
-		bindX(p.xProperty());
-		bindY(p.yProperty());
-	}
 	
 	public void bindXY(DoubleExpression x, DoubleExpression y) {
 		bindX(x);
 		bindY(y);
-	}
-	
-	public void set(XY p) {
-		setX(p.getX());
-		setY(p.getY());
 	}
 
 	/**Sets the base position.
