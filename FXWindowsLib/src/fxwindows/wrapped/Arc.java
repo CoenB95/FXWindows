@@ -69,12 +69,20 @@ public class Arc extends ShapeBase {
 		rotation.bind(value);
 	}
 	
-	public void bindStartAngle(DoubleExpression value) {
-		startAngle.bind(value);
+	public DoubleProperty angleLengthProperty() {
+		return angleLength;
 	}
-	
-	public void bindAngleLength(DoubleExpression value) {
-		angleLength.bind(value);
+
+	public DoubleProperty startAngleProperty() {
+		return startAngle;
+	}
+
+	public DoubleProperty radiusXProperty() {
+		return radiusX;
+	}
+
+	public DoubleProperty radiusYProperty() {
+		return radiusY;
 	}
 	
 	public double getStartAngle() {
