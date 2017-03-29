@@ -1,5 +1,6 @@
-package fxwindows.core;
+package fxwindows.bindings;
 
+import fxwindows.core.Area;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
