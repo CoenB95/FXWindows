@@ -4,7 +4,7 @@ import java.time.Duration;
 
 public class NoopAnimation extends Animation {
 
-	private NoopAnimation(Duration duration) {
+	public NoopAnimation(Duration duration) {
 		super(duration);
 	}
 
