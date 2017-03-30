@@ -154,7 +154,9 @@ public abstract class Manager extends Application {
             pane.getChildren().remove(oldContainer.getNode());
             oldContainer = null;
             System.out.println("Removed old root");
-        }
+        } else {
+        	oldContainer.update();
+		}
     }
 
     public boolean isDebugTextShown() {
