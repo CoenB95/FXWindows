@@ -37,9 +37,9 @@ public abstract class Area extends Position {
 						case FILL_SPACE:
 							return getMaxHeight() * getScaleY();
 						case WRAP_CONTENT:
-							return (getContentHeight() + 2 * getPaddingY()) * getScaleY();
+							return getPrefferedHeight();
 						case WRAP_CONTENT_TILL_MAX:
-							double value = (getContentHeight() + 2 * getPaddingY()) * getScaleY();
+							double value = getPrefferedHeight();
 							if (getMaxHeight() > 0 && value > getMaxHeight())
 								return getMaxHeight();
 							else return value;
@@ -54,9 +54,9 @@ public abstract class Area extends Position {
 						case FILL_SPACE:
 							return getMaxWidth() * getScaleX();
 						case WRAP_CONTENT:
-							return (getContentWidth() + 2 * getPaddingX()) * getScaleX();
+							return getPrefferedWidth();
 						case WRAP_CONTENT_TILL_MAX:
-							double value = (getContentWidth() + 2 * getPaddingX()) * getScaleX();
+							double value = getPrefferedWidth();
 							if (getMaxWidth() > 0 && value > getMaxWidth())
 								return getMaxWidth();
 							else return value;
@@ -204,6 +204,14 @@ public abstract class Area extends Position {
 
 	public double getPaddingY() {
 		return paddingYProperty().get();
+	}
+
+	public double getPrefferedHeight() {
+		return (getContentHeight() + 2 * getPaddingY()) * getScaleY();
+	}
+
+	public double getPrefferedWidth() {
+		return (getContentWidth() + 2 * getPaddingX()) * getScaleX();
 	}
 
 	public double getScaleX() {

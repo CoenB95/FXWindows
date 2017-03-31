@@ -60,7 +60,7 @@ public class VerticalContainer extends ScrollContainer {
 				w.getNode().setVisible(false);
 			} else w.getNode().setVisible(true);
 
-			if (w.getWidth() > width) width = w.getWidth();
+			if (w.getPrefferedWidth() > width) width = w.getPrefferedWidth();
 		}
 		setContentHeight(height);
 		setContentWidth(width);

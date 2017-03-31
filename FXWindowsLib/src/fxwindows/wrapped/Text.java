@@ -67,21 +67,21 @@ public class Text extends TextBase {
 		textNode.textProperty().bind(textProperty());
 		textNode.textProperty().addListener((a,b,c) -> calculateSize = true);
 		textNode.fillProperty().bind(textColorProperty());
-		textNode.wrappingWidthProperty().bind(Bindings.when(wrapTextProperty())
-				.then(innerWidthProperty()).otherwise(0.0));
+
 		maxWidthProperty().addListener((a,b,c) -> calculateSize = true);
 		widthProperty().addListener((a,b,c) -> calculateClip = true);
 		heightProperty().addListener((a,b,c) -> calculateClip = true);
 		textNode.fontProperty().bind(fontProperty());
-		textNode.wrappingWidthProperty().addListener((a,b,c) -> calculateSize = true);
+		wrapTextProperty().addListener((a,b,c) -> calculateSize = true);
 		calculateSize = true;
 	}
 
 	private void calculateSize() {
 		textNode.setClip(null);
-		Bounds b = textNode.getBoundsInLocal();
-		setContentHeight(b.getHeight());
-		setContentWidth(b.getWidth());
+		textNode.setWrappingWidth(0);
+		setContentWidth(textNode.getBoundsInLocal().getWidth());
+		if (getWrapText()) textNode.setWrappingWidth(getInnerWidth());
+		setContentHeight(textNode.getBoundsInLocal().getHeight());
 	}
 
 	private void calculateClip() {
