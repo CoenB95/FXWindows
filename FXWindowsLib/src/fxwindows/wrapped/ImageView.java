@@ -34,6 +34,14 @@ public class ImageView extends ShapeBase {
 		setupTopLevelBindings(view);
 		setupMouseBindings(view);
 	}
+
+	public void setImage(Image image) {
+		view.setImage(image);
+	}
+
+	public void setImage(String url) {
+		view.setImage(new Image(url));
+	}
 	
 	@Override
 	public void update() {

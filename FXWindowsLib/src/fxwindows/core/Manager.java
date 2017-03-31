@@ -151,7 +151,19 @@ public abstract class Manager extends Application {
 		if (oldDone && newDone) {
 			// All animations have finished so we can remove the old container
 			// (it was kept because it could still be visible).
+			oldContainer.onStop();
 			pane.getChildren().remove(oldContainer.getNode());
+			// Restore the state of the old container to before the exit animation.
+			// Otherwise - if reused later - fade or move animations result in the container
+			// being invisible. Since its not to much work, help users by restoring it.
+			if (oldContainer.enterAnimation != null) {
+				oldContainer.enterAnimation.stop();
+				oldContainer.enterAnimation.jumpTo(0.0);
+			}
+			if (oldContainer.exitAnimation != null) {
+				oldContainer.exitAnimation.stop();
+				oldContainer.exitAnimation.jumpTo(0.0);
+			}
 			oldContainer = null;
 			System.out.println("Removed old root");
 		} else {
@@ -187,6 +199,7 @@ public abstract class Manager extends Application {
 		}
 		shapeContainer = root;
 		System.out.println("Set new root");
+		shapeContainer.onStart();
 		pane.setOnMouseMoved((e) -> {
 			shapeContainer.mouseX.set(e.getSceneX());
 			shapeContainer.mouseY.set(e.getSceneY());
@@ -208,14 +221,17 @@ public abstract class Manager extends Application {
 	}
 
 	public void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
+		pane.setFocusTraversable(true);
 		pane.setOnKeyPressed(event);
 	}
 
 	public void setOnKeyReleased(EventHandler<? super KeyEvent> event) {
+		pane.setFocusTraversable(true);
 		pane.setOnKeyReleased(event);
 	}
 
 	public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
+		pane.setFocusTraversable(true);
 		pane.setOnKeyTyped(event);
 	}
 
@@ -226,6 +242,14 @@ public abstract class Manager extends Application {
 
 		private Animation enterAnimation;
 		private Animation exitAnimation;
+
+		public void onStart() {
+
+		}
+
+		public void onStop() {
+
+		}
 
 		public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
 			getNode().setOnKeyTyped(event);

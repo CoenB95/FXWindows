@@ -9,6 +9,7 @@ import java.time.Duration;
 public abstract class Animation extends Updatable {
 
 	private long startTime;
+	private double progress;
 	private Duration duration;
 	private boolean started;
 	private boolean afterEnd;
@@ -25,6 +26,12 @@ public abstract class Animation extends Updatable {
 	public boolean hasFinished() {
 		return isUnregistered();
 	}
+
+	public void jumpTo(double newProgress) {
+		startTime += (progress - newProgress) * duration.toMillis();
+		update(newProgress);
+	}
+
 	public final void update(long time) {
 		if (paused) {
 			if (pauseTime < 0) pauseTime = time;
@@ -39,11 +46,15 @@ public abstract class Animation extends Updatable {
 		}
 		if (started) {
 			if (time >= startTime + duration.toMillis()) {
+				progress = 1.0;
 				update(1.0);
 				if (!afterEnd) unregister();
+			} else if (time < startTime) {
+				progress = 0.0;
+				update(0.0);
 			} else {
-				update(interpolator.interpolate(0.0, 1.0, (time - startTime) /
-						(double) duration.toMillis()));
+				progress = (time - startTime) / (double) duration.toMillis();
+				update(interpolator.interpolate(0.0, 1.0, progress));
 			}
 			
 		}
@@ -62,7 +73,7 @@ public abstract class Animation extends Updatable {
 		afterEnd = true;
 	}
 
-	public final void startAt(long milisDelay) {
+	public void startAt(long milisDelay) {
 		started = false;
 		if (isUnregistered()) register();
 		startTime = System.nanoTime()/1000000 + milisDelay;
@@ -70,7 +81,7 @@ public abstract class Animation extends Updatable {
 		update(startTime - milisDelay);
 	}
 
-	public final void stop() {
+	public void stop() {
 		afterEnd = false;
 		unregister();
 	}
