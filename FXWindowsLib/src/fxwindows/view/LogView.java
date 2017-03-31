@@ -35,6 +35,8 @@ public class LogView extends VerticalContainer {
 	private static final ObservableList<ShapeBase> LOGS = FXCollections.observableArrayList(
 			new ArrayList<ShapeBase>());
 
+	private static double textSize = 12;
+
 	public LogView() {
 		Bindings.bindContent(getChildren(), LOGS);
 		clipChildren(true);
@@ -44,7 +46,7 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static void log(String message, Color color) {
-		Text log = new Text(message, Font.loadFont(RobotoFont.regular(), 12), color);
+		Text log = new Text(message, Font.loadFont(RobotoFont.regular(), textSize), color);
 		log.setBorderColor(Color.LIGHTGRAY);
 		log.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		log.setScaleY(0);
@@ -73,6 +75,10 @@ public class LogView extends VerticalContainer {
 		return new ProgressLog(message, color);
 	}
 
+	public static void setTextSize(double value) {
+		textSize = value;
+	}
+
 	public static class ProgressLog {
 
 		private HorizontalContainer hor;
@@ -85,7 +91,7 @@ public class LogView extends VerticalContainer {
 			hor.setBorderColor(Color.LIGHTGRAY);
 			hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 			progress = new SimpleDoubleProperty();
-			log = new Text(message, Font.loadFont(RobotoFont.regular(), 14), color);
+			log = new Text(message, Font.loadFont(RobotoFont.regular(), textSize), color);
 			prog = ProgressCircle.small(Color.BLUE);
 			Animation fade = new FadeAnimation(prog, Duration.ofMillis(1000))
 					.setFrom(1).setTo(0);
