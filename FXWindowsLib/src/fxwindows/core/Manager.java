@@ -206,6 +206,18 @@ public abstract class Manager extends Application {
         }
     }
 
+	public void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
+		pane.setOnKeyPressed(event);
+	}
+
+	public void setOnKeyReleased(EventHandler<? super KeyEvent> event) {
+		pane.setOnKeyReleased(event);
+	}
+
+    public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
+		pane.setOnKeyTyped(event);
+	}
+
 	public static class RootContainer extends Container {
 
 		private final DoubleProperty mouseX = new SimpleDoubleProperty();

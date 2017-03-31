@@ -13,6 +13,7 @@ public abstract class Animation extends Updatable {
 	private boolean started;
 	private boolean afterEnd;
 	private boolean paused;
+	private boolean revert;
 	private long pauseTime = -1;
 	private Interpolator interpolator = Interpolator.EASE_BOTH;
 
@@ -42,8 +43,8 @@ public abstract class Animation extends Updatable {
 				update(1.0);
 				if (!afterEnd) unregister();
 			} else {
-				update(interpolator.interpolate(0.0, 1.0, (time - startTime) /
-						(double) duration.toMillis()));
+				double fraction = (time - startTime) / (double) duration.toMillis();
+				update(interpolator.interpolate(0.0, 1.0, revert ? 1.0 - fraction : fraction));
 			}
 			
 		}
@@ -51,6 +52,15 @@ public abstract class Animation extends Updatable {
 
 	public void pause(boolean value) {
 		paused = value;
+	}
+
+	public final void revert() {
+		revertAt(0);
+	}
+
+	public final void revertAt(long millisDelay) {
+		revert = !revert;
+		startAt(millisDelay);
 	}
 
 	public final void start() {
