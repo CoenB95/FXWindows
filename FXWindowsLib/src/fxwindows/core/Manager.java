@@ -129,9 +129,9 @@ public abstract class Manager extends Application {
 				}
 			}
 		};
-		timer.start();
 		pane.getChildren().addAll(canv, debugText.getNode());
 		setup();
+		timer.start();
 		primaryStage.setScene(new Scene(new BorderPane(pane), 500, 500));
 		primaryStage.setOnCloseRequest((e) -> shutdown());
 		primaryStage.show();
