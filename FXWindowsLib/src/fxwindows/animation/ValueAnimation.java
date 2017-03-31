@@ -2,10 +2,10 @@ package fxwindows.animation;
 
 
 import javafx.animation.Interpolator;
-import javafx.beans.binding.DoubleExpression;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.time.Duration;
 
@@ -34,7 +34,7 @@ public class ValueAnimation extends Animation {
 		return this;
 	}
 	
-	public ValueAnimation setTo(DoubleExpression newO) {
+	public ValueAnimation setTo(ObservableValue<? extends Number> newO) {
 		toValue.bind(newO);
 		return this;
 	}
@@ -45,7 +45,7 @@ public class ValueAnimation extends Animation {
 		return this;
 	}
 
-	public ValueAnimation setFrom(DoubleExpression newO) {
+	public ValueAnimation setFrom(ObservableValue<? extends Number> newO) {
 		fromValue.bind(newO);
 		value.set(fromValue.get());
 		return this;

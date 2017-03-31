@@ -22,8 +22,8 @@ public class Arc extends ShapeBase {
 	
 	public Arc() {
 		arc = new javafx.scene.shape.Arc();
-		arc.layoutXProperty().bind(innerXProperty().add(radiusX));
-		arc.layoutYProperty().bind(innerYProperty().add(radiusY));
+		arc.layoutXProperty().bind(innerXProperty().add(radiusX.multiply(scaleXProperty())));
+		arc.layoutYProperty().bind(innerYProperty().add(radiusY.multiply(scaleYProperty())));
 		arc.radiusXProperty().bind(radiusX);
 		arc.radiusYProperty().bind(radiusY);
 		arc.startAngleProperty().bind(startAngle);
@@ -32,6 +32,7 @@ public class Arc extends ShapeBase {
 		contentWidthProperty().bind(radiusX.multiply(2));
 		contentHeightProperty().bind(radiusY.multiply(2));
 		setupTopLevelBindings(arc);
+		setupScaleBindings(arc);
 		setupBackgroundBindings(arc);
 		setupMouseBindings(arc);
 	}

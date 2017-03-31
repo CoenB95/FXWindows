@@ -7,6 +7,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 
@@ -188,7 +189,12 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	 */
 	protected void setupTopLevelBindings(Node node) {
 		node.opacityProperty().bind(alphaProperty());
-		node.rotateProperty().bind(rotationProperty());
+		Rotate rotate = new Rotate(0);
+		rotate.angleProperty().bind(rotationProperty());
+		rotate.pivotXProperty().bind(widthProperty().divide(2));
+		rotate.pivotYProperty().bind(heightProperty().divide(2));
+		node.getTransforms().add(rotate);
+		//node.rotateProperty().bind(rotationProperty());
 	}
 
 	/**
