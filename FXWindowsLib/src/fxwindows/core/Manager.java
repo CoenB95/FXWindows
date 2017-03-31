@@ -175,6 +175,10 @@ public abstract class Manager extends Application {
 		return debugTextVisible;
 	}
 
+	public boolean isFullScreen() {
+		return stage.isFullScreen();
+	}
+
 	public void showDebugText(boolean value) {
 		debugTextVisible = value;
 		debugText.setAlpha(debugTextVisible ? 1.0 : 0.0);
@@ -182,6 +186,14 @@ public abstract class Manager extends Application {
 
 	public void setFullScreen(boolean value) {
 		stage.setFullScreen(value);
+	}
+
+	public void setHeight(double value) {
+		stage.setHeight(value);
+	}
+
+	public void setWidth(double value) {
+		stage.setWidth(value);
 	}
 
 	public boolean setRoot(RootContainer root, boolean newInFront) {
