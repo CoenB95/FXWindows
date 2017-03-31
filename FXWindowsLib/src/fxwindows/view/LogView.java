@@ -15,6 +15,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -32,11 +33,19 @@ public class LogView extends VerticalContainer {
 	public static final Color ERROR = Color.RED;
 	public static final Color SUCCESS = Color.GREEN;
 
-	private static final ObservableList<ShapeBase> LOGS = FXCollections.observableArrayList(
-			new ArrayList<ShapeBase>());
+	private static final ObservableList<Log> LOGS = FXCollections.observableArrayList(
+			new ArrayList<Log>());
 
-	public LogView() {
-		Bindings.bindContent(getChildren(), LOGS);
+	private double textSize = 12;
+
+	public LogView(double textSize) {
+		this.textSize = textSize;
+		LOGS.addListener((ListChangeListener<Log>) c -> {
+			for (Log l : c.getAddedSubList()) {
+				log(l);
+			}
+		});
+		//Bindings.bindContent(getChildren(), LOGS);
 		clipChildren(true);
 		setMaxWidth(200);
 		setMaxHeight(158);
@@ -44,7 +53,13 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static void log(String message, Color color) {
-		Text log = new Text(message, Font.loadFont(RobotoFont.regular(), 12), color);
+		Platform.runLater(() -> {
+			LOGS.add(new Log(message, color));
+		});
+	}
+
+	private void log(Log msg) {
+		Text log = new Text(msg.message, Font.loadFont(RobotoFont.regular(), 12), msg.color);
 		log.setBorderColor(Color.LIGHTGRAY);
 		log.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		log.setScaleY(0);
@@ -57,20 +72,34 @@ public class LogView extends VerticalContainer {
 						.setFrom(1)
 						.setTo(0)
 						.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
-								.then(() -> LOGS.remove(log));
+								.then(() -> LOGS.remove(msg));
 		anim1.then(anim2, 3000);
 		anim2.pause(!log.getNode().isVisible());
 		log.setPadding(2);
 		log.setWrapText(true);
 		log.getNode().visibleProperty().addListener((v1, v2, v3) -> anim2.pause(!v3));
-		Platform.runLater(() -> {
-			LOGS.add(log);
-			anim1.start();
-		});
+//		Platform.runLater(() -> {
+//			LOGS.add(log);
+//			anim1.start();
+//		});
 	}
 
 	public static ProgressLog logProgress(String message, Color color) {
 		return new ProgressLog(message, color);
+	}
+
+	public void setTextSize(double value) {
+		textSize = value;
+	}
+
+	public static class Log {
+		private String message;
+		private Color color;
+
+		private Log(String message, Color color) {
+			this.message = message;
+			this.color = color;
+		}
 	}
 
 	public static class ProgressLog {
@@ -85,7 +114,7 @@ public class LogView extends VerticalContainer {
 			hor.setBorderColor(Color.LIGHTGRAY);
 			hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 			progress = new SimpleDoubleProperty();
-			log = new Text(message, Font.loadFont(RobotoFont.regular(), 14), color);
+			log = new Text(message, Font.loadFont(RobotoFont.regular(), 12), color);
 			prog = ProgressCircle.small(Color.BLUE);
 			Animation fade = new FadeAnimation(prog, Duration.ofMillis(1000))
 					.setFrom(1).setTo(0);
