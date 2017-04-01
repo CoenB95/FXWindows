@@ -5,19 +5,17 @@ import fxwindows.animation.FadeAnimation;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.ValueAnimation;
 import fxwindows.core.LayoutBehavior;
-import fxwindows.core.ShapeBase;
 import fxwindows.resources.RobotoFont;
 import fxwindows.wrapped.Text;
 import fxwindows.wrapped.container.HorizontalContainer;
 import fxwindows.wrapped.container.VerticalContainer;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.time.Duration;
@@ -53,13 +51,13 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static void log(String message, Color color) {
-		Platform.runLater(() -> {
-			LOGS.add(new Log(message, color));
-		});
+		Platform.runLater(() -> LOGS.add(new Log(message, color)));
 	}
 
 	private void log(Log msg) {
-		Text log = new Text(msg.message, Font.loadFont(RobotoFont.regular(), 12), msg.color);
+		Text log = new Text("", Font.loadFont(RobotoFont.regular(), textSize));
+		log.textProperty().bind(msg.messageProperty());
+		log.textColorProperty().bind(msg.colorProperty());
 		log.setBorderColor(Color.LIGHTGRAY);
 		log.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		log.setScaleY(0);
@@ -72,16 +70,46 @@ public class LogView extends VerticalContainer {
 						.setFrom(1)
 						.setTo(0)
 						.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
-								.then(() -> LOGS.remove(msg));
+								.then(() -> getChildren().remove(log));
 		anim1.then(anim2, 3000);
 		anim2.pause(!log.getNode().isVisible());
 		log.setPadding(2);
 		log.setWrapText(true);
 		log.getNode().visibleProperty().addListener((v1, v2, v3) -> anim2.pause(!v3));
-//		Platform.runLater(() -> {
-//			LOGS.add(log);
-//			anim1.start();
-//		});
+		Platform.runLater(() -> {
+			getChildren().add(log);
+			anim1.start();
+		});
+	}
+
+	private void logProgress(ProgressLog msg) {
+		HorizontalContainer hor = new HorizontalContainer();
+		hor.setBorderColor(Color.LIGHTGRAY);
+		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
+
+		Text logText = new Text("", Font.loadFont(RobotoFont.regular(), 12));
+		logText.textProperty().bind(msg.messageProperty());
+		logText.textColorProperty().bind(msg.colorProperty());
+		ProgressCircle progressCircle = ProgressCircle.small((Color) msg.getColor());
+		Animation fade = new FadeAnimation(progressCircle, Duration.ofMillis(1000))
+				.setFrom(1).setTo(0);
+		ValueAnimation scale = new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
+				.setFrom(0).setTo(1).setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));
+		logText.setPadding(5);
+		msg.progressProperty().addListener((v1, v2, v3) -> {
+			if (v3.doubleValue() >= 1) {
+				Platform.runLater(() -> {
+					fade.start();
+					scale.setFrom(1).setTo(0).then(() -> Platform.runLater(() -> getChildren().remove(hor)))
+							.startAt(5000);
+				});
+			}
+		});
+		hor.getChildren().addAll(logText, progressCircle);
+		Platform.runLater(() -> {
+			getChildren().add(hor);
+			scale.start();
+		});
 	}
 
 	public static ProgressLog logProgress(String message, Color color) {
@@ -93,16 +121,52 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static class Log {
-		private String message;
-		private Color color;
+		private StringProperty message;
+		private ObjectProperty<Paint> color;
 
-		private Log(String message, Color color) {
-			this.message = message;
-			this.color = color;
+		private Log(String message, Paint color) {
+			this.message = new SimpleStringProperty(message);
+			this.color = new SimpleObjectProperty<>(color);
+		}
+
+		public ObjectProperty<Paint> colorProperty() {
+			return color;
+		}
+
+		public StringProperty messageProperty() {
+			return message;
+		}
+
+		public Paint getColor() {
+			return color.get();
+		}
+
+		public void setColor(Paint value) {
+			color.set(value);
+		}
+
+		public void setMessage(String value) {
+			message.set(value);
 		}
 	}
 
-	public static class ProgressLog {
+	public static class ProgressLog extends Log {
+		private DoubleProperty progress;
+
+		private ProgressLog(String message, Color color) {
+			super(message, color);
+		}
+
+		public DoubleProperty progressProperty() {
+			return progress;
+		}
+
+		public void setProgress(double value) {
+			progress.set(value);
+		}
+	}
+
+	/*public static class ProgressLog {
 
 		private HorizontalContainer hor;
 		private DoubleProperty progress;
@@ -125,14 +189,14 @@ public class LogView extends VerticalContainer {
 				if (v3.doubleValue() >= 1) {
 					Platform.runLater(() -> {
 						fade.start();
-						scale.setFrom(1).setTo(0).then(() -> Platform.runLater(() -> LOGS.remove(hor)))
+						scale.setFrom(1).setTo(0).then(() -> Platform.runLater(() -> getChildren().remove(hor)))
 								.startAt(5000);
 					});
 				}
 			});
 			hor.getChildren().addAll(log, prog);
 			Platform.runLater(() -> {
-				LOGS.add(hor);
+				getChildren().add(hor);
 				scale.start();
 			});
 		}
@@ -156,5 +220,5 @@ public class LogView extends VerticalContainer {
 				log.setText(value);
 			});
 		}
-	}
+	}*/
 }
