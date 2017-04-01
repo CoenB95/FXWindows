@@ -38,9 +38,16 @@ public class LogView extends VerticalContainer {
 
 	public LogView(double textSize) {
 		this.textSize = textSize;
+		for (Log l : LOGS) {
+			if (l instanceof ProgressLog) logProgress((ProgressLog) l);
+			else log(l);
+		}
 		LOGS.addListener((ListChangeListener<Log>) c -> {
-			for (Log l : c.getAddedSubList()) {
-				log(l);
+			while (c.next()) {
+				for (Log l : c.getAddedSubList()) {
+					if (l instanceof ProgressLog) logProgress((ProgressLog) l);
+					else log(l);
+				}
 			}
 		});
 		//Bindings.bindContent(getChildren(), LOGS);
@@ -50,8 +57,16 @@ public class LogView extends VerticalContainer {
 		setWidthBehavior(LayoutBehavior.FILL_SPACE);
 	}
 
-	public static void log(String message, Color color) {
-		Platform.runLater(() -> LOGS.add(new Log(message, color)));
+	public static Log log(String message, Color color) {
+		Log log = new Log(message, color);
+		Platform.runLater(() -> LOGS.add(log));
+		return log;
+	}
+
+	public static ProgressLog logProgress(String message, Color color) {
+		ProgressLog log = new ProgressLog(message, color);
+		Platform.runLater(() -> LOGS.add(log));
+		return log;
 	}
 
 	private void log(Log msg) {
@@ -87,10 +102,11 @@ public class LogView extends VerticalContainer {
 		hor.setBorderColor(Color.LIGHTGRAY);
 		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 
-		Text logText = new Text("", Font.loadFont(RobotoFont.regular(), 12));
+		Text logText = new Text("", Font.loadFont(RobotoFont.regular(), textSize));
 		logText.textProperty().bind(msg.messageProperty());
 		logText.textColorProperty().bind(msg.colorProperty());
 		ProgressCircle progressCircle = ProgressCircle.small((Color) msg.getColor());
+		progressCircle.setRadiusXY(textSize / 2, textSize / 2);
 		Animation fade = new FadeAnimation(progressCircle, Duration.ofMillis(1000))
 				.setFrom(1).setTo(0);
 		ValueAnimation scale = new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
@@ -110,10 +126,6 @@ public class LogView extends VerticalContainer {
 			getChildren().add(hor);
 			scale.start();
 		});
-	}
-
-	public static ProgressLog logProgress(String message, Color color) {
-		return new ProgressLog(message, color);
 	}
 
 	public void setTextSize(double value) {
@@ -155,6 +167,7 @@ public class LogView extends VerticalContainer {
 
 		private ProgressLog(String message, Color color) {
 			super(message, color);
+			progress = new SimpleDoubleProperty();
 		}
 
 		public DoubleProperty progressProperty() {
