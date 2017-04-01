@@ -106,7 +106,8 @@ public class LogView extends VerticalContainer {
 		logText.textProperty().bind(msg.messageProperty());
 		logText.textColorProperty().bind(msg.colorProperty());
 		ProgressCircle progressCircle = ProgressCircle.small((Color) msg.getColor());
-		progressCircle.setRadiusXY(textSize / 2, textSize / 2);
+		progressCircle.setRadiusXY(textSize / 2.5, textSize / 2.5);
+		progressCircle.setBorderWidth(textSize / 5);
 		Animation fade = new FadeAnimation(progressCircle, Duration.ofMillis(1000))
 				.setFrom(1).setTo(0);
 		ValueAnimation scale = new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))

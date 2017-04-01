@@ -5,6 +5,7 @@ import fxwindows.wrapped.Arc;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
 
 import java.time.Duration;
 
@@ -23,15 +24,12 @@ public class ProgressCircle extends Arc {
 	private boolean invert;
 
 	public ProgressCircle(double size, Color borderColor, double borderWidth, double padding) {
-		//arc = new Arc();
+		((javafx.scene.shape.Arc) getNode()).setStrokeLineCap(StrokeLineCap.ROUND);
 		setRadiusXY(size/2, size/2);
 		setPadding(padding);
-		//setContentWidth(size);
-		//setContentHeight(size);
 		setBorderColor(borderColor);
 		setBorderWidth(borderWidth);
 		setAngleLength(90);
-		//getChildren().add(arc);
 	}
 
 	public static ProgressCircle small(Color color) {
