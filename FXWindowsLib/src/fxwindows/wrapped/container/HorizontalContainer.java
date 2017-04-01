@@ -15,6 +15,7 @@ import javafx.collections.ListChangeListener.Change;
 public class HorizontalContainer extends ScrollContainer {
 
 	private final DoubleProperty margin = new SimpleDoubleProperty();
+	private ChildAlignment childAlignment = ChildAlignment.TOP;
 
 	public HorizontalContainer() {
 		super();
@@ -24,6 +25,14 @@ public class HorizontalContainer extends ScrollContainer {
 	
 	public DoubleProperty marginProperty() {
 		return margin;
+	}
+
+	public ChildAlignment getChildAlignment() {
+		return childAlignment;
+	}
+
+	public void setChildAlignment(ChildAlignment value) {
+		childAlignment = value;
 	}
 	
 	public double getMargin() {
@@ -45,7 +54,7 @@ public class HorizontalContainer extends ScrollContainer {
 		double height = 0;
 		double width = 0;
 		for (ShapeBase w : getChildren()) {
-			w.setXY(width + getScrollX(), 0);
+			w.setX(width + getScrollX());
 			width += w.getWidth() + getMargin();
 			if ((width + getScrollX() <= 0) ||
 					(width + getScrollX() - w.getWidth()  > getInnerWidth())) {
@@ -54,7 +63,24 @@ public class HorizontalContainer extends ScrollContainer {
 
 			if (w.getHeight() > height) height = w.getHeight();
 		}
+		for (ShapeBase w : getChildren()) {
+			switch (childAlignment) {
+				case TOP:
+					w.setY(0);
+					break;
+				case CENTER:
+					w.setY((height - w.getHeight()) / 2);
+					break;
+				case BOTTOM:
+					w.setY(height - w.getHeight());
+					break;
+			}
+		}
 		setContentHeight(height);
 		setContentWidth(width);
+	}
+
+	public enum ChildAlignment {
+		TOP, CENTER, BOTTOM
 	}
 }
