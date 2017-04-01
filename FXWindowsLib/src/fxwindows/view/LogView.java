@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  * @author Coen Boelhouwers
@@ -34,19 +35,25 @@ public class LogView extends VerticalContainer {
 	private static final ObservableList<Log> LOGS = FXCollections.observableArrayList(
 			new ArrayList<Log>());
 
+	private Predicate<Log> filter;
 	private double textSize = 12;
 
-	public LogView(double textSize) {
+	public LogView(double textSize, Predicate<Log> filtr) {
+		this.filter = filtr;
 		this.textSize = textSize;
-		for (Log l : LOGS) {
+
+		LOGS.stream().filter(l -> filter == null || filter.test(l)).forEach(l -> {
 			if (l instanceof ProgressLog) logProgress((ProgressLog) l);
 			else log(l);
-		}
+		});
+
 		LOGS.addListener((ListChangeListener<Log>) c -> {
 			while (c.next()) {
 				for (Log l : c.getAddedSubList()) {
-					if (l instanceof ProgressLog) logProgress((ProgressLog) l);
-					else log(l);
+					if (filter == null || filter.test(l)) {
+						if (l instanceof ProgressLog) logProgress((ProgressLog) l);
+						else log(l);
+					}
 				}
 			}
 		});
@@ -58,13 +65,21 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static Log log(String message, Color color) {
-		Log log = new Log(message, color);
+		return log("", message, color);
+	}
+
+	public static Log log(String tag, String message, Color color) {
+		Log log = new Log(tag, message, color);
 		Platform.runLater(() -> LOGS.add(log));
 		return log;
 	}
 
 	public static ProgressLog logProgress(String message, Color color) {
-		ProgressLog log = new ProgressLog(message, color);
+		return logProgress("", message, color);
+	}
+
+	public static ProgressLog logProgress(String tag, String message, Color color) {
+		ProgressLog log = new ProgressLog(tag, message, color);
 		Platform.runLater(() -> LOGS.add(log));
 		return log;
 	}
@@ -92,6 +107,7 @@ public class LogView extends VerticalContainer {
 		log.setWrapText(true);
 		log.getNode().visibleProperty().addListener((v1, v2, v3) -> anim2.pause(!v3));
 		Platform.runLater(() -> {
+			LOGS.remove(msg);
 			getChildren().add(log);
 			anim1.start();
 		});
@@ -112,23 +128,28 @@ public class LogView extends VerticalContainer {
 		progressCircle.setPadding(textSize / 5);
 		Animation fade = new FadeAnimation(progressCircle, Duration.ofMillis(1000))
 				.setFrom(1).setTo(0);
-		ValueAnimation scale = new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
-				.setFrom(0).setTo(1).setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));
+		new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
+				.setFrom(0)
+				.setTo(1)
+				.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+				.start();
+
 		logText.setPadding(5);
 		msg.progressProperty().addListener((v1, v2, v3) -> {
 			if (v3.doubleValue() >= 1) {
 				Platform.runLater(() -> {
+					LOGS.remove(msg);
 					fade.start();
-					scale.setFrom(1).setTo(0).then(() -> Platform.runLater(() -> getChildren().remove(hor)))
+					new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
+							.setFrom(1)
+							.setTo(0)
+							.then(() -> Platform.runLater(() -> getChildren().remove(hor)))
 							.startAt(5000);
 				});
 			}
 		});
 		hor.getChildren().addAll(logText, progressCircle);
-		Platform.runLater(() -> {
-			getChildren().add(hor);
-			scale.start();
-		});
+		Platform.runLater(() -> getChildren().add(hor));
 	}
 
 	public void setTextSize(double value) {
@@ -136,12 +157,18 @@ public class LogView extends VerticalContainer {
 	}
 
 	public static class Log {
+		private String tag;
 		private StringProperty message;
 		private ObjectProperty<Paint> color;
 
 		private Log(String message, Paint color) {
 			this.message = new SimpleStringProperty(message);
 			this.color = new SimpleObjectProperty<>(color);
+		}
+
+		private Log(String tag, String message, Paint color) {
+			this(message, color);
+			this.tag = tag;
 		}
 
 		public ObjectProperty<Paint> colorProperty() {
@@ -156,12 +183,20 @@ public class LogView extends VerticalContainer {
 			return color.get();
 		}
 
+		public String getTag() {
+			return tag;
+		}
+
 		public void setColor(Paint value) {
 			color.set(value);
 		}
 
 		public void setMessage(String value) {
 			message.set(value);
+		}
+
+		public void setTag(String tagName) {
+			tag = tagName;
 		}
 	}
 
@@ -170,6 +205,11 @@ public class LogView extends VerticalContainer {
 
 		private ProgressLog(String message, Color color) {
 			super(message, color);
+			progress = new SimpleDoubleProperty();
+		}
+
+		private ProgressLog(String tag, String message, Color color) {
+			super(tag, message, color);
 			progress = new SimpleDoubleProperty();
 		}
 
