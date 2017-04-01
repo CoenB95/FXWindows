@@ -85,12 +85,16 @@ public class Text extends TextBase {
 	}
 
 	private void calculateClip() {
-		Rectangle textClip = new Rectangle();
-		textClip.setLayoutX(0);
-		textClip.setLayoutY(0);
-		textClip.setHeight(getInnerHeight());
-		textClip.setWidth(getInnerWidth());
-		textNode.setClip(textClip);
+		if (getContentWidth() <= getInnerWidth() && getContentHeight() <= getInnerHeight()) {
+			textNode.setClip(null);
+		} else {
+			Rectangle textClip = new Rectangle();
+			textClip.setLayoutX(0);
+			textClip.setLayoutY(0);
+			textClip.setHeight(getInnerHeight());
+			textClip.setWidth(getInnerWidth());
+			textNode.setClip(textClip);
+		}
 	}
 
 	@Override
