@@ -95,12 +95,9 @@ public class ListContainer extends VerticalContainer {
                 }
             }
         });
-		
-		hoverPositionAnim = new MoveAnimation(Duration.ofMillis(100));
-		hoverPositionAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
+
 		hoverHeightAnim = new ValueAnimation(Duration.ofMillis(100));
-		selectionPositionAnim = new MoveAnimation(Duration.ofMillis(100));
-		selectionPositionAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
+
 		selectionHeightAnim = new ValueAnimation(Duration.ofMillis(100));
 		
 		hoverRect = new Rectangle(widthProperty(), hoverHeightAnim
@@ -116,9 +113,11 @@ public class ListContainer extends VerticalContainer {
 		selectionRect.setBackgroundColor(Color.TRANSPARENT);
 		selectionRect.setBorderColor(Color.DEEPSKYBLUE);
 		selectionRect.setBorderWidth(2);
-		
-		hoverPositionAnim.setShapeBase(hoverRect);
-		selectionPositionAnim.setShapeBase(selectionRect);
+
+		hoverPositionAnim = new MoveAnimation(hoverRect, Duration.ofMillis(100));
+		hoverPositionAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
+		selectionPositionAnim = new MoveAnimation(selectionRect, Duration.ofMillis(100));
+		selectionPositionAnim.setInterpolator(new SmoothInterpolator(AnimType.DECELERATE));
 		
 		selectedPositionProperty().addListener((v1,v2,v3) -> {
 			moveSelectionRect(getChildren().get(v3.intValue()));
