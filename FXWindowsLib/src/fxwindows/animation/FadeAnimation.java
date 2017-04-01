@@ -2,6 +2,7 @@ package fxwindows.animation;
 
 
 import fxwindows.core.Colorable;
+import javafx.beans.value.ObservableValue;
 
 import java.time.Duration;
 
@@ -16,6 +17,19 @@ public class FadeAnimation extends ValueAnimation {
 	public FadeAnimation(Colorable drawable, Duration duration) {
 		super(duration);
 		animatedColorable = drawable;
+	}
+
+	public FadeAnimation(Colorable colorable, Duration duration, double from, double to) {
+		this(colorable, duration);
+		setFrom(from);
+		setTo(to);
+	}
+
+	public FadeAnimation(Colorable colorable, Duration duration, ObservableValue<Number> from,
+						 ObservableValue<Number> to) {
+		this(colorable, duration);
+		setFrom(from);
+		setTo(to);
 	}
 
 	@Override

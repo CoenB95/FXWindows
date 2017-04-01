@@ -15,17 +15,27 @@ public class MoveAnimation extends Animation {
 	private DoubleExpression toY;
 	private ShapeBase drawable;
 
-	public MoveAnimation(Duration duration) {
-		super(duration);
+	public MoveAnimation(ShapeBase drawable, Duration duration) {
+		this(drawable, duration, 0, 0, 0, 0);
 	}
 
-	public MoveAnimation(ShapeBase drawable, Duration duration) {
+	public MoveAnimation(ShapeBase drawable, Duration duration, double fromX, double fromY, double toX, double toY) {
 		super(duration);
 		this.drawable = drawable;
-		fromX = new SimpleDoubleProperty();
-		fromY = new SimpleDoubleProperty();
-		toX = new SimpleDoubleProperty();
-		toY = new SimpleDoubleProperty();
+		this.fromX = new SimpleDoubleProperty(fromX);
+		this.fromY = new SimpleDoubleProperty(fromY);
+		this.toX = new SimpleDoubleProperty(toX);
+		this.toY = new SimpleDoubleProperty(toY);
+	}
+
+	public MoveAnimation(ShapeBase drawable, Duration duration, DoubleExpression fromX, DoubleExpression fromY,
+						 DoubleExpression toX, DoubleExpression toY) {
+		super(duration);
+		this.drawable = drawable;
+		this.fromX = fromX;
+		this.fromY = fromY;
+		this.toX = toX;
+		this.toY = toY;
 	}
 
 	public MoveAnimation setShapeBase(ShapeBase value) {
