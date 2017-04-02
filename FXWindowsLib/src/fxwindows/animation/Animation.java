@@ -9,6 +9,7 @@ import java.time.Duration;
 public abstract class Animation extends Updatable {
 
 	private long startTime;
+	private long delay;
 	private double progress;
 	private Duration duration;
 	private boolean started;
@@ -76,14 +77,19 @@ public abstract class Animation extends Updatable {
 	public void startAt(long milisDelay) {
 		started = false;
 		if (isUnregistered()) register();
-		startTime = System.nanoTime()/1000000 + milisDelay;
+		startTime = System.nanoTime()/1000000 + milisDelay + delay;
 		afterEnd = false;
-		update(startTime - milisDelay);
+		update(startTime - milisDelay - delay);
 	}
 
 	public void stop() {
 		afterEnd = false;
 		unregister();
+	}
+
+	public Animation setDelay(long millis) {
+		delay = millis;
+		return this;
 	}
 
 	public Animation then(Runnable r) {
