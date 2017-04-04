@@ -45,19 +45,16 @@ public abstract class Animation extends Updatable {
 		if (!started && time >= startTime) {
 			started = true;
 		}
-		if (started) {
-			if (time >= startTime + duration.toMillis()) {
-				progress = 1.0;
-				update(1.0);
-				if (!afterEnd) unregister();
-			} else if (time < startTime) {
-				progress = 0.0;
-				update(0.0);
-			} else {
-				progress = (time - startTime) / (double) duration.toMillis();
-				update(interpolator.interpolate(0.0, 1.0, progress));
-			}
-			
+		if (time >= startTime + duration.toMillis()) {
+			progress = 1.0;
+			update(1.0);
+			if (!afterEnd) unregister();
+		} else if (time < startTime) {
+			progress = 0.0;
+			update(0.0);
+		} else {
+			progress = (time - startTime) / (double) duration.toMillis();
+			update(interpolator.interpolate(0.0, 1.0, progress));
 		}
 	}
 
