@@ -19,6 +19,7 @@ import javafx.scene.text.Font;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 /**
@@ -100,6 +101,7 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	}
 
 	private void logProgress(ProgressLog msg) {
+		if (msg.progressProperty().get() >= 1) return;
 		HorizontalContainer hor = new HorizontalContainer();
 		hor.setBorderColor(Color.LIGHTGRAY);
 		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
@@ -145,6 +147,7 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	@Override
 	public void onStart() {
 		super.onStart();
+		logChanges(LOGS);
 		LOGS.addListener(this);
 	}
 
@@ -157,11 +160,15 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	@Override
 	public void onChanged(Change<? extends Log> c) {
 		while (c.next()) {
-			for (Log l : c.getAddedSubList()) {
-				if (filter == null || filter.test(l)) {
-					if (l instanceof ProgressLog) logProgress((ProgressLog) l);
-					else log(l);
-				}
+			logChanges(c.getAddedSubList());
+		}
+	}
+
+	private void logChanges(Collection<? extends Log> newLogs) {
+		for (Log l : newLogs) {
+			if (filter == null || filter.test(l)) {
+				if (l instanceof ProgressLog) logProgress((ProgressLog) l);
+				else log(l);
 			}
 		}
 	}
