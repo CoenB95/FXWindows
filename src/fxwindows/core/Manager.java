@@ -10,15 +10,14 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -92,6 +91,10 @@ public abstract class Manager extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		stage = primaryStage;
+		Font.loadFont(getClass().getResourceAsStream("/Roboto-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream("/Roboto-Medium.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream("/Roboto-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream("/Roboto-Thin.ttf"), 14);
 		try {
 			shapeVersion(primaryStage);
 		} catch (Exception e) {
@@ -259,14 +262,6 @@ public abstract class Manager extends Application {
 
 		private Animation enterAnimation;
 		private Animation exitAnimation;
-
-		public void onStart() {
-
-		}
-
-		public void onStop() {
-
-		}
 
 		public void setOnKeyTyped(EventHandler<? super KeyEvent> event) {
 			getNode().setOnKeyTyped(event);

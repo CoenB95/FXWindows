@@ -68,6 +68,13 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	
 	public abstract Node getNode();
 	public abstract void clip(Node n);
+	public void onStart() {
+
+	}
+
+	public void onStop() {
+
+	}
 
 	/**
 	 * Called once every frame so that components can update their state.

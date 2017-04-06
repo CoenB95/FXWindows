@@ -115,4 +115,14 @@ public abstract class Container extends ShapeBase {
 	    // TODO Remove this method? Seems unneeded thanks to javafx.scene.Pane's clipping.
 		// TODO Implement clip for lists?
 	}
+
+	@Override
+	public void onStart() {
+		getChildren().forEach(ShapeBase::onStart);
+	}
+
+	@Override
+	public void onStop() {
+		getChildren().forEach(ShapeBase::onStop);
+	}
 }

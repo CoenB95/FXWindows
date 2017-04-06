@@ -5,7 +5,6 @@ import fxwindows.animation.FadeAnimation;
 import fxwindows.animation.SmoothInterpolator;
 import fxwindows.animation.ValueAnimation;
 import fxwindows.core.LayoutBehavior;
-import fxwindows.resources.RobotoFont;
 import fxwindows.wrapped.Text;
 import fxwindows.wrapped.container.HorizontalContainer;
 import fxwindows.wrapped.container.VerticalContainer;
@@ -25,7 +24,7 @@ import java.util.function.Predicate;
 /**
  * @author Coen Boelhouwers
  */
-public class LogView extends VerticalContainer {
+public class LogView extends VerticalContainer implements ListChangeListener<LogView.Log> {
 
 	public static final Color INFO = Color.BLUE;
 	public static final Color WARNING = Color.ORANGE;
@@ -37,26 +36,13 @@ public class LogView extends VerticalContainer {
 
 	private Predicate<Log> filter;
 	private double textSize = 12;
+	private Font font;
 
 	public LogView(double textSize, Predicate<Log> filtr) {
 		this.filter = filtr;
 		this.textSize = textSize;
+		this.font = Font.font("Roboto", textSize);
 
-		LOGS.stream().filter(l -> filter == null || filter.test(l)).forEach(l -> {
-			if (l instanceof ProgressLog) logProgress((ProgressLog) l);
-			else log(l);
-		});
-
-		LOGS.addListener((ListChangeListener<Log>) c -> {
-			while (c.next()) {
-				for (Log l : c.getAddedSubList()) {
-					if (filter == null || filter.test(l)) {
-						if (l instanceof ProgressLog) logProgress((ProgressLog) l);
-						else log(l);
-					}
-				}
-			}
-		});
 		//Bindings.bindContent(getChildren(), LOGS);
 		clipChildren(true);
 		setMaxWidth(200);
@@ -85,7 +71,7 @@ public class LogView extends VerticalContainer {
 	}
 
 	private void log(Log msg) {
-		Text log = new Text("", Font.loadFont(RobotoFont.regular(), textSize));
+		Text log = new Text("", font);
 		log.textProperty().bind(msg.messageProperty());
 		log.textColorProperty().bind(msg.colorProperty());
 		log.setBorderColor(Color.LIGHTGRAY);
@@ -119,7 +105,7 @@ public class LogView extends VerticalContainer {
 		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		hor.setChildAlignment(HorizontalContainer.ChildAlignment.CENTER);
 
-		Text logText = new Text("", Font.loadFont(RobotoFont.regular(), textSize));
+		Text logText = new Text("", font);
 		logText.textProperty().bind(msg.messageProperty());
 		logText.textColorProperty().bind(msg.colorProperty());
 		ProgressCircle progressCircle = ProgressCircle.small((Color) msg.getColor());
@@ -154,6 +140,30 @@ public class LogView extends VerticalContainer {
 
 	public void setTextSize(double value) {
 		textSize = value;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		LOGS.addListener(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		LOGS.removeListener(this);
+	}
+
+	@Override
+	public void onChanged(Change<? extends Log> c) {
+		while (c.next()) {
+			for (Log l : c.getAddedSubList()) {
+				if (filter == null || filter.test(l)) {
+					if (l instanceof ProgressLog) logProgress((ProgressLog) l);
+					else log(l);
+				}
+			}
+		}
 	}
 
 	public static class Log {
