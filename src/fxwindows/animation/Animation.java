@@ -16,6 +16,7 @@ public abstract class Animation extends Updatable {
 	private boolean afterEnd;
 	private boolean paused;
 	private long pauseTime = -1;
+	private long pauseTimeOut = -1;
 	private Interpolator interpolator = Interpolator.EASE_BOTH;
 
 	public Animation(Duration duration) {
@@ -36,6 +37,7 @@ public abstract class Animation extends Updatable {
 	public final void update(long time) {
 		if (paused) {
 			if (pauseTime < 0) pauseTime = time;
+			if (pauseTimeOut > 0 && time > pauseTime + pauseTimeOut) paused = false;
 			return;
 		} else if (pauseTime > 0) {
 			startTime += (time - pauseTime);
@@ -45,21 +47,24 @@ public abstract class Animation extends Updatable {
 		if (!started && time >= startTime) {
 			started = true;
 		}
-		if (time >= startTime + duration.toMillis()) {
-			progress = 1.0;
-			update(1.0);
-			if (!afterEnd) unregister();
-		} else if (time < startTime) {
-			progress = 0.0;
-			update(0.0);
-		} else {
-			progress = (time - startTime) / (double) duration.toMillis();
-			update(interpolator.interpolate(0.0, 1.0, progress));
+		if (started) {
+			if (time >= startTime + delay + duration.toMillis()) {
+				progress = 1.0;
+				update(1.0);
+				if (!afterEnd) unregister();
+			} else if (time < startTime + delay) {
+				progress = 0.0;
+				update(0.0);
+			} else {
+				progress = (time - (startTime + delay)) / (double) duration.toMillis();
+				update(interpolator.interpolate(0.0, 1.0, progress));
+			}
 		}
 	}
 
-	public void pause(boolean value) {
+	public void pause(boolean value, long millisTimeout) {
 		paused = value;
+		pauseTimeOut = millisTimeout;
 	}
 
 	public final void start() {
@@ -74,9 +79,9 @@ public abstract class Animation extends Updatable {
 	public void startAt(long milisDelay) {
 		started = false;
 		if (isUnregistered()) register();
-		startTime = System.nanoTime()/1000000 + milisDelay + delay;
+		startTime = System.nanoTime()/1000000 + milisDelay;
 		afterEnd = false;
-		update(startTime - milisDelay - delay);
+		update(startTime - milisDelay);
 	}
 
 	public void stop() {

@@ -27,9 +27,9 @@ public class SequentialAnimation extends Animation {
 	}
 
 	@Override
-	public void pause(boolean value) {
-		super.pause(value);
-		for (Animation a : animations) a.pause(value);
+	public void pause(boolean value, long millisTimeout) {
+		super.pause(value, millisTimeout);
+		for (Animation a : animations) a.pause(value, millisTimeout);
 	}
 
 	@Override

@@ -1,9 +1,6 @@
 package fxwindows.view;
 
-import fxwindows.animation.Animation;
-import fxwindows.animation.FadeAnimation;
-import fxwindows.animation.SmoothInterpolator;
-import fxwindows.animation.ValueAnimation;
+import fxwindows.animation.*;
 import fxwindows.core.LayoutBehavior;
 import fxwindows.wrapped.Text;
 import fxwindows.wrapped.container.HorizontalContainer;
@@ -38,6 +35,8 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	private Predicate<Log> filter;
 	private double textSize = 12;
 	private Font font;
+	private Color childBackground = Color.WHITE;
+	private Color childBorder = Color.LIGHTGRAY;
 
 	public LogView(double textSize, Predicate<Log> filtr) {
 		this.filter = filtr;
@@ -75,24 +74,36 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 		Text log = new Text("", font);
 		log.textProperty().bind(msg.messageProperty());
 		log.textColorProperty().bind(msg.colorProperty());
-		log.setBorderColor(Color.LIGHTGRAY);
+		log.setBackgroundColor(childBackground);
+		log.setBorderColor(childBorder);
 		log.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		log.setScaleY(0);
-		ValueAnimation anim1 = new ValueAnimation(log.scaleYProperty(), Duration.ofMillis(400))
+		Animation anim1 =
+				new ScaleAnimation(log, Duration.ofMillis(400), 0, 0, 0, 1)
+						.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+						.then(new ScaleAnimation(log, Duration.ofMillis(400), 0, 1, 1, 1)
+								.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+						);
+		/*new ValueAnimation(log.scaleYProperty(), Duration.ofMillis(400))
 				.setFrom(0)
 				.setTo(1)
-				.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));
+				.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE));*/
 
-		Animation anim2 = new ValueAnimation(log.scaleYProperty(), Duration.ofMillis(400))
+		Animation anim2 = /*new ValueAnimation(log.scaleYProperty(), Duration.ofMillis(400))
 						.setFrom(1)
 						.setTo(0)
+						.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))*/
+				new ScaleAnimation(log, Duration.ofMillis(400), 1, 1, 0, 1)
 						.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
-								.then(() -> getChildren().remove(log));
+						.then(new ScaleAnimation(log, Duration.ofMillis(400), 0, 1, 0, 0)
+								.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+								.then(() -> getChildren().remove(log))
+						);
 		anim1.then(anim2, 3000);
-		anim2.pause(!log.getNode().isVisible());
+		anim2.pause(!log.getNode().isVisible(), 5000);
 		log.setPadding(2);
 		log.setWrapText(true);
-		log.getNode().visibleProperty().addListener((v1, v2, v3) -> anim2.pause(!v3));
+		log.getNode().visibleProperty().addListener((v1, v2, v3) -> anim2.pause(!v3, 5000));
 		Platform.runLater(() -> {
 			LOGS.remove(msg);
 			getChildren().add(log);
@@ -103,7 +114,8 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	private void logProgress(ProgressLog msg) {
 		if (msg.progressProperty().get() >= 1) return;
 		HorizontalContainer hor = new HorizontalContainer();
-		hor.setBorderColor(Color.LIGHTGRAY);
+		hor.setBackgroundColor(childBackground);
+		hor.setBorderColor(childBorder);
 		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
 		hor.setChildAlignment(HorizontalContainer.ChildAlignment.CENTER);
 
@@ -116,10 +128,14 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 		progressCircle.setPadding(textSize / 5);
 		Animation fade = new FadeAnimation(progressCircle, Duration.ofMillis(1000))
 				.setFrom(1).setTo(0);
-		new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
-				.setFrom(0)
-				.setTo(1)
+		new ScaleAnimation(hor, Duration.ofMillis(400), 0, 0, 0, 1)
 				.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+				.then(new ScaleAnimation(hor, Duration.ofMillis(400), 0, 1, 1, 1)
+		//new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
+		//		.setFrom(0)
+		//		.setTo(1)
+				.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+				)
 				.start();
 
 		logText.setPadding(5);
@@ -128,16 +144,25 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 				Platform.runLater(() -> {
 					LOGS.remove(msg);
 					fade.start();
-					new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
-							.setFrom(1)
-							.setTo(0)
-							.then(() -> Platform.runLater(() -> getChildren().remove(hor)))
-							.startAt(5000);
+					new ScaleAnimation(hor, Duration.ofMillis(400), 1, 1, 0, 1)
+							.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+							.then(new ScaleAnimation(hor, Duration.ofMillis(400), 0, 1, 0, 0)
+									.setInterpolator(new SmoothInterpolator(SmoothInterpolator.AnimType.DECELERATE))
+							).startAt(5000);
+//					new ValueAnimation(hor.scaleYProperty(), Duration.ofMillis(400))
+//							.setFrom(1)
+//							.setTo(0)
+//							.then(() -> Platform.runLater(() -> getChildren().remove(hor)))
+//							.startAt(5000);
 				});
 			}
 		});
 		hor.getChildren().addAll(logText, progressCircle);
 		Platform.runLater(() -> getChildren().add(hor));
+	}
+
+	public void setChildBackgroundColor(Color value) {
+		childBackground = value;
 	}
 
 	public void setTextSize(double value) {

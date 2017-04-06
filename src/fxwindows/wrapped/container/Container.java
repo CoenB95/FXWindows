@@ -86,7 +86,7 @@ public abstract class Container extends ShapeBase {
             }
         });
 		setupTopLevelBindings(pane);
-		setupScaleBindings(pane);
+		setupScaleBindings(innerPane);
 		setupBackgroundBindings(background);
 		setupMouseBindings(pane);
 	}
