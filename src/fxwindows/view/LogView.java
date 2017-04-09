@@ -132,6 +132,7 @@ public class LogView extends VerticalContainer implements ListChangeListener<Log
 	private void logProgress(ProgressLog msg) {
 		if (msg.progressProperty().get() >= 1) return;
 		HorizontalContainer hor = new HorizontalContainer();
+		hor.setLayoutBehavior(LayoutBehavior.WRAP_CONTENT);
 		hor.setBackgroundColor(childBackground);
 		hor.setBorderColor(childBorder);
 		hor.setWidthBehavior(LayoutBehavior.FILL_SPACE);
