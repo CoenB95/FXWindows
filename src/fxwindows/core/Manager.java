@@ -110,7 +110,6 @@ public abstract class Manager extends Application {
 		debugText.bindX(pane.widthProperty().subtract(debugText.widthProperty())
 				.subtract(10.0));
 		debugText.setY(10);
-		debugText.setAlpha(0.0);
 		Canvas canv = new Canvas(10, 10);
 		timer = new AnimationTimer() {
 			@Override
