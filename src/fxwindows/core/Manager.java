@@ -104,7 +104,7 @@ public abstract class Manager extends Application {
 
 	private void shapeVersion(Stage primaryStage) {
 		pane = new Pane();
-		debugText = new Text("", Font.font("Roboto", 14), Color.BLACK);
+		debugText = new Text("", Font.font("Monospaced", 12), Color.BLACK);
 		debugText.setBackgroundColor(Color.WHITE);
 		debugText.setPadding(5);
 		debugText.bindX(pane.widthProperty().subtract(debugText.widthProperty())
