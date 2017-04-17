@@ -104,7 +104,9 @@ public abstract class Manager extends Application {
 
 	private void shapeVersion(Stage primaryStage) {
 		pane = new Pane();
-		debugText = new Text();
+		debugText = new Text("", Font.font("Roboto", 14), Color.BLACK);
+		debugText.setBackgroundColor(Color.WHITE);
+		debugText.setPadding(5);
 		debugText.bindX(pane.widthProperty().subtract(debugText.widthProperty())
 				.subtract(10.0));
 		debugText.setY(10);
@@ -137,7 +139,7 @@ public abstract class Manager extends Application {
 				}
 			}
 		};
-		pane.getChildren().addAll(canv, debugText.getNode());
+		pane.getChildren().add(canv);
 		setup();
 		timer.start();
 		primaryStage.setScene(new Scene(new BorderPane(pane), 500, 500));
@@ -147,15 +149,8 @@ public abstract class Manager extends Application {
 
 	private void oldContainerHandler() {
 		if (shapeContainer == null || oldContainer == null) return;
-		boolean oldDone = false;
-		boolean newDone = false;
-		if (shapeContainer.enterAnimation != null) {
-			newDone = shapeContainer.enterAnimation.hasFinished();
-		} else newDone = true;
-		if (oldContainer.exitAnimation != null) {
-			oldDone = oldContainer.exitAnimation.hasFinished();
-		} else oldDone = true;
-
+		boolean newDone = shapeContainer.enterAnimation == null || shapeContainer.enterAnimation.hasFinished();
+		boolean oldDone = oldContainer.exitAnimation == null || oldContainer.exitAnimation.hasFinished();
 		if (oldDone && newDone) {
 			// All animations have finished so we can remove the old container
 			// (it was kept because it could still be visible).
@@ -188,8 +183,9 @@ public abstract class Manager extends Application {
 	}
 
 	public void showDebugText(boolean value) {
+		if (!debugTextVisible && value) pane.getChildren().add(debugText.getNode());
+		if (debugTextVisible && !value) pane.getChildren().remove(debugText.getNode());
 		debugTextVisible = value;
-		debugText.setAlpha(debugTextVisible ? 1.0 : 0.0);
 	}
 
 	public void setFullScreen(boolean value) {
@@ -232,7 +228,7 @@ public abstract class Manager extends Application {
 
 		if (!newInFront && oldContainer != null) oldContainer.getNode().toFront();
 		// Make sure the fps stays visible.
-		debugText.getNode().toFront();
+		if (debugTextVisible) debugText.getNode().toFront();
 		if (shapeContainer.enterAnimation != null) {
 			System.out.println("Start enter animation new root");
 			shapeContainer.enterAnimation.start();
