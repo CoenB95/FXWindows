@@ -1,7 +1,5 @@
 package fxwindows.wrapped;
 
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;

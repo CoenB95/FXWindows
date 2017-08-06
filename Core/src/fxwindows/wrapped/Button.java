@@ -5,8 +5,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 
 public class Button extends TextBase {
 

@@ -3,7 +3,6 @@ package fxwindows.animation;
 
 import fxwindows.core.Colorable;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.time.Duration;
 

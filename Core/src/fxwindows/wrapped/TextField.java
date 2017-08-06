@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 
 public class TextField extends TextBase {
 

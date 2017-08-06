@@ -1,13 +1,10 @@
 package fxwindows.view;
 
-import fxwindows.animation.ValueAnimation;
 import fxwindows.wrapped.Arc;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
-
-import java.time.Duration;
 
 /**
  * @author Coen Boelhouwers

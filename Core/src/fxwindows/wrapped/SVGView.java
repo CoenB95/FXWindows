@@ -3,7 +3,6 @@ package fxwindows.wrapped;
 import fxwindows.core.ShapeBase;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
 
 public class SVGView extends ShapeBase {

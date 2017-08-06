@@ -1,7 +1,6 @@
 package fxwindows.wrapped.container;
 
 import fxwindows.core.ShapeBase;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 
 /**

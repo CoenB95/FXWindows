@@ -1,15 +1,7 @@
 package fxwindows.bindings;
 
 import fxwindows.core.Area;
-import fxwindows.core.Position;
-import fxwindows.wrapped.container.Container;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleExpression;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableValue;
 
 /**
  * Utility class containing functions to bind a position to a (side of) area.<p/>

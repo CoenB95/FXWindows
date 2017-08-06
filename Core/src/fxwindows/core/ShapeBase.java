@@ -155,7 +155,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the alpha, background color,
+	 * Creates fxwindows.bindings for the alpha, background color,
 	 * border color and border width of this Shape.
 	 *
 	 * @param shape the base shape.
@@ -165,7 +165,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the background color,
+	 * Creates fxwindows.bindings for the background color,
 	 * border color and border width of this Shape.
 	 *
 	 * @param shape the base shape.
@@ -178,7 +178,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the scale.
+	 * Creates fxwindows.bindings for the scale.
 	 *
 	 * @param node the base node.
 	 */
@@ -190,7 +190,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the alpha, visibility and rotation.
+	 * Creates fxwindows.bindings for the alpha, visibility and rotation.
 	 *
 	 * @param node the base node.
 	 */
@@ -205,7 +205,7 @@ public abstract class ShapeBase extends ColoredBoundedArea {
 	}
 
 	/**
-	 * Creates bindings for the mouseClick and mouseDrag.
+	 * Creates fxwindows.bindings for the mouseClick and mouseDrag.
 	 *
 	 * @param node the base node.
 	 */

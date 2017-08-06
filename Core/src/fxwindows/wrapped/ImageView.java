@@ -4,7 +4,6 @@ import fxwindows.core.ShapeBase;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 
 public class ImageView extends ShapeBase {
 

@@ -1,11 +1,8 @@
 package fxwindows.wrapped.container;
 
 import fxwindows.core.ShapeBase;
-import fxwindows.wrapped.container.ScrollContainer;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.ListChangeListener.Change;
 
 /**
  * Container that lays out its children in a vertical fashion.

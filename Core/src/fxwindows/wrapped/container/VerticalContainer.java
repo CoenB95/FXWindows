@@ -1,6 +1,5 @@
 package fxwindows.wrapped.container;
 
-import fxwindows.wrapped.container.ScrollContainer;
 import fxwindows.core.ShapeBase;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

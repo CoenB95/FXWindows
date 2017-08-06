@@ -1,9 +1,7 @@
 package fxwindows.core;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.List;
